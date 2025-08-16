@@ -1,8 +1,11 @@
+// Forzar rebuild - versión corregida
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const path = require('path');
+const multer = require('multer');
+const fs = require('fs');
 
 // Cargar variables de entorno
 dotenv.config();
