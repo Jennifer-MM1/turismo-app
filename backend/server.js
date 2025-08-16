@@ -22,6 +22,12 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, '../frontend/public')));
 app.use('/admin', express.static(path.join(__dirname, '../frontend/admin')));
 
+// ✅ IMPORTANTE: Configuración específica para imágenes
+app.use('/uploads/hoteles', express.static(path.join(__dirname, '../frontend/public/uploads/hoteles')));
+app.use('/uploads/cabanas', express.static(path.join(__dirname, '../frontend/public/uploads/cabanas')));
+app.use('/uploads/airbnb', express.static(path.join(__dirname, '../frontend/public/uploads/airbnb')));
+app.use('/uploads', express.static(path.join(__dirname, '../frontend/public/uploads')));
+
 // 🆕 Servir imágenes desde img_jalpan
 app.use('/img_jalpan', express.static(path.join(__dirname, '../img_jalpan')));
 
