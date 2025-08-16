@@ -25,21 +25,16 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, '../frontend/public')));
 app.use('/admin', express.static(path.join(__dirname, '../frontend/admin')));
 
-// ✅ IMPORTANTE: Configuración específica para imágenes
-app.use('/uploads/hoteles', express.static(path.join(__dirname, '../frontend/public/uploads/hoteles')));
-app.use('/uploads/cabanas', express.static(path.join(__dirname, '../frontend/public/uploads/cabanas')));
-app.use('/uploads/airbnb', express.static(path.join(__dirname, '../frontend/public/uploads/airbnb')));
-app.use('/api/tours', require('./routes/tourOperadoraRoutes'));
-app.use('/api/guias', require('./routes/guiaTuristicaRoutes'));
- app.use('/api/cuestionarios', require('./routes/cuestionarioRoutes'));
-app.use('/uploads', express.static(path.join(__dirname, '../frontend/public/uploads')));
- app.use('/api/super-admin', require('./routes/superAdminRoutes'));
+// ✅ IMPORTANTE: Configuración específica para imágenes - CORREGIDO SIN ../
+app.use('/uploads/hoteles', express.static(path.join(__dirname, 'frontend/public/uploads/hoteles')));
+app.use('/uploads/cabanas', express.static(path.join(__dirname, 'frontend/public/uploads/cabanas')));
+app.use('/uploads/airbnb', express.static(path.join(__dirname, 'frontend/public/uploads/airbnb')));
+app.use('/uploads', express.static(path.join(__dirname, 'frontend/public/uploads')));
 
 // 🆕 Servir imágenes desde img_jalpan
 app.use('/img_jalpan', express.static(path.join(__dirname, '../img_jalpan')));
 
-
-// ✅ Test API súper directo - SIN REQUIRES
+// ✅ Test API súper directo
 app.get('/api/test', (req, res) => {
   res.json({ 
     message: 'API test directo funcionando', 
@@ -47,11 +42,16 @@ app.get('/api/test', (req, res) => {
     timestamp: new Date().toISOString()
   });
 });
-// ✅ Rutas API - agregando gradualmente
+
+// ✅ Rutas API - TODAS ORGANIZADAS JUNTAS
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/hoteles', require('./routes/hotelRoutes'));
 app.use('/api/cabanas', require('./routes/cabanaRoutes'));
 app.use('/api/airbnb', require('./routes/airbnbRoutes'));
+app.use('/api/tours', require('./routes/tourOperadoraRoutes'));
+app.use('/api/guias', require('./routes/guiaTuristicaRoutes'));
+app.use('/api/cuestionarios', require('./routes/cuestionarioRoutes'));
+app.use('/api/super-admin', require('./routes/superAdminRoutes'));
 
 // ✅ Ruta principal
 app.get('/', (req, res) => {
@@ -80,5 +80,5 @@ app.listen(PORT, () => {
   console.log(`🔗 API Info: http://localhost:${PORT}/api`);
   console.log(`📂 Archivos estáticos servidos desde /frontend`);
   console.log(`🖼️ Imágenes de Jalpan: /img_jalpan`);
-  console.log('✅ Server.js cargado completamente - versión actualizada v2'); // ← AGREGA ESTA LÍNEA
+  console.log('✅ Server.js cargado completamente - versión final');
 });
