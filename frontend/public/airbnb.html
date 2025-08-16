@@ -1514,9 +1514,9 @@
         let currentModalImageIndex = 0;
 
         // ✅ NUEVO: URL base dinámica
-        const baseURL = window.location.hostname === 'localhost' 
-            ? 'http://localhost:5000/api' 
-            : 'https://jalpan-turismo.onrender.com/api';
+      const baseURL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:5000/api' 
+    : '/api';
 
         // ✅ FUNCIÓN AGREGADA: getImageUrl para construir URLs correctamente
         function getImageUrl(imagePath) {
