@@ -24,8 +24,11 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 // 🆕 Servir imágenes desde img_jalpan
 app.use('/img_jalpan', express.static(path.join(__dirname, '../img_jalpan')));
 
-// ✅ Rutas API básicas (empezar solo con auth)
+// ✅ Rutas API - agregando gradualmente
 app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/hoteles', require('./routes/hotelRoutes'));
+app.use('/api/cabanas', require('./routes/cabanaRoutes'));
+app.use('/api/airbnb', require('./routes/airbnbRoutes'));
 
 // ✅ Ruta principal
 app.get('/', (req, res) => {
