@@ -29,7 +29,11 @@ app.use('/admin', express.static(path.join(__dirname, '../frontend/admin')));
 app.use('/uploads/hoteles', express.static(path.join(__dirname, '../frontend/public/uploads/hoteles')));
 app.use('/uploads/cabanas', express.static(path.join(__dirname, '../frontend/public/uploads/cabanas')));
 app.use('/uploads/airbnb', express.static(path.join(__dirname, '../frontend/public/uploads/airbnb')));
+app.use('/api/tours', require('./routes/tourOperadoraRoutes'));
+app.use('/api/guias', require('./routes/guiaTuristicaRoutes'));
+ app.use('/api/cuestionarios', require('./routes/cuestionarioRoutes'));
 app.use('/uploads', express.static(path.join(__dirname, '../frontend/public/uploads')));
+ app.use('/api/super-admin', require('./routes/superAdminRoutes'));
 
 // 🆕 Servir imágenes desde img_jalpan
 app.use('/img_jalpan', express.static(path.join(__dirname, '../img_jalpan')));
