@@ -18,8 +18,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// ✅ Servir archivos estáticos
-app.use(express.static(path.join(__dirname, '../frontend')));
+// ✅ Servir archivos estáticos desde frontend/public
+app.use(express.static(path.join(__dirname, '../frontend/public')));
+app.use('/admin', express.static(path.join(__dirname, '../frontend/admin')));
 
 // 🆕 Servir imágenes desde img_jalpan
 app.use('/img_jalpan', express.static(path.join(__dirname, '../img_jalpan')));
