@@ -1,0 +1,2500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoteles - Dirección de Turismo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        /* Header y Navegación */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4CAF50;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            border-radius: 10px;
+            padding: 1rem 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover, .dropdown-item.active {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            padding: 8rem 0 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><radialGradient id="a" cx="50%" cy="0%" r="100%"><stop offset="0%" stop-color="rgba(255,255,255,.1)"/><stop offset="100%" stop-color="rgba(255,255,255,.05)"/></radialGradient></defs><circle cx="10" cy="10" r="10" fill="url(%23a)"/><circle cx="30" cy="5" r="8" fill="url(%23a)"/><circle cx="60" cy="15" r="6" fill="url(%23a)"/><circle cx="80" cy="8" r="7" fill="url(%23a)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .page-header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: white;
+            margin: -3rem 2rem 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.1);
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #4CAF50;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .btn-search {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            height: fit-content;
+        }
+
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        /* Hotels Section */
+        .hotels-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .results-info {
+            font-size: 1.2rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .sort-dropdown {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            background: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sort-dropdown:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 20px;
+            margin: 2rem 0;
+        }
+
+        .loading i {
+            font-size: 3rem;
+            color: #4CAF50;
+            margin-bottom: 1rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .loading p {
+            color: #666;
+        }
+
+        /* Error State */
+        .error-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: #fff5f5;
+            border-radius: 20px;
+            border: 2px solid #fed7d7;
+            margin: 2rem 0;
+        }
+
+        .error-state i {
+            font-size: 3rem;
+            color: #e53e3e;
+            margin-bottom: 1rem;
+        }
+
+        .error-state h3 {
+            color: #c53030;
+            margin-bottom: 0.5rem;
+        }
+
+        .error-state p {
+            color: #744949;
+            margin-bottom: 1.5rem;
+        }
+
+        .retry-btn {
+            background: #e53e3e;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .retry-btn:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+        }
+
+        /* Hotels Grid */
+        .hotels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .hotel-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid #f0f0f0;
+        }
+
+        .hotel-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .hotel-image {
+            height: 220px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hotel-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .hotel-card:hover .hotel-image img {
+            transform: scale(1.05);
+        }
+
+        .price-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .rating-badge {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            background: #ff9500;
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .hotel-content {
+            padding: 1.5rem;
+        }
+
+        .hotel-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            line-height: 1.3;
+        }
+
+        .hotel-location {
+            color: #666;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .hotel-description {
+            color: #777;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            font-size: 0.95rem;
+        }
+
+        .hotel-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-tag {
+            background: linear-gradient(135deg, #e8f5e8, #f1f8e9);
+            color: #2e7d32;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid #c8e6c9;
+        }
+
+        .hotel-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .capacity-info {
+            color: #666;
+            font-size: 0.9rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .capacity-info span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .view-details {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .view-details:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 20px;
+            margin: 2rem 0;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #bdc3c7;
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .empty-state p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        /* Mobile Navigation */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #333;
+            cursor: pointer;
+        }
+
+        /* 🌿 TARJETAS - Para mostrar la etiqueta verde */
+        .eco-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+            z-index: 5;
+            animation: pulse-eco 2s infinite;
+        }
+
+        .eco-badge i {
+            font-size: 14px;
+        }
+
+        @keyframes pulse-eco {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+            }
+        }
+
+        /* 🎯 MODAL DE DETALLES DEL HOTEL */
+        .view-details-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+        }
+
+        .view-details-btn:hover {
+            background: linear-gradient(135deg, #2980b9, #1f4e72);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        /* Overlay del modal */
+        .hotel-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+
+        .hotel-modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Modal principal */
+        .hotel-modal {
+            background: white;
+            border-radius: 20px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .hotel-modal-overlay.show .hotel-modal {
+            transform: scale(1) translateY(0);
+        }
+
+        /* Header del modal */
+        .modal-header {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="25" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>') repeat;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .modal-hotel-info {
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-hotel-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 0 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-hotel-name .eco-icon {
+            color: #2ecc71;
+            font-size: 22px;
+            filter: drop-shadow(0 0 8px rgba(46, 204, 113, 0.5));
+        }
+
+        .modal-hotel-location {
+            font-size: 16px;
+            opacity: 0.9;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-close-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* Contenido del modal */
+        .modal-content {
+            padding: 30px;
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        /* Secciones del modal */
+        .modal-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .modal-section:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 700;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        .section-title i {
+            color: #3498db;
+            font-size: 20px;
+        }
+
+        /* Información general */
+        .info-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-item.full-width {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #7f8c8d;
+        }
+
+        .info-value {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        /* Contacto */
+        .contact-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #2c3e50;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .contact-btn:hover:not(.disabled) {
+            border-color: #3498db;
+            background: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+        }
+
+        .contact-btn.phone:hover {
+            border-color: #27ae60;
+        }
+
+        .contact-btn.email:hover {
+            border-color: #e74c3c;
+        }
+
+        .contact-btn.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .contact-btn i {
+            font-size: 20px;
+            color: #3498db;
+        }
+
+        .contact-btn.phone i {
+            color: #27ae60;
+        }
+
+        .contact-btn.email i {
+            color: #e74c3c;
+        }
+
+        .contact-type {
+            font-size: 12px;
+            color: #7f8c8d;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .schedule-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border: 2px solid #f39c12;
+            border-radius: 12px;
+        }
+
+        .schedule-info i {
+            color: #f39c12;
+            font-size: 20px;
+        }
+
+        /* Servicios */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #27ae60;
+        }
+
+        .service-check {
+            color: #27ae60;
+            font-size: 14px;
+        }
+
+        /* Métodos de pago */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .payment-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .payment-item:hover {
+            border-color: #3498db;
+            transform: translateY(-2px);
+        }
+
+        .payment-item i {
+            color: #3498db;
+            font-size: 24px;
+        }
+
+        .payment-item.disabled {
+            opacity: 0.6;
+            background-color: #f8f9fa;
+            border: 2px dashed #dee2e6;
+        }
+
+        .payment-item.disabled i {
+            color: #6c757d;
+        }
+
+        .contact-item.full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Sección ecológica */
+        .eco-section {
+            background: linear-gradient(135deg, #e8f8f5, #f0fdf4) !important;
+            border: 2px solid #27ae60 !important;
+        }
+
+        .eco-title {
+            color: #27ae60 !important;
+            border-bottom-color: #27ae60 !important;
+        }
+
+        .eco-title i {
+            color: #27ae60 !important;
+        }
+
+        .eco-intro {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .eco-practices {
+            display: grid;
+            gap: 10px;
+        }
+
+        .eco-practice {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(39, 174, 96, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #27ae60;
+        }
+
+        .eco-check {
+            color: #27ae60;
+            font-size: 14px;
+        }
+
+        /* Sección de precios */
+        .price-section {
+            background: linear-gradient(135deg, #fff3e0, #fffbf0) !important;
+            border: 2px solid #ff9800 !important;
+            grid-column: 1 / -1;
+        }
+
+        .price-title {
+            color: #e65100 !important;
+            border-bottom-color: #ff9800 !important;
+        }
+
+        .price-title i {
+            color: #ff9800 !important;
+        }
+
+        .price-warning {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #e65100;
+        }
+
+        .price-warning i {
+            color: #ff9800;
+        }
+
+        .price-factors {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .price-factors li {
+            margin-bottom: 8px;
+            color: #5d4e75;
+        }
+
+        .price-cta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 152, 0, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #ff9800;
+            font-weight: 600;
+            color: #e65100;
+            margin-top: 15px;
+        }
+
+        /* ✨ SLIDER DE IMÁGENES PARA MODAL */
+        .hotel-gallery-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+        }
+
+        .hotel-gallery-section:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .gallery-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 700;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        .gallery-title i {
+            color: #e74c3c;
+            font-size: 20px;
+        }
+
+        .image-slider-container {
+            position: relative;
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .main-image-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .main-image:hover {
+            transform: scale(1.02);
+        }
+
+        .slider-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 10;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider-nav-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .slider-nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: translateY(-50%) scale(0.9);
+        }
+
+        .slider-prev {
+            left: 15px;
+        }
+
+        .slider-next {
+            right: 15px;
+        }
+
+        .image-counter {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .thumbnails-container {
+            display: flex;
+            gap: 8px;
+            padding: 15px;
+            background: #f8f9fa;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e0 #f7fafc;
+        }
+
+        .thumbnails-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .thumbnails-container::-webkit-scrollbar-track {
+            background: #f7fafc;
+            border-radius: 3px;
+        }
+
+        .thumbnails-container::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 3px;
+        }
+
+        .thumbnail {
+            flex-shrink: 0;
+            width: 60px;
+            height: 45px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            overflow: hidden;
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumbnail:hover {
+            transform: scale(1.05);
+            border-color: #3498db;
+        }
+
+        .thumbnail.active {
+            border-color: #e74c3c;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
+        .no-images-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: #7f8c8d;
+        }
+
+        .no-images-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .no-images-state h4 {
+            margin: 0 0 8px;
+            font-size: 18px;
+        }
+
+        .no-images-state p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .image-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 20000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .image-modal-overlay.show {
+            display: flex;
+        }
+
+        .enlarged-image {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .close-modal-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .page-header p {
+                font-size: 1.1rem;
+            }
+
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .hotels-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hotel-footer {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .capacity-info {
+                justify-content: center;
+            }
+
+            .eco-badge {
+                top: 10px;
+                right: 10px;
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+
+            .hotel-modal {
+                margin: 10px;
+                max-height: 95vh;
+            }
+            
+            .modal-header {
+                padding: 20px;
+            }
+            
+            .modal-hotel-name {
+                font-size: 20px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .modal-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .payment-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .main-image-container {
+                height: 250px;
+            }
+            
+            .slider-nav-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            
+            .slider-prev {
+                left: 10px;
+            }
+            
+            .slider-next {
+                right: 10px;
+            }
+            
+            .thumbnail {
+                width: 50px;
+                height: 38px;
+            }
+            
+            .thumbnails-container {
+                padding: 12px;
+                gap: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-compass"></i>
+                Dirección de Turismo
+            </a>
+            
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Inicio
+                    </a>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link active">
+                        <i class="fas fa-bed"></i>
+                        Hospedaje
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="hoteles.html" class="dropdown-item active">
+                            <i class="fas fa-hotel"></i>
+                            Hoteles
+                        </a>
+                        <a href="cabanas.html" class="dropdown-item">
+                            <i class="fas fa-tree"></i>
+                            Cabañas
+                        </a>
+                        <a href="airbnb.html" class="dropdown-item">
+                            <i class="fas fa-home"></i>
+                            Airbnb
+                        </a>
+                    </div>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="tourOperadora.html" class="nav-link">
+                        <i class="fas fa-route"></i>
+                        Tours
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="guias.html" class="nav-link">
+                        <i class="fas fa-user-tie"></i>
+                        Guías
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-login">Iniciar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="page-header-content">
+            <h1><i class="fas fa-hotel"></i> Hoteles</h1>
+            <p>Descubre los mejores hoteles para tu estancia. Desde hoteles boutique hasta resorts de lujo, encuentra el lugar perfecto para descansar.</p>
+        </div>
+    </section>
+
+    <!-- Search and Filters -->
+    <section class="search-section">
+        <form class="search-form" id="searchForm">
+            <div class="form-group">
+                <label for="searchQuery">Buscar hotel</label>
+                <input type="text" id="searchQuery" class="form-control" placeholder="Nombre del hotel...">
+            </div>
+            
+            <div class="form-group">
+                <label for="priceRange">Precio máximo</label>
+                <select id="priceRange" class="form-control">
+                    <option value="">Cualquier precio</option>
+                    <option value="500">Hasta $500</option>
+                    <option value="1000">Hasta $1,000</option>
+                    <option value="2000">Hasta $2,000</option>
+                    <option value="5000">Hasta $5,000</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="serviceFilter">Servicios</label>
+                <select id="serviceFilter" class="form-control">
+                    <option value="">Todos los servicios</option>
+                    <option value="wifi">WiFi gratis</option>
+                    <option value="estacionamiento">Estacionamiento</option>
+                    <option value="desayuno">Desayuno incluido</option>
+                    <option value="piscina">Piscina</option>
+                    <option value="aireacondicionado">Aire acondicionado</option>
+                    <option value="mascotas">Pet-friendly</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn-search">
+                <i class="fas fa-search"></i>
+                Buscar
+            </button>
+        </form>
+    </section>
+
+    <!-- Hoteles Section -->
+    <section class="hotels-section">
+        <div class="section-header">
+            <div class="results-info" id="resultsInfo">
+                Cargando hoteles...
+            </div>
+            <select class="sort-dropdown" id="sortBy">
+                <option value="newest">Más recientes</option>
+                <option value="price-low">Precio: menor a mayor</option>
+                <option value="price-high">Precio: mayor a menor</option>
+                <option value="rating">Mejor calificados</option>
+                <option value="name">Nombre A-Z</option>
+            </select>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading" id="loadingState">
+            <i class="fas fa-spinner"></i>
+            <h3>Cargando hoteles...</h3>
+            <p>Por favor espera mientras obtenemos la información</p>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state" id="errorState" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Error al cargar hoteles</h3>
+            <p id="errorMessage">Hubo un problema al obtener los datos. Por favor intenta de nuevo.</p>
+            <button class="retry-btn" onclick="loadHotels()">
+                <i class="fas fa-sync-alt"></i>
+                Reintentar
+            </button>
+        </div>
+
+        <!-- Hotels Grid -->
+        <div class="hotels-grid" id="hotelsGrid" style="display: none;">
+            <!-- Los hoteles se cargarán aquí dinámicamente -->
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fas fa-hotel"></i>
+            <h3>No se encontraron hoteles</h3>
+            <p>Intenta ajustar tus filtros de búsqueda</p>
+        </div>
+    </section>
+
+    <!-- Modal para imagen ampliada -->
+    <div class="image-modal-overlay" id="imageModalOverlay" onclick="closeImageModal()">
+        <button class="close-modal-btn" onclick="closeImageModal()">
+            <i class="fas fa-times"></i>
+        </button>
+        <img id="enlargedImage" src="" alt="Imagen ampliada" class="enlarged-image" onclick="event.stopPropagation()">
+    </div>
+
+    <script>
+        // Variables globales
+        let allHotels = [];
+        let filteredHotels = [];
+        const baseURL = 'http://localhost:5000/api';
+
+        // ✨ VARIABLES GLOBALES DEL SLIDER
+        let currentHotelImages = [];
+        let currentImageIndex = 0;
+
+        // Elementos del DOM
+        const loadingState = document.getElementById('loadingState');
+        const errorState = document.getElementById('errorState');
+        const hotelsGrid = document.getElementById('hotelsGrid');
+        const emptyState = document.getElementById('emptyState');
+        const resultsInfo = document.getElementById('resultsInfo');
+        const searchForm = document.getElementById('searchForm');
+        const sortBy = document.getElementById('sortBy');
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        // ✅ FUNCIÓN HELPER para URLs de imágenes
+        function getImageUrl(imagePath) {
+            if (!imagePath) {
+                return 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+            }
+            
+            if (imagePath.startsWith('http')) {
+                return imagePath;
+            }
+            
+            return `${baseURL.replace('/api', '')}${imagePath}`;
+        }
+
+        // ✅ FUNCIÓN para agregar manejo global de errores de imágenes
+        function addImageErrorHandling() {
+            document.addEventListener('error', function(e) {
+                if (e.target.tagName === 'IMG') {
+                    console.warn('Error cargando imagen:', e.target.src);
+                    e.target.src = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                }
+            }, true);
+        }
+
+        //  FUNCIÓN de debug para verificar imágenes
+        function debugHotelImages(hotel) {
+            console.log(' Debugging imágenes del hotel:', hotel.nombre);
+            console.log(' Array de imágenes:', hotel.imagenes);
+            
+            if (hotel.imagenes && hotel.imagenes.length > 0) {
+                hotel.imagenes.forEach((img, index) => {
+                    const finalUrl = getImageUrl(img);
+                    console.log(`Imagen ${index}: ${img} → ${finalUrl}`);
+                    
+                    // Probar si la imagen es accesible
+                    const testImg = new Image();
+                    testImg.onload = () => console.log(` Imagen ${index} OK`);
+                    testImg.onerror = () => console.error(`Imagen ${index} ERROR`);
+                    testImg.src = finalUrl;
+                });
+            } else {
+                console.log(' No hay imágenes para este hotel');
+            }
+        }
+        // FUNCIÓN PARA LA GALERÍA
+        function generateImageGalleryHTML(images) {
+            if (!images || images.length === 0) {
+                return `
+                    <div class="hotel-gallery-section">
+                        <h3 class="gallery-title">
+                            <i class="fas fa-images"></i>
+                            Galería de Imágenes
+                        </h3>
+                        <div class="no-images-state">
+                            <i class="fas fa-image"></i>
+                            <h4>No hay imágenes disponibles</h4>
+                            <p>Este hospedaje aún no ha subido fotos</p>
+                        </div>
+                    </div>
+                `;
+            }
+            return `
+                <div class="hotel-gallery-section">
+                    <h3 class="gallery-title">
+                        <i class="fas fa-images"></i>
+                        Galería de Imágenes (${images.length} foto${images.length !== 1 ? 's' : ''})
+                    </h3>     
+                    <div class="image-slider-container" id="imageSlider">
+                        <!-- Imagen principal -->
+                        <div class="main-image-container">
+                            <img id="mainImage" src="${getImageUrl(images[0])}" alt="Hotel imagen" class="main-image" onclick="openImageModal('${getImageUrl(images[0])}')">
+                            
+                            <!-- Botones de navegación -->
+                            <button class="slider-nav-btn slider-prev" id="prevBtn" onclick="changeImage(-1)" ${images.length <= 1 ? 'style="display: none;"' : ''}>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="slider-nav-btn slider-next" id="nextBtn" onclick="changeImage(1)" ${images.length <= 1 ? 'style="display: none;"' : ''}>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                            
+                            <!-- Contador -->
+                            <div class="image-counter" id="imageCounter">1 / ${images.length}</div>
+                        </div>
+                        
+                        <!-- Miniaturas -->
+                        <div class="thumbnails-container" id="thumbnailsContainer">
+                            ${images.map((image, index) => `
+                                <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="goToImage(${index})">
+                                    <img src="${getImageUrl(image)}" alt="Thumbnail ${index + 1}">
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // INICIALIZAR EL SLIDER CON IMÁGENES
+        function initializeImageSlider(images) {
+            currentHotelImages = images || [];
+            currentImageIndex = 0;
+            
+            if (currentHotelImages.length === 0) {
+                return;
+            }
+            
+            updateMainImage();
+            updateNavigationButtons();
+        }
+
+        // ACTUALIZAR IMAGEN PRINCIPAL
+        function updateMainImage() {
+            const mainImage = document.getElementById('mainImage');
+            const counter = document.getElementById('imageCounter');
+            
+            if (mainImage && currentHotelImages.length > 0) {
+                const currentImageUrl = getImageUrl(currentHotelImages[currentImageIndex]);
+                mainImage.src = currentImageUrl;
+                mainImage.alt = `Imagen ${currentImageIndex + 1} del hotel`;
+                mainImage.onclick = () => openImageModal(currentImageUrl);
+                
+                // Actualizar contador
+                if (counter) {
+                    counter.textContent = `${currentImageIndex + 1} / ${currentHotelImages.length}`;
+                }
+                
+                // Actualizar miniaturas activas
+                updateActiveThumbnail();
+            }
+        }
+
+        //  ACTUALIZAR MINIATURA ACTIVA
+        function updateActiveThumbnail() {
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            thumbnails.forEach((thumb, index) => {
+                thumb.classList.toggle('active', index === currentImageIndex);
+            });
+            
+            // Scroll automático de miniaturas
+            const activeThumb = document.querySelector('.thumbnail.active');
+            if (activeThumb) {
+                activeThumb.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'center'
+                });
+            }
+        }
+
+        // ⬅️➡️ CAMBIAR IMAGEN
+        function changeImage(direction) {
+            if (currentHotelImages.length === 0) return;
+            
+            currentImageIndex += direction;
+            
+            // Loop circular
+            if (currentImageIndex >= currentHotelImages.length) {
+                currentImageIndex = 0;
+            } else if (currentImageIndex < 0) {
+                currentImageIndex = currentHotelImages.length - 1;
+            }
+            
+            updateMainImage();
+            updateNavigationButtons();
+        }
+
+        // 🎯 IR A IMAGEN ESPECÍFICA
+        function goToImage(index) {
+            if (index >= 0 && index < currentHotelImages.length) {
+                currentImageIndex = index;
+                updateMainImage();
+                updateNavigationButtons();
+            }
+        }
+
+        // 🔘 ACTUALIZAR BOTONES DE NAVEGACIÓN
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            if (currentHotelImages.length <= 1) {
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) nextBtn.style.display = 'none';
+            } else {
+                if (prevBtn) prevBtn.style.display = 'flex';
+                if (nextBtn) nextBtn.style.display = 'flex';
+            }
+        }
+
+        // 🔍 ABRIR MODAL DE IMAGEN AMPLIADA
+        function openImageModal(imageSrc) {
+            const overlay = document.getElementById('imageModalOverlay');
+            const enlargedImage = document.getElementById('enlargedImage');
+            
+            if (overlay && enlargedImage) {
+                enlargedImage.src = imageSrc;
+                overlay.classList.add('show');
+                document.body.style.overflow = 'hidden'; // Prevenir scroll
+            }
+        }
+
+        // ❌ CERRAR MODAL DE IMAGEN AMPLIADA
+        function closeImageModal() {
+            const overlay = document.getElementById('imageModalOverlay');
+            if (overlay) {
+                overlay.classList.remove('show');
+                document.body.style.overflow = 'auto'; // Restaurar scroll
+            }
+        }
+
+        // ⌨️ CONTROL DE TECLADO PARA EL SLIDER
+        document.addEventListener('keydown', function(e) {
+            const overlay = document.getElementById('imageModalOverlay');
+            
+            // Si el modal de imagen está abierto
+            if (overlay && overlay.classList.contains('show')) {
+                if (e.key === 'Escape') {
+                    closeImageModal();
+                }
+                return;
+            }
+            
+            // Control del slider
+            if (e.key === 'ArrowLeft') {
+                changeImage(-1);
+            } else if (e.key === 'ArrowRight') {
+                changeImage(1);
+            }
+        });
+
+        // TOUCH/SWIPE SUPPORT PARA MÓVILES
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            const slider = document.getElementById('imageSlider');
+            if (slider && e.target.closest('#imageSlider')) {
+                touchStartX = e.changedTouches[0].screenX;
+            }
+        });
+        document.addEventListener('touchend', function(e) {
+            const slider = document.getElementById('imageSlider');
+            if (slider && e.target.closest('#imageSlider')) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }
+        });
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    // Swipe izquierda - siguiente imagen
+                    changeImage(1);
+                } else {
+                    // Swipe derecha - imagen anterior
+                    changeImage(-1);
+                }
+            }
+        }
+
+        // Mobile menu toggle
+        mobileMenuToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+        });
+
+        // Cargar hoteles al iniciar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Página cargada, iniciando carga de hoteles...');
+            addImageErrorHandling(); // ✅ NUEVO: Agregar manejo de errores
+            loadHotels();
+            setupEventListeners();
+        });
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            searchForm.addEventListener('submit', handleSearch);
+            sortBy.addEventListener('change', handleSort);
+            
+            // Búsqueda en tiempo real
+            document.getElementById('searchQuery').addEventListener('input', debounce(handleSearch, 300));
+            document.getElementById('priceRange').addEventListener('change', handleSearch);
+            document.getElementById('serviceFilter').addEventListener('change', handleSearch);
+        }
+
+        // Función debounce para optimizar búsquedas
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Cargar hoteles desde la API
+        async function loadHotels() {
+            try {
+                console.log('Iniciando carga de hoteles...');
+                showLoading();
+                
+                console.log('Haciendo petición a:', `${baseURL}/hoteles`);
+                const response = await fetch(`${baseURL}/hoteles`);
+                
+                console.log('Respuesta recibida:', response.status, response.statusText);
+                
+                if (!response.ok) {
+                    throw new Error(`Error ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('Datos recibidos:', data);
+                
+                if (data.status === 'success') {
+                    allHotels = data.data?.hoteles || [];
+                    filteredHotels = [...allHotels];
+                    
+                    console.log('Hoteles cargados:', allHotels.length);
+                    
+                    if (allHotels.length === 0) {
+                        console.log('No hay hoteles para mostrar');
+                        showEmpty();
+                        updateResultsInfo();
+                        return;
+                    }
+                    
+                    displayHotels();
+                    updateResultsInfo();
+                } else {
+                    throw new Error(data.message || 'Error al cargar hoteles');
+                }
+            } catch (error) {
+                console.error('Error detallado:', error);
+                showError(error.message);
+            }
+        }
+
+        // Manejar búsqueda
+        function handleSearch(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            
+            const searchQuery = document.getElementById('searchQuery').value.toLowerCase();
+            const priceRange = document.getElementById('priceRange').value;
+            const serviceFilter = document.getElementById('serviceFilter').value;
+            
+            console.log('Aplicando filtros:', { searchQuery, priceRange, serviceFilter });
+            
+            filteredHotels = allHotels.filter(hotel => {
+                // Filtro por texto
+                const matchesSearch = !searchQuery || 
+                    hotel.nombre?.toLowerCase().includes(searchQuery) ||
+                    hotel.descripcion?.toLowerCase().includes(searchQuery) ||
+                    hotel.ubicacion?.ciudad?.toLowerCase().includes(searchQuery);
+                
+                // Filtro por precio
+                const matchesPrice = !priceRange || (hotel.precio && hotel.precio <= parseInt(priceRange));
+                
+                // Filtro por servicios
+                const matchesService = !serviceFilter || 
+                    (hotel.servicios && hotel.servicios.includes(serviceFilter));
+                
+                return matchesSearch && matchesPrice && matchesService;
+            });
+            
+            console.log('Hoteles filtrados:', filteredHotels.length);
+            
+            displayHotels();
+            updateResultsInfo();
+        }
+
+        // Manejar ordenamiento
+        function handleSort() {
+            const sortValue = sortBy.value;
+            
+            switch (sortValue) {
+                case 'price-low':
+                    filteredHotels.sort((a, b) => (a.precio || 0) - (b.precio || 0));
+                    break;
+                case 'price-high':
+                    filteredHotels.sort((a, b) => (b.precio || 0) - (a.precio || 0));
+                    break;
+                case 'rating':
+                    filteredHotels.sort((a, b) => (b.calificacion?.promedio || 0) - (a.calificacion?.promedio || 0));
+                    break;
+                case 'name':
+                    filteredHotels.sort((a, b) => (a.nombre || '').localeCompare(b.nombre || ''));
+                    break;
+                case 'newest':
+                default:
+                    filteredHotels.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+                    break;
+            }
+            
+            displayHotels();
+        }
+
+        // Mostrar hoteles
+        function displayHotels() {
+            console.log('Mostrando hoteles:', filteredHotels.length);
+            
+            if (filteredHotels.length === 0) {
+                showEmpty();
+                return;
+            }
+            
+            showHotels();
+            
+            try {
+                const hotelsHTML = filteredHotels.map(hotel => createHotelCard(hotel)).join('');
+                hotelsGrid.innerHTML = hotelsHTML;
+                console.log('Hoteles renderizados exitosamente');
+            } catch (error) {
+                console.error('Error al renderizar hoteles:', error);
+                showError('Error al mostrar los hoteles');
+            }
+        }
+
+        // ✅ FUNCIÓN CORREGIDA: Crear tarjeta de hotel con URLs de imágenes correctas
+        function createHotelCard(hotel) {
+            const rating = hotel.calificacion?.promedio || 0;
+            const reviewCount = hotel.calificacion?.totalReviews || 0;
+            
+            // ✅ CORREGIDO: Usar función helper para construir URL de imagen correctamente
+            const imageUrl = getImageUrl(hotel.imagenes?.[0]);
+            
+            const price = hotel.precio || 0;
+            const ciudad = hotel.ubicacion?.ciudad || 'Ciudad no especificada';
+            const capacidad = hotel.capacidad?.personasMax || 0;
+            const habitaciones = hotel.capacidad?.habitaciones || 0;
+            
+            // Servicios limitados para mostrar en la vista compacta
+            const servicios = hotel.servicios?.slice(0, 3) || [];
+            
+            return `
+                <div class="hotel-card" onclick="viewHotelDetails('${hotel._id}')">
+                    <div class="hotel-image">
+                        <img src="${imageUrl}" 
+                             alt="${hotel.nombre}" 
+                             onerror="this.src='https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'"
+                             loading="lazy">
+                        
+                        <!-- 🌿 Etiqueta ecológica -->
+                        ${hotel.esEcologico ? `
+                            <div class="eco-badge">
+                                <i class="fas fa-leaf"></i>
+                                Alojamiento Ecológico
+                            </div>
+                        ` : ''}
+
+                        ${price > 0 ? `<div class="price-badge">$${price.toLocaleString('es-MX')} / noche</div>` : ''}
+                        ${rating > 0 ? `<div class="rating-badge"><i class="fas fa-star"></i> ${rating.toFixed(1)}</div>` : ''}
+                    </div>
+
+                   <div class="hotel-content">
+                        <h3 class="hotel-title">${hotel.nombre || 'Hotel sin nombre'}</h3>
+                        
+                        <div class="hotel-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            ${ciudad}
+                        </div>
+                        
+                        ${hotel.descripcion ? `
+                            <div class="hotel-description">
+                                ${hotel.descripcion}
+                            </div>
+                        ` : ''}
+                        
+                        ${servicios.length > 0 ? `
+                            <div class="hotel-features">
+                                ${servicios.map(servicio => `<span class="feature-tag">${servicio}</span>`).join('')}
+                                ${hotel.servicios && hotel.servicios.length > 3 ? `<span class="feature-tag more">+${hotel.servicios.length - 3} más</span>` : ''}
+                            </div>
+                        ` : ''}
+                        
+                        <div class="hotel-footer">
+                            <div class="capacity-info">
+                                <span><i class="fas fa-bed"></i> ${habitaciones} hab.</span>
+                                <span><i class="fas fa-users"></i> ${capacidad} huéspedes</span>
+                            </div>
+                            
+                            <!-- Botón para abrir modal -->
+                            <button class="view-details-btn" onclick="event.stopPropagation(); openHotelModal('${hotel._id}')">
+                                <i class="fas fa-info-circle"></i>
+                                Ver detalles
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Ver detalles del hotel
+        function viewHotelDetails(hotelId) {
+            console.log('Ver detalles del hotel:', hotelId);
+            // ✅ NUEVO: Debug de imágenes cuando se hace clic
+            const hotel = allHotels.find(h => h._id === hotelId);
+            if (hotel) {
+                debugHotelImages(hotel);
+            }
+            openHotelModal(hotelId);
+        }
+
+        // Función para abrir el modal con detalles del hotel con SLIDER
+        function openHotelModal(hotelId) {
+            const hotel = allHotels.find(h => h._id === hotelId);
+            if (!hotel) return;    
+            // Información del hotel
+            const telefono = hotel.contacto?.telefono || 'No disponible';
+            const email = hotel.contacto?.email || 'No disponible';
+            const direccion = hotel.ubicacion?.direccion || 'Dirección no especificada';
+            const todosServicios = hotel.servicios || [];
+            const horario = hotel.contacto?.horario || 'No especificado';
+            
+            // Obtener métodos de pago del hotel
+            let metodosPago = hotel.metodosPago || [];
+            
+            // Si no hay métodos en el backend, intentar cargar desde localStorage
+            if (!metodosPago || metodosPago.length === 0) {
+                const savedMetodos = localStorage.getItem(`hotel_${hotelId}_metodosPago`);
+                if (savedMetodos) {
+                    try {
+                        metodosPago = JSON.parse(savedMetodos);
+                    } catch (e) {
+                        metodosPago = [];
+                    }
+                }
+            }
+            // Obtener prácticas ecológicas del hotel
+            let practicasEcologicasDetalladas = [];
+            if (hotel.esEcologico) {
+                let practicasGuardadas = hotel.practicasEcologicas || [];
+                
+                // Si no hay prácticas en el backend, intentar cargar desde localStorage
+                if (!practicasGuardadas || practicasGuardadas.length === 0) {
+                    const savedPracticas = localStorage.getItem(`hotel_${hotelId}_practicasEcologicas`);
+                    if (savedPracticas) {
+                        try {
+                            practicasGuardadas = JSON.parse(savedPracticas);
+                        } catch (e) {
+                            practicasGuardadas = [];
+                        }
+                    }
+                }
+                
+                // Mapear códigos a descripciones
+                const mapaPracticas = {
+                    'energia': 'Uso de energías renovables',
+                    'reciclaje': 'Reciclaje y separación de residuos',
+                    'limpieza': 'Productos de limpieza biodegradables',
+                    'agua': 'Ahorro de agua con sistemas eficientes',
+                    'local': 'Apoyo a productores locales',
+                    'reforestacion': 'Programas de reforestación'
+                };
+                
+                practicasEcologicasDetalladas = practicasGuardadas.length > 0 
+                    ? practicasGuardadas.map(p => mapaPracticas[p] || p)
+                    : [
+                        'Uso de energías renovables',
+                        'Reciclaje y separación de residuos',
+                        'Productos de limpieza biodegradables',
+                        'Ahorro de agua con sistemas eficientes',
+                        'Apoyo a productores locales',
+                        'Programas de reforestación'
+                    ];
+            }
+            
+            //  galería de imágenes
+            const galleryHTML = generateImageGalleryHTML(hotel.imagenes);
+            
+            // Función: Generar HTML de métodos de pago dinámicamente
+            function generarMetodosPagoHTML() {
+                if (!metodosPago || metodosPago.length === 0) {
+                    return `
+                        <div class="payment-item disabled">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Contactar para información de pago</span>
+                        </div>
+                    `;
+                }
+                
+                const iconosMetodos = {
+                    'efectivo': 'fas fa-money-bill-wave',
+                    'transferencia': 'fas fa-exchange-alt',
+                    'tarjeta': 'fas fa-credit-card'
+                };
+                
+                const nombresMetodos = {
+                    'efectivo': 'Efectivo',
+                    'transferencia': 'Transferencia',
+                    'tarjeta': 'Tarjeta'
+                };
+                
+                return metodosPago.map(metodo => `
+                    <div class="payment-item">
+                        <i class="${iconosMetodos[metodo] || 'fas fa-credit-card'}"></i>
+                        <span>${nombresMetodos[metodo] || metodo}</span>
+                    </div>
+                `).join('');
+            }
+            
+            const modalHTML = `
+                <div class="hotel-modal-overlay" id="hotelModalOverlay" onclick="closeHotelModal()">
+                    <div class="hotel-modal" onclick="event.stopPropagation()">
+                        <!-- Header del modal -->
+                        <div class="modal-header">
+                            <div class="modal-hotel-info">
+                                <h2 class="modal-hotel-name">
+                                    ${hotel.esEcologico ? '<i class="fas fa-leaf eco-icon"></i>' : ''}
+                                    ${hotel.nombre}
+                                </h2>
+                                <p class="modal-hotel-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    ${hotel.ubicacion?.ciudad || 'Ubicación no especificada'}
+                                </p>
+                            </div>
+                            <button class="modal-close-btn" onclick="closeHotelModal()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Contenido del modal -->
+                        <div class="modal-content">
+                            <!-- ✨ NUEVA SECCIÓN: Galería de imágenes -->
+                            ${galleryHTML}
+                            
+                            <!-- El resto del modal grid existente -->
+                            <div class="modal-grid">
+                                
+                                <!-- Información básica -->
+                                <div class="modal-section">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-info-circle"></i>
+                                        Información General
+                                    </h3>
+                                    <div class="info-grid">
+                                        <div class="info-item">
+                                            <span class="info-label">Habitaciones:</span>
+                                            <span class="info-value">${hotel.capacidad?.habitaciones || 0}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Capacidad:</span>
+                                            <span class="info-value">${hotel.capacidad?.personasMax || 0} huéspedes</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Precio base:</span>
+                                            <span class="info-value">$${(hotel.precio || 0).toLocaleString('es-MX')} / noche</span>
+                                        </div>
+                                        <div class="info-item full-width">
+                                            <span class="info-label">Dirección:</span>
+                                            <span class="info-value">${direccion}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Contacto -->
+                                <div class="modal-section">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-phone"></i>
+                                        Contacto
+                                    </h3>
+                                    <div class="contact-grid">
+                                        <div class="contact-item">
+                                            ${telefono !== 'No disponible' ? `
+                                                <a href="tel:${telefono}" class="contact-btn phone">
+                                                    <i class="fas fa-phone"></i>
+                                                    <div>
+                                                        <div class="contact-type">Teléfono</div>
+                                                        <div class="contact-value">${telefono}</div>
+                                                    </div>
+                                                </a>
+                                            ` : `
+                                                <div class="contact-btn disabled">
+                                                    <i class="fas fa-phone"></i>
+                                                    <div>
+                                                        <div class="contact-type">Teléfono</div>
+                                                        <div class="contact-value">No disponible</div>
+                                                    </div>
+                                                </div>
+                                            `}
+                                        </div>
+                                        
+                                        <div class="contact-item">
+                                            ${email !== 'No disponible' ? `
+                                                <a href="mailto:${email}" class="contact-btn email">
+                                                    <i class="fas fa-envelope"></i>
+                                                    <div>
+                                                        <div class="contact-type">Email</div>
+                                                        <div class="contact-value">${email}</div>
+                                                    </div>
+                                                </a>
+                                            ` : `
+                                                <div class="contact-btn disabled">
+                                                    <i class="fas fa-envelope"></i>
+                                                    <div>
+                                                        <div class="contact-type">Email</div>
+                                                        <div class="contact-value">No disponible</div>
+                                                    </div>
+                                                </div>
+                                            `}
+                                        </div>
+                                        
+                                        <!-- Horario de atención -->
+                                        <div class="contact-item full-width">
+                                            <div class="schedule-info">
+                                                <i class="fas fa-clock"></i>
+                                                <div>
+                                                    <div class="contact-type">Horario de Atención</div>
+                                                    <div class="contact-value">${horario}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Servicios -->
+                                ${todosServicios.length > 0 ? `
+                                    <div class="modal-section">
+                                        <h3 class="section-title">
+                                            <i class="fas fa-concierge-bell"></i>
+                                            Servicios Incluidos
+                                        </h3>
+                                        <div class="services-grid">
+                                            ${todosServicios.map(servicio => `
+                                                <div class="service-item">
+                                                    <i class="fas fa-check service-check"></i>
+                                                    <span>${formatService(servicio)}</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                                
+                                <!-- Métodos de pago dinámicos -->
+                                <div class="modal-section">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-credit-card"></i>
+                                        Métodos de Pago
+                                        ${metodosPago.length > 0 ? '<span style="color: #27ae60; font-size: 12px; margin-left: 10px;"></span>' : ''}
+                                    </h3>
+                                    <div class="payment-grid">
+                                        ${generarMetodosPagoHTML()}
+                                    </div>
+                                </div>
+                                
+                                <!-- Prácticas ecológicas -->
+                                ${hotel.esEcologico ? `
+                                    <div class="modal-section eco-section">
+                                        <h3 class="section-title eco-title">
+                                            <i class="fas fa-leaf"></i>
+                                            Compromiso Ecológico
+                                        </h3>
+                                        <p class="eco-intro">
+                                            Este alojamiento está comprometido con prácticas sostenibles:
+                                        </p>
+                                        <div class="eco-practices">
+                                            ${practicasEcologicasDetalladas.map(practica => `
+                                                <div class="eco-practice">
+                                                    <i class="fas fa-leaf eco-check"></i>
+                                                    <span>${practica}</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                                
+                                <!-- Nota de precios -->
+                                <div class="modal-section price-section">
+                                    <h3 class="section-title price-title">
+                                        <i class="fas fa-info-circle"></i>
+                                        Información de Precios
+                                    </h3>
+                                    <div class="price-info">
+                                        <div class="price-warning">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            <span>Los precios pueden variar según:</span>
+                                        </div>
+                                        <ul class="price-factors">
+                                            <li>Número de huéspedes</li>
+                                            <li>Tipo de habitación</li>
+                                            <li>Temporada y fechas</li>
+                                            <li>Servicios adicionales</li>
+                                        </ul>
+                                        <div class="price-cta">
+                                            <i class="fas fa-phone"></i>
+                                            <span>Contacta para cotización personalizada</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+           // Insertar modal en el DOM
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            
+            // Animación de entrada
+            setTimeout(() => {
+                document.getElementById('hotelModalOverlay').classList.add('show');
+            }, 10);
+
+            // ✨ NUEVO: Inicializar el slider después de insertar el HTML
+            setTimeout(() => {
+                initializeImageSlider(hotel.imagenes);
+            }, 100);
+        }
+
+        // Función para cerrar el modal
+        function closeHotelModal() {
+            const overlay = document.getElementById('hotelModalOverlay');
+            if (overlay) {
+                overlay.classList.remove('show');
+                setTimeout(() => {
+                    overlay.remove();
+                }, 300);
+            }
+        }
+
+        // Función para formatear nombres de servicios
+        function formatService(service) {
+            const services = {
+                'wifi': 'WiFi Gratis',
+                'piscina': 'Piscina',
+                'gym': 'Gimnasio',
+                'spa': 'Spa',
+                'restaurante': 'Restaurante',
+                'bar': 'Bar',
+                'estacionamiento': 'Estacionamiento',
+                'aireacondicionado': 'Aire Acondicionado',
+                'television': 'Televisión',
+                'desayuno': 'Desayuno Incluido'
+            };
+            return services[service] || service.charAt(0).toUpperCase() + service.slice(1);
+        }
+
+        // Cerrar modal con tecla Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeHotelModal();
+            }
+        });
+
+        // Actualizar información de resultados
+        function updateResultsInfo() {
+            const total = allHotels.length;
+            const count = filteredHotels.length;
+            
+            if (total === 0) {
+                resultsInfo.textContent = 'No hay hoteles disponibles';
+            } else if (count === total) {
+                resultsInfo.textContent = `Mostrando ${total} hotel${total !== 1 ? 'es' : ''}`;
+            } else {
+                resultsInfo.textContent = `Mostrando ${count} de ${total} hotel${total !== 1 ? 'es' : ''}`;
+            }
+        }
+
+        // Estados de la interfaz
+        function showLoading() {
+            console.log('Mostrando estado de carga');
+            loadingState.style.display = 'block';
+            errorState.style.display = 'none';
+            hotelsGrid.style.display = 'none';
+            emptyState.style.display = 'none';
+        }
+
+        function showHotels() {
+            console.log('Mostrando grid de hoteles');
+            loadingState.style.display = 'none';
+            errorState.style.display = 'none';
+            hotelsGrid.style.display = 'grid';
+            emptyState.style.display = 'none';
+        }
+
+        function showEmpty() {
+            console.log('Mostrando estado vacío');
+            loadingState.style.display = 'none';
+            errorState.style.display = 'none';
+            hotelsGrid.style.display = 'none';
+            emptyState.style.display = 'block';
+        }
+
+        function showError(message) {
+            console.log('Mostrando error:', message);
+            document.getElementById('errorMessage').textContent = message || 'Error desconocido';
+            loadingState.style.display = 'none';
+            errorState.style.display = 'block';
+            hotelsGrid.style.display = 'none';
+            emptyState.style.display = 'none';
+        }
+
+        // ✅ FUNCIONES GLOBALES para debug (usar en consola del navegador)
+        window.debugHotelImages = debugHotelImages;
+        window.getImageUrl = getImageUrl;
+        window.debugAllHotels = function() {
+            console.log('🔍 Debugging todas las imágenes de hoteles');
+            allHotels.forEach(hotel => debugHotelImages(hotel));
+        };
+    </script>
+</body>
+</html>

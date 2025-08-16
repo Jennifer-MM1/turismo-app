@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Imágenes - Hotel</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-900);
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--gray-600);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background-color: var(--gray-100);
+            color: var(--primary);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--gray-900);
+            font-size: 0.9rem;
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Main Content */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--gray-600);
+            font-size: 1.1rem;
+        }
+
+        /* Hotel Info Card */
+        .hotel-info-card {
+            background: var(--white);
+            border-radius: 0.75rem;
+            border: 1px solid var(--gray-200);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .hotel-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hotel-icon {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .hotel-details h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .hotel-meta {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: var(--white);
+            border-radius: 0.75rem;
+            border: 1px solid var(--gray-200);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--gray-300);
+            border-radius: 0.75rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background-color: var(--gray-50);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary);
+            background-color: #eff6ff;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--gray-400);
+            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            color: var(--gray-600);
+            margin-bottom: 1rem;
+        }
+
+        .upload-text strong {
+            color: var(--primary);
+        }
+
+        .upload-hint {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .upload-button {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-top: 1rem;
+        }
+
+        .upload-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            background: var(--white);
+            border-radius: 0.75rem;
+            border: 1px solid var(--gray-200);
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .gallery-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .gallery-stats {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .image-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .image-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .image-card:hover .image-container img {
+            transform: scale(1.05);
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            display: flex;
+            align-items: flex-end;
+            padding: 1rem;
+        }
+
+        .image-card:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .image-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--gray-700);
+        }
+
+        .action-btn:hover {
+            background: var(--white);
+            transform: scale(1.1);
+        }
+
+        .action-btn.primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .action-btn.primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .action-btn.danger {
+            background: var(--error);
+            color: var(--white);
+        }
+
+        .action-btn.danger:hover {
+            background: #dc2626;
+        }
+
+        .main-badge {
+            position: absolute;
+            top: 0.75rem;
+            left: 0.75rem;
+            background: var(--success);
+            color: var(--white);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 10;
+        }
+
+        .image-info {
+            padding: 1rem;
+        }
+
+        .image-filename {
+            font-size: 0.9rem;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .image-meta {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray-500);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--gray-300);
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray-500);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--gray-200);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            max-width: 400px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border-left: 4px solid var(--primary);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            gap: 12px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success { border-left-color: var(--success); }
+        .notification.error { border-left-color: var(--error); }
+        .notification.warning { border-left-color: var(--warning); }
+        
+        .notification i {
+            font-size: 18px;
+            color: var(--primary);
+        }
+        
+        .notification.success i { color: var(--success); }
+        .notification.error i { color: var(--error); }
+        .notification.warning i { color: var(--warning); }
+        
+        .notification-message {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .notification-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            color: var(--gray-400);
+        }
+        
+        .notification-close:hover {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main {
+                padding: 1rem;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+            
+            .upload-section {
+                padding: 1.5rem;
+            }
+            
+            .upload-area {
+                padding: 2rem 1rem;
+            }
+            
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .hotel-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .hotel-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-left">
+                <button class="back-btn" onclick="goBack()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <a href="hoteles-admin.html" class="logo">
+                    <i class="fas fa-images"></i>
+                    Gestión de Imágenes
+                </a>
+            </div>
+            
+            <div class="user-section">
+                <div class="user-info">
+                    <div class="user-name" id="user-name">Cargando...</div>
+                    <div class="user-role" id="user-role">admin</div>
+                </div>
+                <div class="user-avatar" id="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Gestión de Imágenes</h1>
+            <p class="page-subtitle">Administra las fotos de tu hotel</p>
+        </div>
+
+        <!-- Hotel Info -->
+        <div class="hotel-info-card" id="hotel-info-card" style="display: none;">
+            <div class="hotel-info">
+                <div class="hotel-icon">
+                    <i class="fas fa-hotel"></i>
+                </div>
+                <div class="hotel-details">
+                    <h3 id="hotel-name">Cargando hotel...</h3>
+                    <div class="hotel-meta">
+                        <span><i class="fas fa-map-marker-alt"></i> <span id="hotel-location">-</span></span>
+                        <span><i class="fas fa-bed"></i> <span id="hotel-rooms">-</span> habitaciones</span>
+                        <span><i class="fas fa-users"></i> <span id="hotel-capacity">-</span> huéspedes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <h2 style="margin-bottom: 1.5rem; font-size: 1.25rem; color: var(--gray-900);">Subir Nuevas Imágenes</h2>
+            
+            <div class="upload-area" id="upload-area">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div class="upload-text">
+                    <strong>Haz clic aquí</strong> o arrastra las imágenes para subirlas
+                </div>
+                <div class="upload-hint">
+                    Formatos soportados: JPG, PNG, GIF, WebP • Máximo 5MB por imagen • Hasta 10 imágenes
+                </div>
+                <button type="button" class="upload-button" onclick="document.getElementById('file-input').click()">
+                    <i class="fas fa-plus"></i>
+                    Seleccionar Imágenes
+                </button>
+            </div>
+            
+            <input type="file" id="file-input" multiple accept="image/*">
+            
+            <div class="progress-container" id="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-text" id="progress-text">Subiendo imágenes...</div>
+            </div>
+        </div>
+
+        <!-- Gallery Section -->
+        <div class="gallery-section">
+            <div class="gallery-header">
+                <h2 class="gallery-title">Galería de Imágenes</h2>
+                <div class="gallery-stats" id="gallery-stats">
+                    <span id="image-count">0</span> imágenes
+                </div>
+            </div>
+            
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Cargando imágenes...</p>
+            </div>
+            
+            <div id="gallery-grid" class="gallery-grid" style="display: none;">
+                <!-- Las imágenes se cargarán aquí dinámicamente -->
+            </div>
+            
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <i class="fas fa-images"></i>
+                <h3>No hay imágenes</h3>
+                <p>Sube tus primeras imágenes para comenzar</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ✅ CONFIGURACIÓN CORREGIDA: URL dinámico
+        const API_BASE = window.location.origin.includes('localhost') 
+            ? 'http://localhost:5000/api' 
+            : 'https://tu-servidor.com/api'; // ✅ Cambiar por tu URL de producción
+
+        // ✅ FUNCIÓN AGREGADA: getImageUrl para construir URLs correctamente
+        function getImageUrl(imagePath) {
+            console.log('🔍 getImageUrl recibió:', imagePath);
+            
+            // Si no hay imagen, usar imagen por defecto
+            if (!imagePath) {
+                console.log('⚠️ No hay imagen, usando por defecto');
+                return 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+            }
+            
+            // Si ya es una URL completa (http/https), devolverla tal como está
+            if (imagePath.startsWith('http')) {
+                console.log('✅ URL completa:', imagePath);
+                return imagePath;
+            }
+            
+            // Construir URL completa
+            const finalUrl = `${API_BASE.replace('/api', '')}${imagePath}`;
+            console.log('✅ URL construida:', finalUrl);
+            return finalUrl;
+        }
+
+        // ✅ FUNCIÓN AGREGADA: Manejo global de errores de imágenes
+        function addImageErrorHandling() {
+            document.addEventListener('error', function(e) {
+                if (e.target.tagName === 'IMG') {
+                    console.warn('Error cargando imagen:', e.target.src);
+                    e.target.src = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                }
+            }, true);
+        }
+            
+        let currentUser = null;
+        let currentHotel = null;
+        let images = [];
+
+        // Elementos del DOM
+        const fileInput = document.getElementById('file-input');
+        const uploadArea = document.getElementById('upload-area');
+        const progressContainer = document.getElementById('progress-container');
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-text');
+        const galleryGrid = document.getElementById('gallery-grid');
+        const loadingElement = document.getElementById('loading');
+        const emptyState = document.getElementById('empty-state');
+        const imageCount = document.getElementById('image-count');
+        const hotelInfoCard = document.getElementById('hotel-info-card');
+
+        // Funciones de notificación
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            const icon = type === 'success' ? 'fa-check-circle' : 
+                        type === 'error' ? 'fa-exclamation-circle' : 
+                        type === 'warning' ? 'fa-exclamation-triangle' : 'fa-info-circle';
+            
+            notification.innerHTML = `
+                <i class="fas ${icon}"></i>
+                <span class="notification-message">${message}</span>
+                <button class="notification-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 5000);
+            
+            notification.querySelector('.notification-close').onclick = () => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            };
+        }
+
+        // ✅ FUNCIÓN CORREGIDA: Verificación rápida (como en otras páginas)
+        function quickAuthCheck() {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                console.log('❌ No hay token en quickAuthCheck');
+                window.location.href = '../login.html';
+                return false;
+            }
+            return true;
+        }
+
+        // ✅ FUNCIÓN CORREGIDA: Verificar autenticación
+        async function checkAuth() {
+            const token = localStorage.getItem('authToken');
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            
+            // ✅ VERIFICACIÓN SIMPLE como en otras páginas del proyecto
+            if (!token) {
+                console.log('❌ No hay token, redirigiendo al login');
+                showNotification('No has iniciado sesión', 'error');
+                setTimeout(() => {
+                    window.location.href = '../login.html';
+                }, 2000);
+                return;
+            }
+
+            // ✅ VERIFICACIÓN ADICIONAL OPCIONAL (solo si hay userData)
+            if (userData && userData.nombre) {
+                currentUser = userData;
+                updateUserInterface();
+                await loadHotelInfo();
+                console.log('✅ Usuario autenticado desde localStorage:', userData.email || userData.nombre);
+                return;
+            }
+
+            // ✅ VERIFICACIÓN CON SERVIDOR (solo si no hay userData local)
+            try {
+                console.log('🔍 Verificando token con servidor...');
+                const response = await fetch(`${API_BASE}/auth/me`, {  // ✅ RUTA CORREGIDA
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // ✅ GUARDAR datos del usuario en localStorage para futuras verificaciones
+                    currentUser = data.data.user;
+                    localStorage.setItem('userData', JSON.stringify(currentUser));
+                    
+                    updateUserInterface();
+                    await loadHotelInfo();
+                    console.log('✅ Usuario verificado con servidor:', currentUser.email);
+                } else {
+                    // ✅ NO redirigir inmediatamente - dar oportunidad de funcionar con token local
+                    console.warn('⚠️ Error verificando con servidor, pero token existe localmente');
+                    
+                    // Solo redirigir si es un error de token inválido (401)
+                    if (response.status === 401) {
+                        throw new Error('Token inválido');
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Error verificando auth:', error);
+                
+                // ✅ SOLO eliminar datos y redirigir si es error grave
+                if (error.message.includes('Token inválido') || error.message.includes('401')) {
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('userData');
+                    showNotification('Sesión expirada, redirigiendo...', 'warning');
+                    setTimeout(() => {
+                        window.location.href = '../login.html';
+                    }, 2000);
+                } else {
+                    // ✅ Para otros errores (conexión, etc.), continuar con token local
+                    console.log('⚠️ Error de conexión, continuando con sesión local');
+                    showNotification('Conexión limitada, pero continuando...', 'warning');
+                }
+            }
+        }
+
+        // ✅ FUNCIÓN CORREGIDA: Actualizar interfaz de usuario
+        function updateUserInterface() {
+            if (!currentUser) {
+                // ✅ Usar datos básicos desde localStorage si no hay currentUser
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                currentUser = userData;
+            }
+
+            const userName = document.getElementById('user-name');
+            const userRole = document.getElementById('user-role');
+            const userAvatar = document.getElementById('user-avatar');
+
+            if (userName) {
+                userName.textContent = currentUser?.nombre || 'Administrador';
+            }
+            
+            if (userRole) {
+                userRole.textContent = currentUser?.role || 'admin';
+            }
+            
+            if (userAvatar) {
+                const initials = currentUser?.nombre ? 
+                    currentUser.nombre.charAt(0).toUpperCase() + (currentUser.apellido?.charAt(0).toUpperCase() || '') :
+                    'AD';
+                userAvatar.textContent = initials;
+            }
+        }
+
+        // ✅ FUNCIÓN CORREGIDA: Cargar hotel específico por ID del query string
+        async function loadHotelInfo() {
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+
+            // ✅ OBTENER ID del hotel desde la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const hotelId = urlParams.get('hotelId');
+
+            if (!hotelId) {
+                console.error('❌ No se proporcionó ID del hotel');
+                showNotification('No se especificó el hotel a gestionar', 'error');
+                setTimeout(() => {
+                    window.location.href = 'hoteles-admin.html';
+                }, 2000);
+                return;
+            }
+
+            try {
+                // ✅ OBTENER hotel específico por ID
+                const response = await fetch(`${API_BASE}/hoteles/${hotelId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.status === 'success' && data.data.hotel) {
+                        currentHotel = data.data.hotel;
+                        displayHotelInfo();
+                        loadImages();
+                        console.log('✅ Hotel cargado:', currentHotel.nombre);
+                    } else {
+                        throw new Error('Hotel no encontrado');
+                    }
+                } else if (response.status === 404) {
+                    showNotification('Hotel no encontrado o no tienes permisos', 'error');
+                    setTimeout(() => {
+                        window.location.href = 'hoteles-admin.html';
+                    }, 2000);
+                } else {
+                    throw new Error('Error cargando hotel');
+                }
+            } catch (error) {
+                console.error('Error cargando hotel:', error);
+                showNotification('Error cargando información del hotel', 'error');
+            }
+        }
+
+        // Mostrar información del hotel
+        function displayHotelInfo() {
+            if (!currentHotel) return;
+
+            document.getElementById('hotel-name').textContent = currentHotel.nombre;
+            document.getElementById('hotel-location').textContent = 
+                `${currentHotel.ubicacion?.ciudad || 'Ciudad'}, ${currentHotel.ubicacion?.estado || 'Estado'}`;
+            document.getElementById('hotel-rooms').textContent = 
+                currentHotel.capacidad?.habitaciones || '0';
+            document.getElementById('hotel-capacity').textContent = 
+                currentHotel.capacidad?.personasMax || '0';
+
+            hotelInfoCard.style.display = 'block';
+        }
+
+        // Cargar imágenes
+        async function loadImages() {
+            const token = localStorage.getItem('authToken');
+            if (!token || !currentHotel) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/hoteles/${currentHotel._id}/images`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    images = data.data || [];
+                    displayImages();
+                } else {
+                    throw new Error('Error cargando imágenes');
+                }
+            } catch (error) {
+                console.error('Error cargando imágenes:', error);
+                showNotification('Error cargando imágenes', 'error');
+                showEmptyState();
+            }
+        }
+
+        // ✅ FUNCIÓN CORREGIDA: Mostrar imágenes usando getImageUrl()
+        function displayImages() {
+            loadingElement.style.display = 'none';
+            
+            if (images.length === 0) {
+                showEmptyState();
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            galleryGrid.style.display = 'grid';
+            imageCount.textContent = images.length;
+
+            galleryGrid.innerHTML = images.map((image, index) => `
+                <div class="image-card" data-image-index="${index}">
+                    ${index === 0 ? '<div class="main-badge">Principal</div>' : ''}
+                    <div class="image-container">
+                        <img src="${getImageUrl(image)}" alt="Imagen ${index + 1}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+                        <div class="image-overlay">
+                            <div class="image-actions">
+                                ${index !== 0 ? `
+                                    <button class="action-btn primary" onclick="setMainImage(${index})" title="Establecer como principal">
+                                        <i class="fas fa-star"></i>
+                                    </button>
+                                ` : ''}
+                                <button class="action-btn danger" onclick="deleteImage(${index})" title="Eliminar imagen">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="image-info">
+                        <div class="image-filename">imagen-${index + 1}.jpg</div>
+                        <div class="image-meta">
+                            <span>Posición: ${index + 1}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Mostrar estado vacío
+        function showEmptyState() {
+            loadingElement.style.display = 'none';
+            galleryGrid.style.display = 'none';
+            emptyState.style.display = 'block';
+            imageCount.textContent = '0';
+        }
+
+        // Drag and drop
+        function setupDragAndDrop() {
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                const files = Array.from(e.dataTransfer.files).filter(file => 
+                    file.type.startsWith('image/')
+                );
+                
+                if (files.length > 0) {
+                    handleFileUpload(files);
+                } else {
+                    showNotification('Solo se permiten archivos de imagen', 'warning');
+                }
+            });
+
+            uploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+        }
+
+        // Manejar selección de archivos
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            if (files.length > 0) {
+                handleFileUpload(files);
+            }
+        });
+
+        // Subir archivos
+        async function handleFileUpload(files) {
+            if (files.length > 10) {
+                showNotification('Máximo 10 imágenes por vez', 'warning');
+                return;
+            }
+
+            // Verificar tamaño de archivos
+            const invalidFiles = files.filter(file => file.size > 5 * 1024 * 1024);
+            if (invalidFiles.length > 0) {
+                showNotification('Algunas imágenes superan los 5MB', 'warning');
+                return;
+            }
+
+            if (!currentHotel) {
+                showNotification('No se ha cargado la información del hotel', 'error');
+                return;
+            }
+
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+
+            const formData = new FormData();
+            files.forEach(file => {
+                formData.append('images', file);
+            });
+
+            // Mostrar progress
+            progressContainer.style.display = 'block';
+            progressFill.style.width = '0%';
+            progressText.textContent = `Subiendo ${files.length} imagen(es)...`;
+
+            try {
+                const xhr = new XMLHttpRequest();
+                
+                xhr.upload.addEventListener('progress', (e) => {
+                    if (e.lengthComputable) {
+                        const percentComplete = (e.loaded / e.total) * 100;
+                        progressFill.style.width = percentComplete + '%';
+                        progressText.textContent = `Subiendo... ${Math.round(percentComplete)}%`;
+                    }
+                });
+
+                xhr.addEventListener('load', () => {
+                    progressContainer.style.display = 'none';
+                    
+                    if (xhr.status === 200) {
+                        const data = JSON.parse(xhr.responseText);
+                        showNotification(data.message || 'Imágenes subidas exitosamente', 'success');
+                        loadImages(); // Recargar galería
+                        fileInput.value = ''; // Limpiar input
+                    } else {
+                        const error = JSON.parse(xhr.responseText);
+                        showNotification(error.message || 'Error subiendo imágenes', 'error');
+                    }
+                });
+
+                xhr.addEventListener('error', () => {
+                    progressContainer.style.display = 'none';
+                    showNotification('Error de conexión al subir imágenes', 'error');
+                });
+
+                xhr.open('POST', `${API_BASE}/hoteles/${currentHotel._id}/images/upload`);
+                xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+                xhr.send(formData);
+
+            } catch (error) {
+                progressContainer.style.display = 'none';
+                console.error('Error subiendo imágenes:', error);
+                showNotification('Error subiendo imágenes', 'error');
+            }
+        }
+
+        // Establecer imagen principal
+        async function setMainImage(imageIndex) {
+            const token = localStorage.getItem('authToken');
+            if (!token || !currentHotel) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/hoteles/${currentHotel._id}/images/set-main`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ imageIndex })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showNotification(data.message || 'Imagen principal actualizada', 'success');
+                    loadImages(); // Recargar galería
+                } else {
+                    showNotification(data.message || 'Error estableciendo imagen principal', 'error');
+                }
+            } catch (error) {
+                console.error('Error estableciendo imagen principal:', error);
+                showNotification('Error de conexión', 'error');
+            }
+        }
+
+        // Eliminar imagen
+        async function deleteImage(imageIndex) {
+            const confirmed = confirm('¿Estás seguro de que quieres eliminar esta imagen?');
+            if (!confirmed) return;
+
+            const token = localStorage.getItem('authToken');
+            if (!token || !currentHotel) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/hoteles/${currentHotel._id}/images/${imageIndex}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showNotification(data.message || 'Imagen eliminada exitosamente', 'success');
+                    loadImages(); // Recargar galería
+                } else {
+                    showNotification(data.message || 'Error eliminando imagen', 'error');
+                }
+            } catch (error) {
+                console.error('Error eliminando imagen:', error);
+                showNotification('Error de conexión', 'error');
+            }
+        }
+
+        // Función para volver atrás
+        function goBack() {
+            window.history.back();
+        }
+
+        // ✅ INICIALIZACIÓN CORREGIDA: Verificación rápida primero + manejo de errores de imágenes
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Iniciando manage-images-hotel...');
+            
+            // ✅ VERIFICACIÓN RÁPIDA primero (como en otras páginas)
+            if (!quickAuthCheck()) {
+                return; // Si no hay token, ya redirigió
+            }
+            
+            // ✅ AGREGAR manejo de errores de imágenes
+            addImageErrorHandling();
+            
+            // ✅ CONTINUAR con inicialización
+            setupDragAndDrop();
+            
+            // ✅ VERIFICACIÓN COMPLETA después (sin redirigir automáticamente)
+            checkAuth();
+            
+            console.log('✅ Gestión de imágenes de hotel inicializada');
+        });
+
+        // ✅ MEJORAR el intervalo de verificación (menos agresivo)
+        setInterval(() => {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                console.log('⚠️ Token eliminado durante la sesión, redirigiendo...');
+                window.location.href = '../login.html';
+            }
+        }, 60000); // ✅ Verificar cada minuto en lugar de cada 30 segundos
+    </script>
+</body>
+</html>

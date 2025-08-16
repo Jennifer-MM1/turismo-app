@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar Cabaña - TuristaApp</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        /* Variables CSS */
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --secondary-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --text-color: #333333;
+            --text-muted: #666666;
+            --bg-color: #f0f2f5;
+        }
+
+        /* Reset y estilos base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--bg-color);
+            min-height: 100vh;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-overlay p {
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* Admin Container */
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar - ESTILOS EXACTOS DE CABANAS-ADMIN */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            background: rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .sidebar-close {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+
+        /* User Info in Sidebar */
+        .user-info {
+            padding: 1rem 1.5rem;
+            background: rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--success-color), #2ecc71);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            border: 3px solid rgba(255,255,255,0.2);
+            margin: 0 auto 1rem;
+        }
+
+        .user-name {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-role {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Sidebar Menu */
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+        }
+
+        .menu-section {
+            padding: 1rem 1.5rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-item {
+            list-style: none;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .menu-link:hover {
+            background: rgba(255,255,255,0.1);
+            border-left-color: var(--success-color);
+        }
+
+        .menu-link.active {
+            background: rgba(255,255,255,0.15);
+            border-left-color: var(--success-color);
+        }
+
+        .menu-link i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .menu-badge {
+            background: var(--success-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .submenu-item {
+            margin-left: 1rem;
+        }
+
+        .submenu-link {
+            padding-left: 3rem !important;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .submenu-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Sidebar Footer */
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            background: rgba(0,0,0,0.1);
+        }
+
+        .logout-btn {
+            width: 100%;
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(231, 76, 60, 0.3);
+        }
+
+        /* Sidebar Overlay para móviles */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            min-height: 100vh;
+            background: var(--bg-color);
+        }
+
+        /* Top Header */
+        .top-header {
+            background: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .page-title i {
+            color: var(--primary-color);
+        }
+
+        /* Content Header */
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .content-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .content-header h1 i {
+            color: var(--primary-color);
+        }
+
+        /* Content Body */
+        .content-body {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            overflow: hidden;
+            margin: 2rem;
+        }
+
+        /* Form Container */
+        .form-container {
+            padding: 2rem;
+        }
+
+        /* Form Section */
+        .form-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .section-title i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: white;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-hint {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .service-item:hover {
+            border-color: var(--primary-color);
+            background: #e8f4fd;
+            transform: translateY(-2px);
+        }
+
+        .service-item.selected {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), transparent);
+        }
+
+        .service-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        .service-item i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .service-item label {
+            cursor: pointer;
+            flex: 1;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        /* Payment Grid */
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .payment-option {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .payment-option:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+        }
+
+        .payment-option.selected {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), transparent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .payment-option input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .payment-option label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 10px;
+            cursor: pointer;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .payment-option.selected label {
+            color: var(--primary-color);
+        }
+
+        .payment-icon {
+            font-size: 24px;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .payment-option.selected .payment-icon {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .payment-option::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .payment-option.selected::before {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .payment-option.selected::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            color: white;
+            font-size: 12px;
+        }
+
+        /* Checkbox Group */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-group:hover {
+            border-color: var(--success-color);
+            background: #e8f5e8;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--success-color);
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .checkbox-group label i {
+            color: var(--success-color);
+            font-size: 1.2rem;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: var(--text-muted);
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .sidebar-close {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-menu-toggle,
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .content-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .payment-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                justify-content: center;
+            }
+
+            .content-body {
+                margin: 1rem;
+            }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .form-container {
+                padding: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>Cargando...</p>
+    </div>
+
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" class="logo">
+                    <i class="fas fa-compass"></i>
+                    <span>Dirección de Turismo</span>
+                </a>
+                <button class="sidebar-close" id="sidebarClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-name" id="userName">Administrador</div>
+                <div class="user-role">
+                    <i class="fas fa-shield-alt"></i>
+                    <span id="userRole">Administrador</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <!-- PRINCIPAL -->
+                <li class="menu-section">Principal</li>
+                <li class="menu-item">
+                    <a href="dashboard.html" class="menu-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <!-- GESTIÓN DE SERVICIOS -->
+                <li class="menu-section">Gestión de Servicios</li>
+                
+                <!-- Mis Cabañas - Enlace principal -->
+                <li class="menu-item">
+                    <a href="cabanas-admin.html" class="menu-link">
+                        <i class="fas fa-mountain"></i>
+                        <span>Mis Cabañas</span>
+                        <span class="menu-badge" id="cabanaCount">0</span>
+                    </a>
+                </li>
+                
+                <!-- Gestión de Imágenes -->
+                <li class="menu-item submenu-item" id="menu-edicion-imagenes">
+                    <a href="manage-images-cabana.html" class="menu-link submenu-link" id="image-management-link">
+                        <i class="fas fa-images"></i>
+                        <span>Gestión de Imágenes</span>
+                    </a>
+                </li>
+
+                <!-- CONFIGURACIÓN -->
+                <li class="menu-section">Configuración</li>
+                <li class="menu-item">
+                    <a href="perfil.html" class="menu-link">
+                        <i class="fas fa-user-cog"></i>
+                        <span>Mi Perfil</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Sidebar Footer -->
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Cerrar Sesión</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Overlay for mobile -->
+        <div class="sidebar-overlay" id="overlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="page-title">
+                        <i class="fas fa-edit"></i>
+                        <span>Actualizar Cabaña</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <form id="updateForm" class="form-container">
+                    <!-- Información Básica -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-info-circle"></i>
+                            Información Básica
+                        </h3>
+                        
+                        <div class="form-group">
+                            <label for="nombre">Nombre de la Cabaña *</label>
+                            <input type="text" id="nombre" name="nombre" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descripcion">Descripción *</label>
+                            <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="precio">Precio por Noche (MX$) *</label>
+                                <input type="number" id="precio" name="precio" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Capacidad y Características -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-users"></i>
+                            Capacidad y Características
+                        </h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="huespedes">Huéspedes *</label>
+                                <input type="number" id="huespedes" name="huespedes" min="1" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="habitaciones">Habitaciones *</label>
+                                <input type="number" id="habitaciones" name="habitaciones" min="1" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="camas">Camas *</label>
+                                <input type="number" id="camas" name="camas" min="1" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="metrosCuadrados">Metros Cuadrados</label>
+                                <input type="number" id="metrosCuadrados" name="metrosCuadrados" min="0">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tipoPropiedad">Tipo de Propiedad</label>
+                                <select id="tipoPropiedad" name="tipoPropiedad">
+                                    <option value="">Seleccionar tipo</option>
+                                    <option value="cabana">Cabaña</option>
+                                    <option value="casa_rural">Casa Rural</option>
+                                    <option value="chalet">Chalet</option>
+                                    <option value="bungalow">Bungalow</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tipoAlojamiento">Tipo de Alojamiento</label>
+                                <select id="tipoAlojamiento" name="tipoAlojamiento">
+                                    <option value="individual">Individual</option>
+                                    <option value="conjunto">Conjunto</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ubicación -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Ubicación
+                        </h3>
+                        
+                        <div class="form-group">
+                            <label for="direccion">Dirección *</label>
+                            <input type="text" id="direccion" name="direccion" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="ciudad">Ciudad *</label>
+                                <input type="text" id="ciudad" name="ciudad" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="estado">Estado *</label>
+                                <input type="text" id="estado" name="estado" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="codigoPostal">Código Postal</label>
+                                <input type="text" id="codigoPostal" name="codigoPostal">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información de Contacto -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-phone"></i>
+                            Información de Contacto
+                        </h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="telefono">Teléfono *</label>
+                                <input type="tel" id="telefono" name="telefono" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="sitioWeb">Sitio Web</label>
+                                <input type="url" id="sitioWeb" name="sitioWeb">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="horario">Horario de Atención</label>
+                                <input type="text" id="horario" name="horario" placeholder="Ej: 9:00 AM - 6:00 PM">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Servicios Disponibles -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-concierge-bell"></i>
+                            Servicios Disponibles
+                        </h3>
+                        <span class="form-hint">Selecciona todos los servicios que ofreces</span>
+                        
+                        <div class="services-grid">
+                            <div class="service-item" data-service="wifi">
+                                <input type="checkbox" id="wifi" name="servicios" value="wifi">
+                                <i class="fas fa-wifi"></i>
+                                <label for="wifi">WiFi Gratis</label>
+                            </div>
+
+                            <div class="service-item" data-service="estacionamiento">
+                                <input type="checkbox" id="estacionamiento" name="servicios" value="estacionamiento">
+                                <i class="fas fa-car"></i>
+                                <label for="estacionamiento">Estacionamiento</label>
+                            </div>
+
+                            <div class="service-item" data-service="aireacondicionado">
+                                <input type="checkbox" id="aireacondicionado" name="servicios" value="aireacondicionado">
+                                <i class="fas fa-snowflake"></i>
+                                <label for="aireacondicionado">Aire Acondicionado</label>
+                            </div>
+
+                            <div class="service-item" data-service="piscina">
+                                <input type="checkbox" id="piscina" name="servicios" value="piscina">
+                                <i class="fas fa-swimming-pool"></i>
+                                <label for="piscina">Piscina</label>
+                            </div>
+
+                            <div class="service-item" data-service="mascotas">
+                                <input type="checkbox" id="mascotas" name="servicios" value="mascotas">
+                                <i class="fas fa-paw"></i>
+                                <label for="mascotas">Admite Mascotas</label>
+                            </div>
+
+                            <div class="service-item" data-service="transporte">
+                                <input type="checkbox" id="transporte" name="servicios" value="transporte">
+                                <i class="fas fa-shuttle-van"></i>
+                                <label for="transporte">Transporte</label>
+                            </div>
+
+                            <div class="service-item" data-service="restaurante">
+                                <input type="checkbox" id="restaurante" name="servicios" value="restaurante">
+                                <i class="fas fa-utensils"></i>
+                                <label for="restaurante">Restaurante</label>
+                            </div>
+
+                            <div class="service-item" data-service="accesibilidad">
+                                <input type="checkbox" id="accesibilidad" name="servicios" value="accesibilidad">
+                                <i class="fas fa-wheelchair"></i>
+                                <label for="accesibilidad">Acceso para discapacidad</label>
+                            </div>
+
+                            <div class="service-item" data-service="television">
+                                <input type="checkbox" id="television" name="servicios" value="television">
+                                <i class="fas fa-tv"></i>
+                                <label for="television">Televisión</label>
+                            </div>
+
+                            <div class="service-item" data-service="eventos">
+                                <input type="checkbox" id="eventos" name="servicios" value="eventos">
+                                <i class="fas fa-glass-cheers"></i>
+                                <label for="eventos">Salon para eventos</label>
+                            </div>
+
+                            <div class="service-item" data-service="gimnasio">
+                                <input type="checkbox" id="gimnasio" name="servicios" value="gimnasio">
+                                <i class="fas fa-dumbbell"></i>
+                                <label for="gimnasio">Gimnasio</label>
+                            </div>
+
+                            <div class="service-item" data-service="spa">
+                                <input type="checkbox" id="spa" name="servicios" value="spa">
+                                <i class="fas fa-spa"></i>
+                                <label for="spa">Spa</label>
+                            </div>
+
+                            <div class="service-item" data-service="desayuno">
+                                <input type="checkbox" id="desayuno" name="servicios" value="desayuno">
+                                <i class="fas fa-coffee"></i>
+                                <label for="desayuno">Desayuno</label>
+                            </div>
+
+                            <!-- Servicios específicos de cabañas -->
+                            <div class="service-item" data-service="cocina">
+                                <input type="checkbox" id="cocina" name="servicios" value="cocina">
+                                <i class="fas fa-utensils"></i>
+                                <label for="cocina">Cocina Equipada</label>
+                            </div>
+
+                            <div class="service-item" data-service="chimenea">
+                                <input type="checkbox" id="chimenea" name="servicios" value="chimenea">
+                                <i class="fas fa-fire"></i>
+                                <label for="chimenea">Chimenea</label>
+                            </div>
+
+                            <div class="service-item" data-service="jardin">
+                                <input type="checkbox" id="jardin" name="servicios" value="jardin">
+                                <i class="fas fa-tree"></i>
+                                <label for="jardin">Jardín</label>
+                            </div>
+
+                            <div class="service-item" data-service="bbq">
+                                <input type="checkbox" id="bbq" name="servicios" value="bbq">
+                                <i class="fas fa-fire-burner"></i>
+                                <label for="bbq">Parrilla/BBQ</label>
+                            </div>
+
+                            <div class="service-item" data-service="calefaccion">
+                                <input type="checkbox" id="calefaccion" name="servicios" value="calefaccion">
+                                <i class="fas fa-thermometer-half"></i>
+                                <label for="calefaccion">Calefacción</label>
+                            </div>
+
+                            <div class="service-item" data-service="terraza">
+                                <input type="checkbox" id="terraza" name="servicios" value="terraza">
+                                <i class="fas fa-umbrella-beach"></i>
+                                <label for="terraza">Terraza</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Métodos de Pago -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-credit-card"></i>
+                            Métodos de Pago
+                            <span style="color: #f39c12; font-size: 12px; margin-left: 10px;"></span>
+                        </h3>
+                        <span class="form-hint">Selecciona los métodos de pago que aceptas</span>
+                        
+                        <div class="payment-grid">
+                            <div class="payment-option" data-payment="efectivo">
+                                <input type="checkbox" id="efectivo" name="metodosPago" value="efectivo">
+                                <label for="efectivo">
+                                    <i class="fas fa-money-bill-wave payment-icon"></i>
+                                    Efectivo
+                                </label>
+                            </div>
+
+                            <div class="payment-option" data-payment="transferencia">
+                                <input type="checkbox" id="transferencia" name="metodosPago" value="transferencia">
+                                <label for="transferencia">
+                                    <i class="fas fa-exchange-alt payment-icon"></i>
+                                    Transferencia
+                                </label>
+                            </div>
+
+                            <div class="payment-option" data-payment="tarjeta">
+                                <input type="checkbox" id="tarjeta" name="metodosPago" value="tarjeta">
+                                <label for="tarjeta">
+                                    <i class="fas fa-credit-card payment-icon"></i>
+                                    Tarjeta
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Opciones Ecológicas -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-leaf"></i>
+                            Opciones Ecológicas
+                        </h3>
+                        
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="esEcologico" name="esEcologico">
+                                <label for="esEcologico">
+                                    <i class="fas fa-leaf"></i>
+                                    Esta cabaña es ecológica
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="form-section">
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Actualizar Cabaña
+                            </button>
+                            <a href="mis-anuncios.html?tipo=cabana" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancelar
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        // ========================================
+        // JAVASCRIPT COMPLETAMENTE CORREGIDO
+        // ========================================
+
+        const baseURL = 'http://localhost:5000/api';
+        const authToken = localStorage.getItem('authToken');
+        let cabanaId = null;
+
+        // Verificar autenticación
+        if (!authToken) {
+            window.location.href = 'login.html';
+        }
+
+        // Funciones de UI
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            alert('✅ ' + message);
+        }
+
+        function showError(message) {
+            alert('❌ ' + message);
+        }
+
+        // ✅ FUNCIÓN CORREGIDA: Cargar cabaña del usuario
+        async function loadUserCabana() {
+            try {
+                showLoading();
+                
+                const response = await fetch(`${baseURL}/cabanas/mis-cabanas`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success' && data.data.cabanas.length > 0) {
+                    const cabana = data.data.cabanas[0];
+                    cabanaId = cabana._id;
+                    populateForm(cabana);
+                } else {
+                    showError('No se encontró ninguna cabaña para editar');
+                    setTimeout(() => {
+                        window.location.href = 'mis-anuncios.html?tipo=cabana';
+                    }, 2000);
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error al cargar la cabaña');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // ✅ FUNCIÓN CORREGIDA: Llenar formulario con datos existentes
+        function populateForm(cabana) {
+            // Información básica
+            document.getElementById('nombre').value = cabana.nombre || '';
+            document.getElementById('descripcion').value = cabana.descripcion || '';
+            document.getElementById('precio').value = cabana.precio || '';
+            
+            // Capacidad
+            if (cabana.capacidad) {
+                document.getElementById('huespedes').value = cabana.capacidad.huespedes || '';
+                document.getElementById('habitaciones').value = cabana.capacidad.habitaciones || '';
+                document.getElementById('camas').value = cabana.capacidad.camas || '';
+            }
+            
+            // Características
+            if (cabana.caracteristicas) {
+                document.getElementById('metrosCuadrados').value = cabana.caracteristicas.metrosCuadrados || '';
+                document.getElementById('tipoPropiedad').value = cabana.caracteristicas.tipoPropiedad || '';
+                
+                if (cabana.caracteristicas.esConjunto) {
+                    document.getElementById('tipoAlojamiento').value = 'conjunto';
+                }
+            }
+            
+            // Ubicación
+            if (cabana.ubicacion) {
+                document.getElementById('direccion').value = cabana.ubicacion.direccion || '';
+                document.getElementById('ciudad').value = cabana.ubicacion.ciudad || '';
+                document.getElementById('estado').value = cabana.ubicacion.estado || '';
+                document.getElementById('codigoPostal').value = cabana.ubicacion.codigoPostal || '';
+            }
+            
+            // Contacto
+            if (cabana.contacto) {
+                document.getElementById('telefono').value = cabana.contacto.telefono || '';
+                document.getElementById('email').value = cabana.contacto.email || '';
+                document.getElementById('sitioWeb').value = cabana.contacto.sitioWeb || '';
+                document.getElementById('horario').value = cabana.contacto.horario || '';
+            }
+            
+            // ✅ SERVICIOS CON COMPATIBILIDAD (exactamente como Airbnb exitoso)
+            if (cabana.servicios) {
+                console.log('🔍 Servicios recibidos:', cabana.servicios, 'Es array:', Array.isArray(cabana.servicios));
+                
+                if (Array.isArray(cabana.servicios)) {
+                    // 🔥 NUEVA LÓGICA: servicios como array de strings
+                    cabana.servicios.forEach(servicio => {
+                        const checkbox = document.querySelector(`input[name="servicios"][value="${servicio}"]`);
+                        const serviceItem = document.querySelector(`[data-service="${servicio}"]`);
+                        
+                        if (checkbox && serviceItem) {
+                            checkbox.checked = true;
+                            serviceItem.classList.add('selected');
+                        }
+                    });
+                } else {
+                    // 🔧 LÓGICA LEGACY: servicios como objeto
+                    Object.keys(cabana.servicios).forEach(servicio => {
+                        if (cabana.servicios[servicio]) {
+                            const checkbox = document.querySelector(`input[name="servicios"][value="${servicio}"]`);
+                            const serviceItem = document.querySelector(`[data-service="${servicio}"]`);
+                            
+                            if (checkbox && serviceItem) {
+                                checkbox.checked = true;
+                                serviceItem.classList.add('selected');
+                            }
+                        }
+                    });
+                }
+            }
+            
+            // Cargar métodos de pago desde localStorage
+            loadMetodosPago(cabana._id);
+            
+            // Ecológico
+            if (cabana.esEcologico) {
+                document.getElementById('esEcologico').checked = true;
+            }
+        }
+
+        // ✅ FUNCIÓN NUEVA: Cargar métodos de pago desde localStorage
+        function loadMetodosPago(cabanaId) {
+            const savedMetodos = localStorage.getItem(`cabana_${cabanaId}_metodosPago`);
+            if (savedMetodos) {
+                try {
+                    const metodosPago = JSON.parse(savedMetodos);
+                    metodosPago.forEach(metodo => {
+                        const checkbox = document.getElementById(metodo);
+                        const paymentOption = document.querySelector(`[data-payment="${metodo}"]`);
+                        
+                        if (checkbox && paymentOption) {
+                            checkbox.checked = true;
+                            paymentOption.classList.add('selected');
+                        }
+                    });
+                    console.log('✅ Métodos de pago cargados:', metodosPago);
+                } catch (e) {
+                    console.error('Error cargando métodos de pago:', e);
+                }
+            }
+        }
+
+        // ✅ FUNCIÓN CORREGIDA: Configurar event listeners
+        function setupEventListeners() {
+            // Manejar clicks en servicios
+            document.querySelectorAll('.service-item').forEach(item => {
+                const checkbox = item.querySelector('input[type="checkbox"]');
+                
+                item.addEventListener('click', function(e) {
+                    if (e.target !== checkbox) {
+                        checkbox.checked = !checkbox.checked;
+                    }
+                    
+                    if (checkbox.checked) {
+                        this.classList.add('selected');
+                    } else {
+                        this.classList.remove('selected');
+                    }
+                });
+            });
+
+            // Manejar clicks en métodos de pago
+            document.querySelectorAll('.payment-option').forEach(option => {
+                const checkbox = option.querySelector('input[type="checkbox"]');
+                
+                option.addEventListener('click', function(e) {
+                    if (e.target !== checkbox) {
+                        checkbox.checked = !checkbox.checked;
+                    }
+                    
+                    if (checkbox.checked) {
+                        this.classList.add('selected');
+                    } else {
+                        this.classList.remove('selected');
+                    }
+                });
+            });
+
+            // Mobile menu toggle
+            const sidebar = document.getElementById('sidebar');
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const sidebarClose = document.getElementById('sidebarClose');
+            const overlay = document.getElementById('overlay');
+
+            mobileMenuToggle?.addEventListener('click', () => {
+                sidebar.classList.add('show');
+                overlay.classList.add('active');
+            });
+
+            sidebarClose?.addEventListener('click', () => {
+                sidebar.classList.remove('show');
+                overlay.classList.remove('active');
+            });
+
+            overlay?.addEventListener('click', () => {
+                sidebar.classList.remove('show');
+                overlay.classList.remove('active');
+            });
+
+            // ✅ ENVÍO DEL FORMULARIO CORREGIDO (patrón exitoso de Airbnb)
+            document.getElementById('updateForm').addEventListener('submit', handleFormSubmit);
+        }
+
+        // ✅ FUNCIÓN PRINCIPAL CORREGIDA: Manejar envío del formulario
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            if (!cabanaId) {
+                showError('No se ha cargado ninguna cabaña');
+                return;
+            }
+            
+            try {
+                showLoading();
+                
+                const formData = new FormData(e.target);
+                
+                // ✅ ESTRUCTURA CORRECTA (exactamente como Airbnb exitoso)
+                const updateData = {
+                    // Información básica
+                    nombre: formData.get('nombre'),
+                    descripcion: formData.get('descripcion'),
+                    precio: parseFloat(formData.get('precio')),
+                    
+                    // Capacidad
+                    capacidad: {
+                        huespedes: parseInt(formData.get('huespedes')),
+                        habitaciones: parseInt(formData.get('habitaciones')),
+                        camas: parseInt(formData.get('camas') || 0)
+                    },
+                    
+                    // Características
+                    caracteristicas: {
+                        metrosCuadrados: parseInt(formData.get('metrosCuadrados') || 0)
+                    },
+                    
+                    // Ubicación
+                    ubicacion: {
+                        direccion: formData.get('direccion'),
+                        ciudad: formData.get('ciudad'),
+                        estado: formData.get('estado'),
+                        codigoPostal: formData.get('codigoPostal')
+                    },
+                    
+                    // Contacto
+                    contacto: {
+                        telefono: formData.get('telefono'),
+                        email: formData.get('email'),
+                        sitioWeb: formData.get('sitioWeb'),
+                        horario: formData.get('horario')
+                    },
+                    
+                    // 🔥 CAMBIO CLAVE: Inicializar como arrays vacíos
+                    servicios: [],
+                    metodosPago: [],
+                    
+                    esEcologico: formData.get('esEcologico') === 'on'
+                };
+                
+                // ✅ RECOPILAR SERVICIOS COMO ARRAY (exactamente como Airbnb)
+                document.querySelectorAll('input[name="servicios"]:checked').forEach(checkbox => {
+                    updateData.servicios.push(checkbox.value);
+                });
+                
+                // ✅ RECOPILAR MÉTODOS DE PAGO COMO ARRAY
+                document.querySelectorAll('input[name="metodosPago"]:checked').forEach(checkbox => {
+                    updateData.metodosPago.push(checkbox.value);
+                });
+                
+                console.log('🔍 DEBUG - Servicios enviados:', updateData.servicios);
+                console.log('🔍 DEBUG - Métodos de pago enviados:', updateData.metodosPago);
+                console.log('🔍 DEBUG - Datos completos:', updateData);
+                
+                // Enviar actualización
+                const response = await fetch(`${baseURL}/cabanas/editar/${cabanaId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updateData)
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || `Error del servidor: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    // Guardar métodos de pago localmente para futura carga
+                    if (updateData.metodosPago.length > 0) {
+                        localStorage.setItem(`cabana_${cabanaId}_metodosPago`, JSON.stringify(updateData.metodosPago));
+                        console.log('✅ Métodos de pago guardados localmente:', updateData.metodosPago);
+                    }
+                    
+                    showSuccess('¡Cabaña actualizada exitosamente!');
+                    
+                    // Recargar página después de 1.5 segundos para ver cambios
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                } else {
+                    throw new Error(data.message || 'Error al actualizar la cabaña');
+                }
+                
+            } catch (error) {
+                console.error('❌ Error completo:', error);
+                showError('Error al actualizar: ' + error.message);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // ✅ INICIALIZAR cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Inicializando actualizar-cabanas...');
+            setupEventListeners();
+            loadUserCabana();
+        });
+    </script>
+</body>
+</html>

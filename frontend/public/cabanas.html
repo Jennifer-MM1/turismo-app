@@ -1,0 +1,2334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cabañas - Dirección de Turismo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        /* Header y Navegación */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4CAF50;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            border-radius: 15px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            padding: 1rem 0;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 0.7rem 1.5rem;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .dropdown-item:hover, .dropdown-item.active {
+            background: linear-gradient(135deg, #8BC34A, #689F38);
+            color: white;
+            border-left: 3px solid #fff;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+        }
+
+        .btn-login:hover {
+            background: #4CAF50;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-top: 80px;
+            background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="tree" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="2" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23tree)"/></svg>');
+            z-index: 1;
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Search and Filters */
+        .search-section {
+            background: white;
+            padding: 2rem;
+            margin: -2rem 2rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 100;
+        }
+
+        .search-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-control {
+            padding: 0.8rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #8BC34A;
+            box-shadow: 0 0 10px rgba(139, 195, 74, 0.2);
+        }
+
+        .btn-search {
+            background: linear-gradient(135deg, #8BC34A, #689F38);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-search:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 195, 74, 0.4);
+        }
+
+        /* Cabins Grid */
+        .cabanas-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .results-info {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .sort-dropdown {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .cabanas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .cabana-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .cabana-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .cabana-image {
+            height: 250px;
+            background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cabana-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .cabana-card:hover .cabana-image img {
+            transform: scale(1.1);
+        }
+
+        .price-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(139, 195, 74, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+        }
+
+        .capacity-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .type-badge {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #8BC34A;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Etiqueta ecológica */
+        .eco-badge {
+            position: absolute;
+            top: 60px;
+            left: 15px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 3px 10px rgba(39, 174, 96, 0.4);
+            z-index: 5;
+            animation: pulse-eco 2s infinite;
+            backdrop-filter: blur(10px);
+        }
+
+        .eco-badge i {
+            font-size: 12px;
+        }
+
+        @keyframes pulse-eco {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 3px 10px rgba(39, 174, 96, 0.4);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 5px 15px rgba(39, 174, 96, 0.5);
+            }
+        }
+
+        /* ✅ NUEVO: Contenido de la cabaña (igual que hoteles.html) */
+        .cabana-content {
+            padding: 1.5rem;
+        }
+
+        .cabana-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .cabana-location {
+            color: #666;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cabana-description {
+            color: #666;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* ✅ NUEVO: Servicios compactos (igual que hoteles.html) */
+        .cabana-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-tag {
+            background: #e8f5e8;
+            color: #689F38;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .more-features {
+            background: #f0f0f0;
+            color: #666;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .cabana-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .contact-btn {
+            color: #8BC34A;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .contact-btn:hover {
+            color: #689F38;
+            transform: scale(1.1);
+        }
+
+        .view-details-btn {
+            background: linear-gradient(135deg, #8BC34A, #689F38);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .view-details-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 195, 74, 0.4);
+        }
+
+        /* Loading and Empty States */
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #666;
+        }
+
+        .loading i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: spin 1s linear infinite;
+            color: #8BC34A;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #ddd;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        /* Modal Styles */
+        .cabana-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+
+        .cabana-modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .cabana-modal {
+            background: white;
+            border-radius: 20px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .cabana-modal-overlay.show .cabana-modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #8BC34A, #689F38);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="25" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>') repeat;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .modal-cabana-info {
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-cabana-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 0 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-cabana-name .eco-icon {
+            color: #f1c40f;
+            font-size: 22px;
+            filter: drop-shadow(0 0 8px rgba(241, 196, 15, 0.5));
+        }
+
+        .modal-cabana-location {
+            font-size: 16px;
+            opacity: 0.9;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-close-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .modal-content {
+            padding: 30px;
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .modal-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .modal-section:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 700;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        .section-title i {
+            color: #8BC34A;
+            font-size: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-item.full-width {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #2c3e50;
+            min-width: 120px;
+        }
+
+        .info-value {
+            color: #5d6d7e;
+            text-align: right;
+            flex: 1;
+        }
+
+        .info-item.full-width .info-value {
+            text-align: left;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #ecf0f1;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            border-color: #8BC34A;
+            transform: translateY(-2px);
+        }
+
+        .contact-item i {
+            color: #8BC34A;
+            font-size: 20px;
+        }
+
+        .contact-item a {
+            color: #8BC34A;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .contact-item a:hover {
+            color: #689F38;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #ecf0f1;
+            transition: all 0.3s ease;
+        }
+
+        .service-item:hover {
+            border-color: #8BC34A;
+            transform: translateY(-2px);
+        }
+
+        .service-item i {
+            color: #8BC34A;
+            font-size: 16px;
+            width: 20px;
+        }
+
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .payment-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .payment-item:hover {
+            border-color: #8BC34A;
+            transform: translateY(-2px);
+        }
+
+        .payment-item i {
+            color: #8BC34A;
+            font-size: 24px;
+        }
+
+        .payment-item span {
+            font-weight: 500;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .payment-item.disabled {
+            opacity: 0.6;
+            border-color: #dee2e6;
+            cursor: not-allowed;
+        }
+
+        .payment-item.disabled:hover {
+            transform: none;
+            border-color: #dee2e6;
+        }
+
+        .payment-item.disabled i {
+            color: #6c757d;
+        }
+
+        .payment-item.disabled span {
+            color: #6c757d;
+        }
+
+        .eco-section {
+            background: linear-gradient(135deg, #e8f8f5, #f0fdf4) !important;
+            border: 2px solid #27ae60 !important;
+        }
+
+        .eco-title {
+            color: #27ae60 !important;
+            border-bottom-color: #27ae60 !important;
+        }
+
+        .eco-title i {
+            color: #27ae60 !important;
+        }
+
+        .eco-intro {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .eco-practices {
+            display: grid;
+            gap: 10px;
+        }
+
+        .eco-practice {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(39, 174, 96, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #27ae60;
+        }
+
+        .eco-check {
+            color: #27ae60;
+            font-size: 14px;
+        }
+
+        .price-section {
+            background: linear-gradient(135deg, #fff3e0, #fffbf0) !important;
+            border: 2px solid #f39c12 !important;
+            grid-column: 1 / -1;
+        }
+
+        .price-title {
+            color: #e67e22 !important;
+            border-bottom-color: #f39c12 !important;
+        }
+
+        .price-title i {
+            color: #f39c12 !important;
+        }
+
+        .price-warning {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #e67e22;
+        }
+
+        .price-warning i {
+            color: #f39c12;
+        }
+
+        .price-factors {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .price-factors li {
+            margin-bottom: 8px;
+            color: #5d4e75;
+        }
+
+        .price-cta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(243, 156, 18, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #f39c12;
+            font-weight: 600;
+            color: #e67e22;
+            margin-top: 15px;
+        }
+
+        /* ✨ SLIDER DE IMÁGENES PARA MODAL - ADAPTADO PARA CABAÑAS */
+        .cabana-gallery-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+        }
+
+        .cabana-gallery-section:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .gallery-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 700;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        .gallery-title i {
+            color: #8BC34A;
+            font-size: 20px;
+        }
+
+        .image-slider-container {
+            position: relative;
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .main-image-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .main-image:hover {
+            transform: scale(1.02);
+        }
+
+        .slider-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 10;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slider-nav-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .slider-nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: translateY(-50%) scale(0.9);
+        }
+
+        .slider-prev {
+            left: 15px;
+        }
+
+        .slider-next {
+            right: 15px;
+        }
+
+        .image-counter {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .thumbnails-container {
+            display: flex;
+            gap: 8px;
+            padding: 15px;
+            background: #f8f9fa;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e0 #f7fafc;
+        }
+
+        .thumbnails-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .thumbnails-container::-webkit-scrollbar-track {
+            background: #f7fafc;
+            border-radius: 3px;
+        }
+
+        .thumbnails-container::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 3px;
+        }
+
+        .thumbnail {
+            flex-shrink: 0;
+            width: 60px;
+            height: 45px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            overflow: hidden;
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumbnail:hover {
+            transform: scale(1.05);
+            border-color: #8BC34A;
+        }
+
+        .thumbnail.active {
+            border-color: #8BC34A;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(139, 195, 74, 0.4);
+        }
+
+        .no-images-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: #7f8c8d;
+        }
+
+        .no-images-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .no-images-state h4 {
+            margin: 0 0 8px;
+            font-size: 18px;
+        }
+
+        .no-images-state p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .image-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 20000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .image-modal-overlay.show {
+            display: flex;
+        }
+
+        .enlarged-image {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .close-modal-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .search-form {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .cabanas-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .eco-badge {
+                top: 50px;
+                left: 10px;
+                padding: 5px 8px;
+                font-size: 10px;
+            }
+
+            .cabana-modal {
+                margin: 10px;
+                max-height: 95vh;
+            }
+            
+            .modal-header {
+                padding: 20px;
+            }
+            
+            .modal-cabana-name {
+                font-size: 20px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .modal-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .payment-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .main-image-container {
+                height: 250px;
+            }
+            
+            .slider-nav-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            
+            .slider-prev {
+                left: 10px;
+            }
+            
+            .slider-next {
+                right: 10px;
+            }
+            
+            .thumbnail {
+                width: 50px;
+                height: 38px;
+            }
+            
+            .thumbnails-container {
+                padding: 12px;
+                gap: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-compass"></i>
+                Dirección de Turismo
+            </a>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Inicio
+                    </a>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link active">
+                        <i class="fas fa-bed"></i>
+                        Hospedaje
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="hoteles.html" class="dropdown-item">
+                            <i class="fas fa-hotel"></i>
+                            Hoteles
+                        </a>
+                        <a href="cabanas.html" class="dropdown-item active">
+                            <i class="fas fa-tree"></i>
+                            Cabañas
+                        </a>
+                        <a href="airbnb.html" class="dropdown-item">
+                            <i class="fas fa-home"></i>
+                            Airbnb
+                        </a>
+                    </div>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="tourOperadora.html" class="nav-link">
+                        <i class="fas fa-route"></i>
+                        Tours
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="guias.html" class="nav-link">
+                        <i class="fas fa-user-tie"></i>
+                        Guías
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-login">Iniciar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="page-header-content">
+            <h1><i class="fas fa-tree"></i> Cabañas</h1>
+            <p>Desconéctate en la naturaleza con nuestras acogedoras cabañas. Perfectas para escapadas románticas, vacaciones familiares o retiros de relajación.</p>
+        </div>
+    </section>
+
+    <!-- Search and Filters -->
+    <section class="search-section">
+        <div class="search-container">
+            <form class="search-form" id="searchForm">
+                <div class="form-group">
+                    <label for="searchQuery">Buscar cabaña</label>
+                    <input type="text" id="searchQuery" class="form-control" placeholder="Nombre de la cabaña o ciudad...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="priceRange">Precio máximo</label>
+                    <select id="priceRange" class="form-control">
+                        <option value="">Cualquier precio</option>
+                        <option value="500">Hasta $500</option>
+                        <option value="800">Hasta $800</option>
+                        <option value="1200">Hasta $1,200</option>
+                        <option value="2000">Hasta $2,000</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="guestFilter">Huéspedes</label>
+                    <select id="guestFilter" class="form-control">
+                        <option value="">Cualquier cantidad</option>
+                        <option value="2">Hasta 2 huéspedes</option>
+                        <option value="4">Hasta 4 huéspedes</option>
+                        <option value="6">Hasta 6 huéspedes</option>
+                        <option value="8">8 o más huéspedes</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn-search">
+                    <i class="fas fa-search"></i>
+                    Buscar
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Cabins Section -->
+    <section class="cabanas-section">
+        <div class="section-header">
+            <div class="results-info" id="resultsInfo">
+                Cargando cabañas...
+            </div>
+            <select class="sort-dropdown" id="sortBy">
+                <option value="newest">Más recientes</option>
+                <option value="price-low">Precio: menor a mayor</option>
+                <option value="price-high">Precio: mayor a menor</option>
+                <option value="capacity">Capacidad</option>
+                <option value="name">Nombre A-Z</option>
+            </select>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading" id="loadingState">
+            <i class="fas fa-spinner"></i>
+            <h3>Cargando cabañas...</h3>
+            <p>Por favor espera mientras obtenemos la información</p>
+        </div>
+
+        <!-- Cabins Grid -->
+        <div class="cabanas-grid" id="cabanasGrid" style="display: none;">
+            <!-- Las cabañas se cargarán aquí dinámicamente -->
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fas fa-tree"></i>
+            <h3>No se encontraron cabañas</h3>
+            <p>Intenta ajustar tus filtros de búsqueda</p>
+        </div>
+    </section>
+
+    <!-- Modal para imagen ampliada -->
+    <div class="image-modal-overlay" id="imageModalOverlay" onclick="closeImageModal()">
+        <button class="close-modal-btn" onclick="closeImageModal()">
+            <i class="fas fa-times"></i>
+        </button>
+        <img id="enlargedImage" src="" alt="Imagen ampliada" class="enlarged-image" onclick="event.stopPropagation()">
+    </div>
+
+    <script>
+        // Variables globales
+        let allCabanas = [];
+        let filteredCabanas = [];
+        
+        // ✅ CORREGIDO: URL dinámica igual que manage-images-cabana.html
+        const baseURL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5000/api' 
+            : 'https://jalpan-turismo.onrender.com/api';
+
+        // ✨ VARIABLES GLOBALES DEL SLIDER
+        let currentCabanaImages = [];
+        let currentImageIndex = 0;
+
+        // Elementos del DOM
+        const loadingState = document.getElementById('loadingState');
+        const cabanasGrid = document.getElementById('cabanasGrid');
+        const emptyState = document.getElementById('emptyState');
+        const resultsInfo = document.getElementById('resultsInfo');
+        const searchForm = document.getElementById('searchForm');
+        const sortBy = document.getElementById('sortBy');
+
+        // ✅ FUNCIÓN CORREGIDA: getImageUrl (igual que manage-images-cabana.html que SÍ funciona)
+        function getImageUrl(imagePath) {
+            console.log('🔍 getImageUrl para cabaña recibió:', imagePath);
+            
+            // Si no hay imagen, usar imagen por defecto
+            if (!imagePath) {
+                console.log('⚠️ No hay imagen, usando por defecto');
+                return 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+            }
+            
+            // Si ya es una URL completa (http/https), devolverla tal como está
+            if (imagePath.startsWith('http')) {
+                console.log('✅ URL completa:', imagePath);
+                return imagePath;
+            }
+            
+            // ✅ CORRECCIÓN CLAVE: Usar baseURL.replace('/api', '') igual que manage-images-cabana.html
+            const finalUrl = `${baseURL.replace('/api', '')}${imagePath}`;
+            console.log('✅ URL construida:', finalUrl);
+            return finalUrl;
+        }
+
+        // ✅ FUNCIÓN AGREGADA: addImageErrorHandling
+        function addImageErrorHandling() {
+            document.addEventListener('error', function(e) {
+                if (e.target.tagName === 'IMG') {
+                    console.warn('Error cargando imagen:', e.target.src);
+                    e.target.src = 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                }
+            }, true);
+        }
+
+        // 🔄 FUNCIÓN PARA GENERAR EL HTML DE LA GALERÍA DE CABAÑAS
+        function generateImageGalleryHTML(images) {
+            if (!images || images.length === 0) {
+                return `
+                    <div class="cabana-gallery-section">
+                        <h3 class="gallery-title">
+                            <i class="fas fa-images"></i>
+                            Galería de Imágenes
+                        </h3>
+                        <div class="no-images-state">
+                            <i class="fas fa-image"></i>
+                            <h4>No hay imágenes disponibles</h4>
+                            <p>Esta cabaña aún no ha subido fotos</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="cabana-gallery-section">
+                    <h3 class="gallery-title">
+                        <i class="fas fa-images"></i>
+                        Galería de Imágenes (${images.length} foto${images.length !== 1 ? 's' : ''})
+                    </h3>
+                    
+                    <div class="image-slider-container" id="imageSlider">
+                        <!-- Imagen principal -->
+                        <div class="main-image-container">
+                            <img id="mainImage" src="${getImageUrl(images[0])}" alt="Cabaña imagen" class="main-image" onclick="openImageModal('${getImageUrl(images[0])}')">
+                            
+                            <!-- Botones de navegación -->
+                            <button class="slider-nav-btn slider-prev" id="prevBtn" onclick="changeImage(-1)" ${images.length <= 1 ? 'style="display: none;"' : ''}>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="slider-nav-btn slider-next" id="nextBtn" onclick="changeImage(1)" ${images.length <= 1 ? 'style="display: none;"' : ''}>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                            
+                            <!-- Contador -->
+                            <div class="image-counter" id="imageCounter">1 / ${images.length}</div>
+                        </div>
+                        
+                        <!-- Miniaturas -->
+                        <div class="thumbnails-container" id="thumbnailsContainer">
+                            ${images.map((image, index) => `
+                                <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="goToImage(${index})">
+                                    <img src="${getImageUrl(image)}" alt="Thumbnail ${index + 1}">
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 🖼️ INICIALIZAR EL SLIDER CON IMÁGENES
+        function initializeImageSlider(images) {
+            currentCabanaImages = images || [];
+            currentImageIndex = 0;
+            
+            if (currentCabanaImages.length === 0) {
+                return;
+            }
+            
+            updateMainImage();
+            updateNavigationButtons();
+        }
+
+        // 🔄 ACTUALIZAR IMAGEN PRINCIPAL
+        function updateMainImage() {
+            const mainImage = document.getElementById('mainImage');
+            const counter = document.getElementById('imageCounter');
+            
+            if (mainImage && currentCabanaImages.length > 0) {
+                const currentImageUrl = getImageUrl(currentCabanaImages[currentImageIndex]);
+                mainImage.src = currentImageUrl;
+                mainImage.alt = `Imagen ${currentImageIndex + 1} de la cabaña`;
+                mainImage.onclick = () => openImageModal(currentImageUrl);
+                
+                // Actualizar contador
+                if (counter) {
+                    counter.textContent = `${currentImageIndex + 1} / ${currentCabanaImages.length}`;
+                }
+                
+                // Actualizar miniaturas activas
+                updateActiveThumbnail();
+            }
+        }
+
+        // 🖼️ ACTUALIZAR MINIATURA ACTIVA
+        function updateActiveThumbnail() {
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            thumbnails.forEach((thumb, index) => {
+                thumb.classList.toggle('active', index === currentImageIndex);
+            });
+            
+            // Scroll automático de miniaturas
+            const activeThumb = document.querySelector('.thumbnail.active');
+            if (activeThumb) {
+                activeThumb.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'center'
+                });
+            }
+        }
+
+        // ⬅️➡️ CAMBIAR IMAGEN
+        function changeImage(direction) {
+            if (currentCabanaImages.length === 0) return;
+            
+            currentImageIndex += direction;
+            
+            // Loop circular
+            if (currentImageIndex >= currentCabanaImages.length) {
+                currentImageIndex = 0;
+            } else if (currentImageIndex < 0) {
+                currentImageIndex = currentCabanaImages.length - 1;
+            }
+            
+            updateMainImage();
+            updateNavigationButtons();
+        }
+
+        // 🎯 IR A IMAGEN ESPECÍFICA
+        function goToImage(index) {
+            if (index >= 0 && index < currentCabanaImages.length) {
+                currentImageIndex = index;
+                updateMainImage();
+                updateNavigationButtons();
+            }
+        }
+
+        // 🔘 ACTUALIZAR BOTONES DE NAVEGACIÓN
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            if (currentCabanaImages.length <= 1) {
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) nextBtn.style.display = 'none';
+            } else {
+                if (prevBtn) prevBtn.style.display = 'flex';
+                if (nextBtn) nextBtn.style.display = 'flex';
+            }
+        }
+
+        // 🔍 ABRIR MODAL DE IMAGEN AMPLIADA
+        function openImageModal(imageSrc) {
+            const overlay = document.getElementById('imageModalOverlay');
+            const enlargedImage = document.getElementById('enlargedImage');
+            
+            if (overlay && enlargedImage) {
+                enlargedImage.src = imageSrc;
+                overlay.classList.add('show');
+                document.body.style.overflow = 'hidden'; // Prevenir scroll
+            }
+        }
+
+        // ❌ CERRAR MODAL DE IMAGEN AMPLIADA
+        function closeImageModal() {
+            const overlay = document.getElementById('imageModalOverlay');
+            if (overlay) {
+                overlay.classList.remove('show');
+                document.body.style.overflow = 'auto'; // Restaurar scroll
+            }
+        }
+
+        // ⌨️ CONTROL DE TECLADO PARA EL SLIDER
+        document.addEventListener('keydown', function(e) {
+            const overlay = document.getElementById('imageModalOverlay');
+            
+            // Si el modal de imagen está abierto
+            if (overlay && overlay.classList.contains('show')) {
+                if (e.key === 'Escape') {
+                    closeImageModal();
+                }
+                return;
+            }
+            
+            // Control del slider
+            if (e.key === 'ArrowLeft') {
+                changeImage(-1);
+            } else if (e.key === 'ArrowRight') {
+                changeImage(1);
+            }
+        });
+
+        // 📱 TOUCH/SWIPE SUPPORT PARA MÓVILES
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            const slider = document.getElementById('imageSlider');
+            if (slider && e.target.closest('#imageSlider')) {
+                touchStartX = e.changedTouches[0].screenX;
+            }
+        });
+
+        document.addEventListener('touchend', function(e) {
+            const slider = document.getElementById('imageSlider');
+            if (slider && e.target.closest('#imageSlider')) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    // Swipe izquierda - siguiente imagen
+                    changeImage(1);
+                } else {
+                    // Swipe derecha - imagen anterior
+                    changeImage(-1);
+                }
+            }
+        }
+
+        // ✅ CORREGIDO: DOMContentLoaded con addImageErrorHandling
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Iniciando cabanas.html con corrección de imágenes...');
+            
+            // ✅ AGREGADO: Manejo de errores de imágenes
+            addImageErrorHandling();
+            
+            loadCabanas();
+            setupEventListeners();
+        });
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            searchForm.addEventListener('submit', handleSearch);
+            sortBy.addEventListener('change', handleSort);
+            
+            // Búsqueda en tiempo real
+            document.getElementById('searchQuery').addEventListener('input', debounce(handleSearch, 300));
+            document.getElementById('priceRange').addEventListener('change', handleSearch);
+            document.getElementById('guestFilter').addEventListener('change', handleSearch);
+        }
+
+        // Función debounce para optimizar búsquedas
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // ✅ CORREGIDA: Cargar cabañas desde la API con debug
+        async function loadCabanas() {
+            try {
+                showLoading();
+                
+                const response = await fetch(`${baseURL}/cabanas`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('📥 Datos de cabañas recibidos:', data);
+                
+                if (data.status === 'success' && data.data && data.data.cabanas) {
+                    allCabanas = data.data.cabanas;
+                    filteredCabanas = [...allCabanas];
+                    
+                    // ✅ DEBUG: Verificar imágenes al cargar
+                    console.log('🔍 Verificando imágenes de todas las cabañas...');
+                    allCabanas.forEach((cabana, index) => {
+                        console.log(`Cabaña ${index + 1}: ${cabana.nombre}`);
+                        console.log('  Imágenes:', cabana.imagenes);
+                        if (cabana.imagenes && cabana.imagenes.length > 0) {
+                            const finalUrl = getImageUrl(cabana.imagenes[0]);
+                            console.log('  Primera imagen:', cabana.imagenes[0], '→', finalUrl);
+                        }
+                    });
+                    
+                    displayCabanas();
+                    updateResultsInfo();
+                    showCabanas();
+                    
+                    // ✅ AGREGADO: Debug automático de las primeras cabañas
+                    console.log('✅ Cabañas cargadas:', allCabanas.length);
+                    if (allCabanas.length > 0 && allCabanas[0].imagenes) {
+                        console.log('🖼️ Primera cabaña tiene imágenes, ejecutando debug...');
+                        debugCabanaImages(allCabanas[0]);
+                    }
+                } else {
+                    console.warn('⚠️ No se encontraron cabañas:', data);
+                    showEmpty();
+                }
+            } catch (error) {
+                console.error('❌ Error cargando cabañas:', error);
+                showError('Error al cargar las cabañas: ' + error.message);
+            }
+        }
+
+        // Manejar búsqueda
+        function handleSearch(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            
+            const searchQuery = document.getElementById('searchQuery').value.toLowerCase();
+            const priceRange = document.getElementById('priceRange').value;
+            const guestFilter = document.getElementById('guestFilter').value;
+            
+            filteredCabanas = allCabanas.filter(cabana => {
+                // Filtro por texto
+                const matchesSearch = !searchQuery || 
+                    cabana.nombre.toLowerCase().includes(searchQuery) ||
+                    (cabana.descripcion && cabana.descripcion.toLowerCase().includes(searchQuery)) ||
+                    cabana.ubicacion?.ciudad?.toLowerCase().includes(searchQuery);
+                
+                // Filtro por precio
+                const matchesPrice = !priceRange || cabana.precio <= parseInt(priceRange);
+                
+                // Filtro por huéspedes
+                const matchesGuests = !guestFilter || 
+                    (cabana.capacidad?.huespedes && cabana.capacidad.huespedes >= parseInt(guestFilter));
+                
+                return matchesSearch && matchesPrice && matchesGuests;
+            });
+            
+            displayCabanas();
+            updateResultsInfo();
+        }
+
+        // Manejar ordenamiento
+        function handleSort() {
+            const sortValue = sortBy.value;
+            
+            switch (sortValue) {
+                case 'price-low':
+                    filteredCabanas.sort((a, b) => (a.precio || 0) - (b.precio || 0));
+                    break;
+                case 'price-high':
+                    filteredCabanas.sort((a, b) => (b.precio || 0) - (a.precio || 0));
+                    break;
+                case 'capacity':
+                    filteredCabanas.sort((a, b) => (b.capacidad?.huespedes || 0) - (a.capacidad?.huespedes || 0));
+                    break;
+                case 'name':
+                    filteredCabanas.sort((a, b) => a.nombre.localeCompare(b.nombre));
+                    break;
+                case 'newest':
+                default:
+                    filteredCabanas.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                    break;
+            }
+            
+            displayCabanas();
+        }
+
+        // Mostrar cabañas
+        function displayCabanas() {
+            if (filteredCabanas.length === 0) {
+                showEmpty();
+                return;
+            }
+            
+            showCabanas();
+            
+            const cabanasHTML = filteredCabanas.map(cabana => createCabanaCard(cabana)).join('');
+            cabanasGrid.innerHTML = cabanasHTML;
+        }
+
+        // ✅ FUNCIÓN CORREGIDA: Crear tarjeta de cabaña (igual que hoteles.html)
+        function createCabanaCard(cabana) {
+            // ✅ USAR getImageUrl para procesar la imagen
+            const imageUrl = getImageUrl(cabana.imagenes?.[0]);
+            const tipoPropiedad = cabana.caracteristicas?.tipoPropiedad || 'cabana';
+            const price = cabana.precio || 0;
+            const ciudad = cabana.ubicacion?.ciudad || 'Ciudad no especificada';
+            const capacidad = cabana.capacidad?.huespedes || 0;
+            
+            // ✅ NUEVO: Servicios limitados para mostrar en la vista compacta (igual que hoteles.html)
+            const servicios = cabana.servicios?.slice(0, 3) || [];
+            
+            console.log(`🖼️ Creando card para ${cabana.nombre} con imagen: ${imageUrl}`);
+            
+            return `
+                <div class="cabana-card" onclick="openCabanaModal('${cabana._id}')">
+                    <div class="cabana-image">
+                        <img src="${imageUrl}" alt="${cabana.nombre}" onerror="this.src='https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+                        
+                        ${cabana.esEcologico ? `
+                            <div class="eco-badge">
+                                <i class="fas fa-leaf"></i>
+                                Cabaña Ecológica
+                            </div>
+                        ` : ''}
+                        
+                        ${price > 0 ? `<div class="price-badge">$${price.toLocaleString('es-MX')} MXN</div>` : ''}
+                        <div class="capacity-badge">
+                            <i class="fas fa-users"></i> 
+                            ${capacidad} huéspedes
+                        </div>
+                        <div class="type-badge">${formatTipoPropiedad(tipoPropiedad)}</div>
+                    </div>
+                    
+                    <div class="cabana-content">
+                        <h3 class="cabana-title">${cabana.nombre}</h3>
+                        
+                        <div class="cabana-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            ${ciudad}
+                        </div>
+                        
+                        ${cabana.descripcion ? `
+                            <div class="cabana-description">
+                                ${cabana.descripcion}
+                            </div>
+                        ` : ''}
+                        
+                        ${servicios.length > 0 ? `
+                            <div class="cabana-features">
+                                ${servicios.map(servicio => `<span class="feature-tag">${formatServiceName(servicio)}</span>`).join('')}
+                                ${cabana.servicios && cabana.servicios.length > 3 ? `<span class="more-features">+${cabana.servicios.length - 3} más</span>` : ''}
+                            </div>
+                        ` : ''}
+                        
+                        <div class="cabana-footer">
+                            <div class="contact-info">
+                                ${cabana.contacto?.telefono ? `<a href="tel:${cabana.contacto.telefono}" class="contact-btn" title="Llamar"><i class="fas fa-phone"></i></a>` : ''}
+                                ${cabana.contacto?.email ? `<a href="mailto:${cabana.contacto.email}" class="contact-btn" title="Email"><i class="fas fa-envelope"></i></a>` : ''}
+                            </div>
+                            
+                            <button class="view-details-btn" onclick="event.stopPropagation();">
+                                Ver detalles
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Formatear tipo de propiedad
+        function formatTipoPropiedad(tipo) {
+            const tipos = {
+                'cabana': 'Cabaña',
+                'casa_rural': 'Casa Rural',
+                'chalet': 'Chalet',
+                'bungalow': 'Bungalow',
+                'individual': 'Cabaña Individual',
+                'complejo': 'Complejo de Cabañas',
+                'rustica': 'Cabaña Rústica',
+                'moderna': 'Cabaña Moderna'
+            };
+            return tipos[tipo] || tipo.charAt(0).toUpperCase() + tipo.slice(1);
+        }
+
+        // Formatear nombres de servicios
+        function formatServiceName(service) {
+            const services = {
+                'wifi': 'WiFi',
+                'estacionamiento': 'Estacionamiento',
+                'aireacondicionado': 'A/C',
+                'restaurante': 'Restaurante',
+                'piscina': 'Piscina',
+                'mascotas': 'Mascotas',
+                'transporte': 'Transporte',
+                'accesibilidad': 'Accesible',
+                'television': 'TV',
+                'eventos': 'Eventos',
+                'gimnasio': 'Gimnasio',
+                'spa': 'Spa',
+                'desayuno': 'Desayuno',
+                'cocina': 'Cocina',
+                'chimenea': 'Chimenea',
+                'bbq': 'BBQ',
+                'calefaccion': 'Calefacción',
+                'jardin': 'Jardín',
+                'terraza': 'Terraza'
+            };
+            return services[service] || service.charAt(0).toUpperCase() + service.slice(1);
+        }
+
+        // Formatear métodos de pago
+        function formatPaymentMethods(metodos) {
+            if (!metodos || metodos.length === 0) {
+                return `
+                    <div class="payment-item disabled">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Contactar para información de pago</span>
+                    </div>
+                `;
+            }
+            
+            const iconosMetodos = {
+                'efectivo': 'fas fa-money-bill-wave',
+                'transferencia': 'fas fa-exchange-alt',
+                'tarjeta': 'fas fa-credit-card'
+            };
+            
+            const nombresMetodos = {
+                'efectivo': 'Efectivo',
+                'transferencia': 'Transferencia',
+                'tarjeta': 'Tarjeta'
+            };
+            
+            return metodos.map(metodo => `
+                <div class="payment-item">
+                    <i class="${iconosMetodos[metodo] || 'fas fa-credit-card'}"></i>
+                    <span>${nombresMetodos[metodo] || metodo}</span>
+                </div>
+            `).join('');
+        }
+
+        // Obtener métodos de pago
+        function getMetodosPago(cabanaId, cabana) {
+            let metodosPago = cabana.metodosPago || [];
+            
+            if (!metodosPago || metodosPago.length === 0) {
+                const savedMetodos = localStorage.getItem(`cabana_${cabanaId}_metodosPago`);
+                if (savedMetodos) {
+                    try {
+                        metodosPago = JSON.parse(savedMetodos);
+                    } catch (e) {
+                        metodosPago = [];
+                    }
+                }
+            }
+            
+            return metodosPago;
+        }
+
+        // Abrir modal de cabaña - MODIFICADA CON SLIDER
+        function openCabanaModal(cabanaId) {
+            const cabana = allCabanas.find(c => c._id === cabanaId);
+            if (!cabana) return;
+            
+            const telefono = cabana.contacto?.telefono || 'No disponible';
+            const email = cabana.contacto?.email || 'No disponible';
+            const horario = cabana.contacto?.horario || 'No especificado';
+            const direccion = cabana.ubicacion?.direccion || 'Dirección no especificada';
+            
+            // Obtener métodos de pago
+            const metodosPago = getMetodosPago(cabanaId, cabana);
+            
+            // Servicios con compatibilidad
+            let serviciosArray = [];
+            if (cabana.servicios) {
+                if (Array.isArray(cabana.servicios)) {
+                    serviciosArray = cabana.servicios;
+                } else {
+                    serviciosArray = Object.keys(cabana.servicios).filter(key => cabana.servicios[key]);
+                }
+            }
+            
+            const esConjunto = cabana.caracteristicas?.esConjunto || false;
+            const totalCabanas = cabana.conjunto?.totalCabanas || 1;
+            const cabanasDisponibles = cabana.conjunto?.cabanasDisponibles || 0;
+            const disponibleIndividual = cabana.individual?.disponible || false;
+            
+            const practicasEcologicas = cabana.esEcologico ? [
+                'Uso de energías renovables',
+                'Reciclaje y separación de residuos',
+                'Productos de limpieza biodegradables',
+                'Ahorro de agua con sistemas eficientes',
+                'Apoyo a productores locales',
+                'Construcción con materiales sostenibles'
+            ] : [];
+            
+            // ✨ NUEVO: Generar HTML de la galería de imágenes
+            const galleryHTML = generateImageGalleryHTML(cabana.imagenes);
+            
+            const modalHTML = `
+                <div class="cabana-modal-overlay" id="cabanaModalOverlay" onclick="closeCabanaModal()">
+                    <div class="cabana-modal" onclick="event.stopPropagation()">
+                        <div class="modal-header">
+                            <div class="modal-cabana-info">
+                                <h2 class="modal-cabana-name">
+                                    ${cabana.esEcologico ? '<i class="fas fa-leaf eco-icon"></i>' : ''}
+                                    ${cabana.nombre}
+                                </h2>
+                                <p class="modal-cabana-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    ${cabana.ubicacion?.ciudad || 'Ubicación no especificada'}
+                                </p>
+                            </div>
+                            <button class="modal-close-btn" onclick="closeCabanaModal()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="modal-content">
+                            <!-- ✨ NUEVA SECCIÓN: Galería de imágenes -->
+                            ${galleryHTML}
+                            
+                            <div class="modal-grid">
+                                
+                                <div class="modal-section">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-info-circle"></i>
+                                        Información General
+                                    </h3>
+                                    <div class="info-grid">
+                                        <div class="info-item">
+                                            <span class="info-label">Nombre:</span>
+                                            <span class="info-value">${cabana.nombre}</span>
+                                        </div>
+                                        <div class="info-item full-width">
+                                            <span class="info-label">Ubicación:</span>
+                                            <span class="info-value">${direccion}</span>
+                                        </div>
+                                        <div class="info-item full-width">
+                                            <span class="info-label">Descripción:</span>
+                                            <span class="info-value">${cabana.descripcion || 'No disponible'}</span>
+                                        </div>
+                                        ${esConjunto ? `
+                                            <div class="info-item">
+                                                <span class="info-label">Total de cabañas:</span>
+                                                <span class="info-value">${totalCabanas}</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="info-label">Cabañas disponibles:</span>
+                                                <span class="info-value">${cabanasDisponibles}</span>
+                                            </div>
+                                        ` : `
+                                            <div class="info-item">
+                                                <span class="info-label">Habitaciones:</span>
+                                                <span class="info-value">${cabana.capacidad?.habitaciones || 1}</span>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="info-label">Disponible:</span>
+                                                <span class="info-value">${disponibleIndividual ? 'Sí' : 'No'}</span>
+                                            </div>
+                                        `}
+                                        <div class="info-item">
+                                            <span class="info-label">Total de huéspedes:</span>
+                                            <span class="info-value">${cabana.capacidad?.huespedes || 0}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">Precio base:</span>
+                                            <span class="info-value">$${(cabana.precio || 0).toLocaleString('es-MX')} / noche</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="modal-section">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-phone"></i>
+                                        Contacto
+                                    </h3>
+                                    <div class="contact-grid">
+                                        <div class="contact-item">
+                                            ${telefono !== 'No disponible' ? `
+                                                <i class="fas fa-phone"></i>
+                                                <a href="tel:${telefono}">${telefono}</a>
+                                            ` : `
+                                                <i class="fas fa-phone"></i>
+                                                <span>No disponible</span>
+                                            `}
+                                        </div>
+                                        <div class="contact-item">
+                                            ${email !== 'No disponible' ? `
+                                                <i class="fas fa-envelope"></i>
+                                                <a href="mailto:${email}">${email}</a>
+                                            ` : `
+                                                <i class="fas fa-envelope"></i>
+                                                <span>No disponible</span>
+                                            `}
+                                        </div>
+                                        <div class="contact-item">
+                                            <i class="fas fa-clock"></i>
+                                            <span>${horario}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="modal-section">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-concierge-bell"></i>
+                                        Servicios Disponibles
+                                    </h3>
+                                    <div class="services-grid">
+                                        ${serviciosArray.length > 0 ? serviciosArray.map(servicio => `
+                                            <div class="service-item">
+                                                <i class="fas fa-check"></i>
+                                                <span>${formatServiceName(servicio)}</span>
+                                            </div>
+                                        `).join('') : '<p>No hay servicios especificados</p>'}
+                                    </div>
+                                </div>
+                                
+                                <div class="modal-section">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-credit-card"></i>
+                                        Métodos de Pago
+                                    </h3>
+                                    <div class="payment-grid">
+                                        ${formatPaymentMethods(metodosPago)}
+                                    </div>
+                                </div>
+                                
+                                ${cabana.esEcologico ? `
+                                    <div class="modal-section eco-section">
+                                        <h3 class="section-title eco-title">
+                                            <i class="fas fa-leaf"></i>
+                                            Compromiso Ecológico
+                                        </h3>
+                                        <p class="eco-intro">
+                                            Esta cabaña está comprometida con prácticas sostenibles:
+                                        </p>
+                                        <div class="eco-practices">
+                                            ${practicasEcologicas.map(practica => `
+                                                <div class="eco-practice">
+                                                    <i class="fas fa-leaf eco-check"></i>
+                                                    <span>${practica}</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                                
+                                <div class="modal-section price-section">
+                                    <h3 class="section-title price-title">
+                                        <i class="fas fa-info-circle"></i>
+                                        Información de Precios
+                                    </h3>
+                                    <div class="price-info">
+                                        <div class="price-warning">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            <span>Los precios pueden variar según:</span>
+                                        </div>
+                                        <ul class="price-factors">
+                                            <li>Número de personas que se hospedarán</li>
+                                            <li>Tipo de habitación/cabaña</li>
+                                            <li>Temporada y fechas</li>
+                                            <li>Servicios adicionales</li>
+                                        </ul>
+                                        <div class="price-cta">
+                                            <i class="fas fa-phone"></i>
+                                            <span>Contacta para cotización personalizada</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            
+            setTimeout(() => {
+                document.getElementById('cabanaModalOverlay').classList.add('show');
+            }, 10);
+
+            // ✨ NUEVO: Inicializar el slider después de insertar el HTML
+            setTimeout(() => {
+                initializeImageSlider(cabana.imagenes);
+            }, 100);
+        }
+
+        // Cerrar modal
+        function closeCabanaModal() {
+            const modal = document.getElementById('cabanaModalOverlay');
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    modal.remove();
+                }, 300);
+            }
+        }
+
+        // Actualizar información de resultados
+        function updateResultsInfo() {
+            const count = filteredCabanas.length;
+            const total = allCabanas.length;
+            
+            if (count === total) {
+                resultsInfo.textContent = `Mostrando ${count} cabaña${count !== 1 ? 's' : ''}`;
+            } else {
+                resultsInfo.textContent = `Mostrando ${count} de ${total} cabaña${total !== 1 ? 's' : ''}`;
+            }
+        }
+
+        // Estados de la interfaz
+        function showLoading() {
+            loadingState.style.display = 'block';
+            cabanasGrid.style.display = 'none';
+            emptyState.style.display = 'none';
+        }
+
+        function showCabanas() {
+            loadingState.style.display = 'none';
+            cabanasGrid.style.display = 'grid';
+            emptyState.style.display = 'none';
+        }
+
+        function showEmpty() {
+            loadingState.style.display = 'none';
+            cabanasGrid.style.display = 'none';
+            emptyState.style.display = 'block';
+        }
+
+        function showError(message) {
+            loadingState.innerHTML = `
+                <i class="fas fa-exclamation-triangle" style="color: #ff6b6b;"></i>
+                <h3>Error</h3>
+                <p>${message}</p>
+            `;
+        }
+
+        // ✅ FUNCIÓN DE DEBUG AGREGADA: Para diagnosticar problemas de imágenes
+        function debugCabanaImages(cabana) {
+            console.log('🔍 === DEBUG DETALLADO DE IMÁGENES DE CABAÑA ===');
+            console.log('Cabaña:', cabana.nombre);
+            console.log('Array de imágenes:', cabana.imagenes);
+            console.log('Cantidad de imágenes:', cabana.imagenes?.length || 0);
+            
+            if (cabana.imagenes && cabana.imagenes.length > 0) {
+                cabana.imagenes.forEach((img, index) => {
+                    const finalUrl = getImageUrl(img);
+                    console.log(`--- Imagen ${index + 1} ---`);
+                    console.log('  Original:', img);
+                    console.log('  URL final:', finalUrl);
+                    
+                    // Probar si la imagen es accesible
+                    const testImg = new Image();
+                    testImg.onload = () => console.log(`✅ Imagen ${index + 1} carga correctamente`);
+                    testImg.onerror = () => console.log(`❌ Imagen ${index + 1} no se puede cargar`);
+                    testImg.src = finalUrl;
+                });
+            } else {
+                console.log('⚠️ No hay imágenes para esta cabaña');
+            }
+            
+            console.log('🔍 === FIN DEBUG ===');
+        }
+
+        // ✅ HACER FUNCIONES GLOBALES para debugging en consola
+        window.debugCabanaImages = debugCabanaImages;
+        window.getImageUrl = getImageUrl;
+        window.debugAllCabanas = function() {
+            console.log('🔍 Debugging todas las imágenes de cabañas');
+            allCabanas.forEach(cabana => debugCabanaImages(cabana));
+        };
+
+        // Cerrar modal con Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeCabanaModal();
+            }
+        });
+
+        console.log('✅ Cabañas cargadas con slider de imágenes integrado');
+    </script>
+</body>
+</html>

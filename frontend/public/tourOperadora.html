@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tours - Dirección de Turismo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+        /* Header y Navegación */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4CAF50;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+        .nav-item {
+            position: relative;
+        }
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .nav-link:hover, .nav-link.active {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            transform: translateY(-2px);
+        }
+        .dropdown {
+            position: relative;
+        }
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            border-radius: 15px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            padding: 1rem 0;
+        }
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .dropdown-item {
+            display: block;
+            padding: 0.7rem 1.5rem;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        .dropdown-item:hover {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            border-left: 3px solid #fff;
+        }
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-login {
+            background: transparent;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+        }
+        .btn-login:hover {
+            background: #4CAF50;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .btn-register {
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            color: white;
+        }
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+        /* Page Header */
+        .page-header {
+            margin-top: 80px;
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="adventure" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M15 5 L25 15 L15 25 L5 15 Z M15 10 L20 15 L15 20 L10 15 Z" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23adventure)"/></svg>');
+            z-index: 1;
+        }
+        .page-header-content {
+            position: relative;
+            z-index: 2;
+        }
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Tour Categories Section con Slider de Imágenes */
+        .categories-section {
+            background: white;
+            padding: 3rem 2rem;
+            margin: -2rem 2rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 100;
+        }
+
+        .categories-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .categories-title {
+            text-align: center;
+            font-size: 2.2rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .categories-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        /* Slider de Imágenes */
+        .categories-slider-wrapper {
+            position: relative;
+            max-width: 100%;
+            margin: 2rem auto;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .categories-slider {
+            display: flex;
+            transition: transform 0.6s ease-in-out;
+            width: 100%;
+        }
+
+        .category-slide {
+            min-width: 100%;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .experience-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .category-slide:hover .experience-image {
+            transform: scale(1.05);
+        }
+
+        /* Overlay sutil para mejor contraste */
+        .category-slide::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                45deg,
+                rgba(0,0,0,0.1) 0%,
+                transparent 50%,
+                rgba(255,255,255,0.1) 100%
+            );
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .category-slide:hover::after {
+            opacity: 1;
+        }
+
+        .category-slide.active::after {
+            background: linear-gradient(
+                45deg,
+                rgba(255, 107, 53, 0.3) 0%,
+                transparent 50%,
+                rgba(247, 147, 30, 0.3) 100%
+            );
+            opacity: 1;
+        }
+
+        /* Botones de navegación */
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.9);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #333;
+            transition: all 0.3s ease;
+            z-index: 10;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .slider-prev {
+            left: 20px;
+        }
+
+        .slider-next {
+            right: 20px;
+        }
+
+        .slider-nav:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            color: #667eea;
+        }
+
+        /* Indicadores del Slider */
+        .slider-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 2rem;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .indicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.6);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .indicator.active {
+            background: white;
+            transform: scale(1.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .indicator:hover {
+            background: rgba(255,255,255,0.9);
+            transform: scale(1.2);
+        }
+
+        /* Responsividad */
+        @media (min-width: 768px) {
+            .experience-image {
+                height: 450px;
+            }
+            
+            .categories-slider-wrapper {
+                padding: 0 80px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .experience-image {
+                height: 500px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .slider-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+            
+            .slider-prev {
+                left: 10px;
+            }
+            
+            .slider-next {
+                right: 10px;
+            }
+            
+            .experience-image {
+                height: 300px;
+            }
+            
+            .categories-section {
+                padding: 2rem 1rem;
+            }
+            
+            .categories-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Tour Operators Grid */
+        .tours-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .results-info {
+            font-size: 1.1rem;
+            color: #666;
+        }
+        .sort-dropdown {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+        }
+        .tours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .operator-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .operator-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.15);
+            border-color: #FF6B35;
+        }
+        .operator-logo {
+            height: 200px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .operator-logo img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        .operator-card:hover .operator-logo img {
+            transform: scale(1.05);
+        }
+        .logo-placeholder {
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .verified-badge-logo {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+        }
+        .rating-badge-logo {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 193, 7, 0.9);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .operator-info {
+            padding: 1.5rem;
+        }
+        .operator-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .operator-name:hover {
+            color: #FF6B35;
+        }
+        .operator-location {
+            color: #666;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+        .operator-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.5;
+        }
+        .operator-specialties {
+            margin-bottom: 1.5rem;
+        }
+        .specialties-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.8rem;
+        }
+        .specialties-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .specialty-tag {
+            background: linear-gradient(135deg, #fff5f2, #ffede6);
+            color: #FF6B35;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: 1px solid #ffe6d9;
+        }
+        .operator-footer {
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .contact-text {
+            font-weight: 500;
+            color: #333;
+            min-width: 80px;
+        }
+        .contact-link {
+            color: #FF6B35;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            word-break: break-all;
+        }
+        .contact-link:hover {
+            color: #F7931E;
+            text-decoration: underline;
+        }
+        /* Social Media Links */
+        .social-media {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+        .social-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.8rem;
+        }
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .social-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .social-text {
+            font-weight: 500;
+            color: #333;
+            min-width: 80px;
+        }
+        .social-link {
+            color: #FF6B35;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            word-break: break-all;
+        }
+        .social-link:hover {
+            color: #F7931E;
+            text-decoration: underline;
+        }
+        /* Loading and Empty States */
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #666;
+        }
+        .loading i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: spin 1s linear infinite;
+            color: #FF6B35;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #666;
+        }
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #ddd;
+        }
+        .empty-state h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            .tours-grid {
+                grid-template-columns: 1fr;
+            }
+            .section-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-compass"></i>
+                Dirección de Turismo
+            </a>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Inicio
+                    </a>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-bed"></i>
+                        Hospedaje
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="hoteles.html" class="dropdown-item">
+                            <i class="fas fa-hotel"></i>
+                            Hoteles
+                        </a>
+                        <a href="cabanas.html" class="dropdown-item">
+                            <i class="fas fa-tree"></i>
+                            Cabañas
+                        </a>
+                        <a href="airbnb.html" class="dropdown-item">
+                            <i class="fas fa-home"></i>
+                            Airbnb
+                        </a>
+                    </div>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="tourOperadora.html" class="nav-link active">
+                        <i class="fas fa-route"></i>
+                        Tours
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="guias.html" class="nav-link">
+                        <i class="fas fa-user-tie"></i>
+                        Guías
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-login">Iniciar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="page-header-content">
+            <h1><i class="fas fa-route"></i> Tours Operadoras</h1>
+            <p>Vive aventuras únicas con nuestras tour operadoras certificadas. Desde expediciones de aventura hasta tours culturales, encuentra la experiencia perfecta para ti.</p>
+        </div>
+    </section>
+
+    <!-- Tour Categories Section con Slider de Imágenes -->
+    <section class="categories-section">
+        <div class="categories-container">
+            <h2 class="categories-title">Experiencias turísticas</h2>
+            <p class="categories-subtitle">Encuentra el tipo de aventura que más te emocione</p>
+            
+            <!-- Slider Container -->
+            <div class="categories-slider-wrapper">
+                <div class="categories-slider" id="categoriesSlider">
+                    <div class="category-slide" data-type="espeleismo">
+                        <img src="/hospedaje-web/img_jalpan/1_tour.png" alt="Espeleísmo - Explora cuevas y cavernas subterráneas" class="experience-image">
+                    </div>
+                    
+                    <div class="category-slide" data-type="cultural">
+                        <img src="/hospedaje-web/img_jalpan/2_tour.png" alt="Tours Culturales - Sitios arqueológicos y patrimonio histórico" class="experience-image">
+                    </div>
+                    
+                    <div class="category-slide" data-type="aviturismo">
+                        <img src="/hospedaje-web/img_jalpan/3_tour.png" alt="Aviturismo - Observación de aves en su hábitat natural" class="experience-image">
+                    </div>
+                    
+                    <div class="category-slide" data-type="senderismo">
+                        <img src="/hospedaje-web/img_jalpan/4_tour.png" alt="Senderismo - Caminatas por senderos naturales" class="experience-image">
+                    </div>
+                    
+                    <div class="category-slide" data-type="kayak">
+                        <img src="/hospedaje-web/img_jalpan/5_tour.png" alt="Kayak - Navegación en ríos y cuerpos de agua" class="experience-image">
+                    </div>
+                    
+                    <div class="category-slide" data-type="rzr">
+                        <img src="/hospedaje-web/img_jalpan/6_tour.png" alt="RZR - Aventuras todoterreno en vehículos RZR" class="experience-image">
+                    </div>
+                    
+                    <div class="category-slide" data-type="rutas-comunitarias">
+                        <img src="/hospedaje-web/img_jalpan/7_tour.png" alt="Rutas Comunitarias - Experiencias auténticas con comunidades locales" class="experience-image">
+                    </div>
+                    
+                    <div class="category-slide" data-type="">
+                        <img src="/hospedaje-web/img_jalpan/8_tour.png" alt="Ver Todos - Explora toda nuestra oferta de tours" class="experience-image">
+                    </div>
+                </div>
+                
+                <!-- Navigation Arrows -->
+                <button class="slider-nav slider-prev" id="sliderPrev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="slider-nav slider-next" id="sliderNext">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                
+                <!-- Slider Indicators -->
+                <div class="slider-indicators" id="sliderIndicators">
+                    <!-- Puntos indicadores se generan dinámicamente -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tours Section -->
+    <section class="tours-section">
+        <div class="section-header">
+            <div class="results-info" id="resultsInfo">
+                Cargando tours...
+            </div>
+            <select class="sort-dropdown" id="sortBy">
+                <option value="newest">Más recientes</option>
+                <option value="name">Nombre A-Z</option>
+                <option value="rating">Mejor calificados</option>
+                <option value="tours-count">Más tours</option>
+            </select>
+        </div>
+        
+        <!-- Loading State -->
+        <div class="loading" id="loadingState">
+            <i class="fas fa-spinner"></i>
+            <h3>Cargando tour operadoras...</h3>
+            <p>Por favor espera mientras obtenemos la información</p>
+        </div>
+        
+        <!-- Tours Grid -->
+        <div class="tours-grid" id="toursGrid" style="display: none;">
+            <!-- Las tour operadoras se cargarán aquí dinámicamente -->
+        </div>
+        
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <i class="fas fa-route"></i>
+            <h3>No se encontraron tour operadoras</h3>
+            <p>Intenta seleccionar una categoría diferente</p>
+        </div>
+    </section>
+
+    <script>
+        // Variables globales
+        let allOperators = [];
+        let allTours = [];
+        let filteredOperators = [];
+        const baseURL = 'http://localhost:5000/api';
+
+        // Elementos del DOM
+        const loadingState = document.getElementById('loadingState');
+        const toursGrid = document.getElementById('toursGrid');
+        const emptyState = document.getElementById('emptyState');
+        const resultsInfo = document.getElementById('resultsInfo');
+        const sortBy = document.getElementById('sortBy');
+
+        // Clase del Slider de Categorías con Imágenes
+        class CategoriesSlider {
+            constructor() {
+                this.slider = document.getElementById('categoriesSlider');
+                this.slides = this.slider.querySelectorAll('.category-slide');
+                this.prevBtn = document.getElementById('sliderPrev');
+                this.nextBtn = document.getElementById('sliderNext');
+                this.indicatorsContainer = document.getElementById('sliderIndicators');
+                
+                this.currentIndex = 0;
+                this.autoSlideInterval = null;
+                this.totalSlides = this.slides.length;
+                
+                this.init();
+            }
+            
+            init() {
+                this.createIndicators();
+                this.setupEventListeners();
+                this.startAutoSlide();
+                this.updateSlider();
+            }
+            
+            createIndicators() {
+                this.indicatorsContainer.innerHTML = '';
+                
+                for (let i = 0; i < this.totalSlides; i++) {
+                    const indicator = document.createElement('div');
+                    indicator.classList.add('indicator');
+                    if (i === 0) indicator.classList.add('active');
+                    indicator.addEventListener('click', () => this.goToSlide(i));
+                    this.indicatorsContainer.appendChild(indicator);
+                }
+            }
+            
+            setupEventListeners() {
+                this.prevBtn.addEventListener('click', () => this.prevSlide());
+                this.nextBtn.addEventListener('click', () => this.nextSlide());
+                
+                // Pausar auto-slide en hover
+                const sliderWrapper = this.slider.parentElement;
+                sliderWrapper.addEventListener('mouseenter', () => this.stopAutoSlide());
+                sliderWrapper.addEventListener('mouseleave', () => this.startAutoSlide());
+                
+                // Funcionalidad de click en las imágenes
+                this.slides.forEach(slide => {
+                    slide.addEventListener('click', () => {
+                        const type = slide.getAttribute('data-type');
+                        this.selectCategory(type, slide);
+                    });
+                });
+                
+                // Soporte para navegación por teclado
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') this.prevSlide();
+                    if (e.key === 'ArrowRight') this.nextSlide();
+                });
+                
+                // Touch/Swipe support para móviles
+                let startX = 0;
+                let endX = 0;
+                
+                sliderWrapper.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                });
+                
+                sliderWrapper.addEventListener('touchend', (e) => {
+                    endX = e.changedTouches[0].clientX;
+                    const diff = startX - endX;
+                    
+                    if (Math.abs(diff) > 50) { // Umbral mínimo para swipe
+                        if (diff > 0) {
+                            this.nextSlide(); // Swipe izquierda = siguiente
+                        } else {
+                            this.prevSlide(); // Swipe derecha = anterior
+                        }
+                    }
+                });
+            }
+            
+            updateSlider() {
+                const translateX = -this.currentIndex * 100;
+                this.slider.style.transform = `translateX(${translateX}%)`;
+                
+                // Actualizar indicadores
+                const indicators = this.indicatorsContainer.querySelectorAll('.indicator');
+                indicators.forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === this.currentIndex);
+                });
+            }
+            
+            nextSlide() {
+                this.currentIndex = (this.currentIndex + 1) % this.totalSlides;
+                this.updateSlider();
+            }
+            
+            prevSlide() {
+                this.currentIndex = (this.currentIndex - 1 + this.totalSlides) % this.totalSlides;
+                this.updateSlider();
+            }
+            
+            goToSlide(index) {
+                this.currentIndex = index;
+                this.updateSlider();
+            }
+            
+            startAutoSlide() {
+                this.stopAutoSlide();
+                this.autoSlideInterval = setInterval(() => {
+                    this.nextSlide();
+                }, 5000); // Cambia cada 5 segundos
+            }
+            
+            stopAutoSlide() {
+                if (this.autoSlideInterval) {
+                    clearInterval(this.autoSlideInterval);
+                    this.autoSlideInterval = null;
+                }
+            }
+            
+            selectCategory(type, slide) {
+                // Remover clase active de todas las slides
+                this.slides.forEach(s => s.classList.remove('active'));
+                
+                // Agregar clase active a la slide seleccionada
+                slide.classList.add('active');
+                
+                // Llamar función de filtrado
+                filterByCategory(type);
+            }
+        }
+
+        // Cargar tours al iniciar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOperators();
+            setupEventListeners();
+            // Inicializar el slider
+            new CategoriesSlider();
+        });
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            sortBy.addEventListener('change', handleSort);
+        }
+
+        // Función debounce para optimizar búsquedas
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Cargar tour operadoras desde la API
+        async function loadOperators() {
+            try {
+                showLoading();
+                
+                const response = await fetch(`${baseURL}/tours`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    allOperators = data.data.tourOperadoras;
+                    // Expandir tours para conteos
+                    expandToursForCounting();
+                    filteredOperators = [...allOperators];
+                    
+                    displayOperators();
+                    updateResultsInfo();
+                } else {
+                    throw new Error(data.message || 'Error al cargar tour operadoras');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Error al cargar las tour operadoras. Por favor recarga la página.');
+            }
+        }
+
+        // Expandir tours para conteos de categorías
+        function expandToursForCounting() {
+            allTours = [];
+            allOperators.forEach(operadora => {
+                if (operadora.tours && operadora.tours.length > 0) {
+                    operadora.tours.forEach(tour => {
+                        if (tour.activo !== false) {
+                            allTours.push(tour);
+                        }
+                    });
+                }
+            });
+        }
+
+        // Filtrar por categoría
+        function filterByCategory(type) {
+            if (type === '') {
+                // Mostrar todas las operadoras
+                filteredOperators = [...allOperators];
+            } else {
+                // Filtrar operadoras que tengan tours del tipo seleccionado
+                filteredOperators = allOperators.filter(operadora => {
+                    return operadora.tours && operadora.tours.some(tour => 
+                        tour.tipoTour === type && tour.activo !== false
+                    );
+                });
+            }
+            
+            displayOperators();
+            updateResultsInfo();
+        }
+
+        // Manejar ordenamiento
+        function handleSort() {
+            const sortValue = sortBy.value;
+            
+            switch (sortValue) {
+                case 'name':
+                    filteredOperators.sort((a, b) => a.nombre.localeCompare(b.nombre));
+                    break;
+                case 'rating':
+                    filteredOperators.sort((a, b) => (b.calificacion?.promedio || 0) - (a.calificacion?.promedio || 0));
+                    break;
+                case 'tours-count':
+                    filteredOperators.sort((a, b) => (b.tours?.length || 0) - (a.tours?.length || 0));
+                    break;
+                case 'newest':
+                default:
+                    filteredOperators.sort((a, b) => a.nombre.localeCompare(b.nombre));
+                    break;
+            }
+            
+            displayOperators();
+        }
+
+        // Mostrar tour operadoras
+        function displayOperators() {
+            if (filteredOperators.length === 0) {
+                showEmpty();
+                return;
+            }
+            
+            showOperators();
+            
+            const operatorsHTML = filteredOperators.map(operadora => createOperatorCard(operadora)).join('');
+            toursGrid.innerHTML = operatorsHTML;
+        }
+
+        // Crear tarjeta de tour operadora (MODIFICADA)
+        function createOperatorCard(operadora) {
+            const rating = operadora.calificacion?.promedio || 0;
+            const toursCount = operadora.tours?.filter(tour => tour.activo !== false).length || 0;
+            
+            // Crear iniciales para el placeholder del logo
+            const initials = operadora.nombre.split(' ').map(word => word.charAt(0)).join('').substring(0, 3);
+            
+            // Obtener especialidades únicas
+            const specialties = [...new Set(operadora.tours?.map(tour => tour.tipoTour).filter(Boolean))];
+            
+            // Función para crear contacto item
+            const createContactItem = (text, value, link) => {
+                if (!value) return '';
+                return `
+                    <div class="contact-item">
+                        <span class="contact-text">${text}:</span>
+                        <a href="${link}" class="contact-link">${value}</a>
+                    </div>
+                `;
+            };
+
+            // Función para crear redes sociales
+            const createSocialItems = () => {
+                let socialHTML = '';
+                const redesSociales = operadora.contacto?.redesSociales || {};
+                
+                if (redesSociales.facebook) {
+                    socialHTML += `
+                        <div class="social-item">
+                            <span class="social-text">Facebook:</span>
+                            <a href="${redesSociales.facebook}" class="social-link" target="_blank">${redesSociales.facebook}</a>
+                        </div>
+                    `;
+                }
+                
+                if (redesSociales.instagram) {
+                    socialHTML += `
+                        <div class="social-item">
+                            <span class="social-text">Instagram:</span>
+                            <a href="${redesSociales.instagram}" class="social-link" target="_blank">${redesSociales.instagram}</a>
+                        </div>
+                    `;
+                }
+                
+                if (redesSociales.twitter) {
+                    socialHTML += `
+                        <div class="social-item">
+                            <span class="social-text">Twitter:</span>
+                            <a href="${redesSociales.twitter}" class="social-link" target="_blank">${redesSociales.twitter}</a>
+                        </div>
+                    `;
+                }
+                
+                return socialHTML;
+            };
+
+            const socialItemsHTML = createSocialItems();
+            
+            return `
+                <div class="operator-card" onclick="viewOperatorDetails('${operadora._id}')">
+                    <div class="operator-logo">
+                        ${operadora.imagenes && operadora.imagenes[0] ? 
+                            `<img src="${operadora.imagenes[0]}" alt="Logo ${operadora.nombre}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                             <div class="logo-placeholder" style="display: none;">${initials}</div>` :
+                            `<div class="logo-placeholder">${initials}</div>`
+                        }
+                        
+                        ${rating > 0 ? `<div class="rating-badge-logo"><i class="fas fa-star"></i> ${rating.toFixed(1)}</div>` : ''}
+                        ${operadora.verificada ? '<div class="verified-badge-logo"><i class="fas fa-shield-check"></i> Verificada</div>' : ''}
+                    </div>
+                    
+                    <div class="operator-info">
+                        <h3 class="operator-name" onclick="event.stopPropagation(); showOperatorInfo('${operadora._id}')">
+                            ${operadora.nombre}
+                        </h3>
+                        
+                        <div class="operator-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            ${operadora.ubicacion?.ciudad || ''} ${operadora.ubicacion?.estado || ''}
+                        </div>
+                        
+                        <p class="operator-description">${operadora.descripcion || 'Tour operadora especializada en experiencias únicas y memorables.'}</p>
+                        
+                        ${specialties.length > 0 ? `
+                        <div class="operator-specialties">
+                            <div class="specialties-title">Especialidades:</div>
+                            <div class="specialties-list">
+                                ${specialties.slice(0, 4).map(specialty => 
+                                    `<span class="specialty-tag">${formatTourType(specialty)}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+                        
+                        <div class="operator-footer">
+                            <div class="contact-info">
+                                ${createContactItem('Teléfono', operadora.contacto?.telefono, `tel:${operadora.contacto?.telefono}`)}
+                                ${createContactItem('Email', operadora.contacto?.email, `mailto:${operadora.contacto?.email}`)}
+                                ${createContactItem('WhatsApp', operadora.contacto?.whatsapp, `https://wa.me/${operadora.contacto?.whatsapp}`)}
+                                ${createContactItem('Sitio Web', operadora.contacto?.sitioWeb, operadora.contacto?.sitioWeb)}
+                            </div>
+                            
+                            ${socialItemsHTML ? `
+                            <div class="social-media">
+                                <div class="social-title">Redes Sociales:</div>
+                                <div class="social-links">
+                                    ${socialItemsHTML}
+                                </div>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Formatear tipo de tour
+        function formatTourType(type) {
+            const types = {
+                'espeleismo': 'Espeleísmo',
+                'cultural': 'Cultural',
+                'aviturismo': 'Aviturismo',
+                'senderismo': 'Senderismo',
+                'kayak': 'Kayak',
+                'rzr': 'RZR',
+                'rutas-comunitarias': 'Rutas Comunitarias'
+            };
+            return types[type] || type?.charAt(0).toUpperCase() + type?.slice(1) || 'Tour';
+        }
+
+        // Ver detalles de la operadora
+        function viewOperatorDetails(operadoraId) {
+            // Por ahora mostrar alert, después se puede crear página de detalles
+            alert(`Ver página completa de la operadora con ID: ${operadoraId}`);
+            // En el futuro: window.location.href = `operadora-detalle.html?id=${operadoraId}`;
+        }
+
+        // Mostrar información de la operadora (al hacer clic en el nombre)
+        function showOperatorInfo(operadoraId) {
+            const operadora = allOperators.find(op => op._id === operadoraId);
+            if (operadora) {
+                const toursInfo = operadora.tours?.map(tour => 
+                    `• ${tour.nombre} - ${tour.precio?.toLocaleString('es-MX') || 'Consultar'} MXN`
+                ).join('\n') || 'No hay tours disponibles';
+                
+                alert(`${operadora.nombre}\n\n` +
+                      `📍 ${operadora.ubicacion?.ciudad || ''}, ${operadora.ubicacion?.estado || ''}\n` +
+                      `⭐ Calificación: ${operadora.calificacion?.promedio?.toFixed(1) || 'N/A'}\n` +
+                      `📧 ${operadora.contacto?.email || 'No disponible'}\n` +
+                      `📞 ${operadora.contacto?.telefono || 'No disponible'}\n\n` +
+                      `Tours disponibles:\n${toursInfo}`);
+            }
+        }
+
+        // Actualizar información de resultados
+        function updateResultsInfo() {
+            const count = filteredOperators.length;
+            const total = allOperators.length;
+            
+            if (count === total) {
+                resultsInfo.textContent = `Mostrando ${count} tour operadora${count !== 1 ? 's' : ''}`;
+            } else {
+                resultsInfo.textContent = `Mostrando ${count} de ${total} tour operadora${total !== 1 ? 's' : ''}`;
+            }
+        }
+
+        // Estados de la interfaz
+        function showLoading() {
+            loadingState.style.display = 'block';
+            toursGrid.style.display = 'none';
+            emptyState.style.display = 'none';
+        }
+
+        function showOperators() {
+            loadingState.style.display = 'none';
+            toursGrid.style.display = 'grid';
+            emptyState.style.display = 'none';
+        }
+
+        function showEmpty() {
+            loadingState.style.display = 'none';
+            toursGrid.style.display = 'none';
+            emptyState.style.display = 'block';
+        }
+
+        function showError(message) {
+            loadingState.innerHTML = `
+                <i class="fas fa-exclamation-triangle" style="color: #ff6b6b;"></i>
+                <h3>Error</h3>
+                <p>${message}</p>
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,2366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airbnb - Dirección de Turismo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+ <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        /* Header y Navegación */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4CAF50;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            padding: 1rem 0;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.5rem;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover, .dropdown-item.active {
+            background: #f0f0f0;
+            color: #4CAF50;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+        }
+
+        .btn-login:hover {
+            background: #4CAF50;
+            color: white;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #FF5A5F 0%, #FF385C 50%, #E91E63 100%);
+            color: white;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            margin-top: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>') repeat;
+            opacity: 0.3;
+        }
+
+        .page-header-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: white;
+            padding: 3rem 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .search-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .form-control {
+            padding: 0.8rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #FF5A5F;
+            box-shadow: 0 0 0 3px rgba(255, 90, 95, 0.1);
+        }
+
+        .btn-search {
+            background: linear-gradient(135deg, #FF5A5F, #FF385C);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .btn-search:hover {
+            background: linear-gradient(135deg, #FF385C, #E91E63);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 90, 95, 0.3);
+        }
+
+        /* Airbnb Section */
+        .airbnb-section {
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .results-info {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .sort-dropdown {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #666;
+        }
+
+        .loading i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: spin 1s linear infinite;
+            color: #FF5A5F;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ✅ CORRECCIÓN: Airbnb Grid mejorado */
+        .airbnb-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* Airbnb Cards */
+        .airbnb-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .airbnb-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        /* ✅ NUEVO: Slider de imágenes para las tarjetas */
+        .airbnb-image-slider {
+            width: 100%;
+            height: 250px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .airbnb-main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .airbnb-image-slider:hover .airbnb-main-image {
+            transform: scale(1.05);
+        }
+
+        .card-slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 10;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+        }
+
+        .airbnb-card:hover .card-slider-nav {
+            opacity: 1;
+        }
+
+        .card-slider-nav:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .card-slider-prev {
+            left: 10px;
+        }
+
+        .card-slider-next {
+            right: 10px;
+        }
+
+        .card-image-counter {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* ✅ NUEVO: Estilos para el slider del modal */
+        .modal-gallery-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+        }
+
+        .modal-gallery-section:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .gallery-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 700;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        .gallery-title i {
+            color: #FF5A5F;
+            font-size: 20px;
+        }
+
+        .modal-image-slider-container {
+            position: relative;
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-main-image-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .modal-main-image:hover {
+            transform: scale(1.02);
+        }
+
+        .modal-slider-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 10;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-slider-nav-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .modal-slider-nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: translateY(-50%) scale(0.9);
+        }
+
+        .modal-slider-prev {
+            left: 15px;
+        }
+
+        .modal-slider-next {
+            right: 15px;
+        }
+
+        .modal-image-counter {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .modal-thumbnails-container {
+            display: flex;
+            gap: 8px;
+            padding: 15px;
+            background: #f8f9fa;
+            overflow-x: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e0 #f7fafc;
+        }
+
+        .modal-thumbnails-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .modal-thumbnails-container::-webkit-scrollbar-track {
+            background: #f7fafc;
+            border-radius: 3px;
+        }
+
+        .modal-thumbnails-container::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 3px;
+        }
+
+        .modal-thumbnail {
+            flex-shrink: 0;
+            width: 60px;
+            height: 45px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            overflow: hidden;
+        }
+
+        .modal-thumbnail:hover {
+            transform: scale(1.05);
+            border-color: #FF5A5F;
+        }
+
+        .modal-thumbnail.active {
+            border-color: #FF5A5F;
+            box-shadow: 0 0 0 2px rgba(255, 90, 95, 0.3);
+        }
+
+        .modal-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ✅ CORRECCIÓN PRINCIPAL: Badges mejorados */
+        .airbnb-badges {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 10px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .airbnb-badges > * {
+            pointer-events: auto;
+        }
+
+        .price-badge {
+            background: linear-gradient(135deg, #FF5A5F, #FF385C);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(255, 90, 95, 0.3);
+        }
+
+        .eco-badge {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+            animation: pulse-eco 2s infinite;
+        }
+
+        .eco-badge i {
+            font-size: 14px;
+        }
+
+        @keyframes pulse-eco {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+            }
+        }
+
+        .type-badge {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rating-badge {
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 6px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .rating-badge i {
+            color: #ffc107;
+        }
+
+        /* ✅ MEJORA: Contenido de las tarjetas optimizado */
+        .airbnb-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .airbnb-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 0;
+            color: #2c3e50;
+            line-height: 1.3;
+        }
+
+        .airbnb-location {
+            color: #7f8c8d;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .airbnb-description {
+            color: #666;
+            margin: 0;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .airbnb-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 0;
+        }
+
+        .feature-tag {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .feature-tag i {
+            color: #27ae60;
+            font-size: 0.7rem;
+        }
+
+        .airbnb-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #ecf0f1;
+            margin-top: auto;
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .contact-btn {
+            background: #ecf0f1;
+            color: #2c3e50;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .contact-btn:hover {
+            background: #FF5A5F;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .view-details-btn {
+            background: linear-gradient(135deg, #FF5A5F, #FF385C);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(255, 90, 95, 0.3);
+            text-decoration: none;
+        }
+
+        .view-details-btn:hover {
+            background: linear-gradient(135deg, #FF385C, #E91E63);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 90, 95, 0.4);
+        }
+
+        .capacity-info {
+            display: flex;
+            gap: 1rem;
+            margin: 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .capacity-info span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .capacity-info i {
+            color: #FF5A5F;
+        }
+
+        /* 🎯 MODAL DE DETALLES DEL AIRBNB */
+
+        /* Overlay del modal */
+        .airbnb-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+
+        .airbnb-modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Modal principal */
+        .airbnb-modal {
+            background: white;
+            border-radius: 20px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .airbnb-modal-overlay.show .airbnb-modal {
+            transform: scale(1) translateY(0);
+        }
+
+        /* Header del modal */
+        .modal-header {
+            background: linear-gradient(135deg, #FF5A5F, #FF385C);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="25" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>') repeat;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .modal-airbnb-info {
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-airbnb-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 0 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-airbnb-name .eco-icon {
+            color: #2ecc71;
+            font-size: 22px;
+            filter: drop-shadow(0 0 8px rgba(46, 204, 113, 0.5));
+        }
+
+        .modal-airbnb-location {
+            font-size: 16px;
+            opacity: 0.9;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-close-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        /* Contenido del modal */
+        .modal-content {
+            padding: 30px;
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        /* Secciones del modal */
+        .modal-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .modal-section:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 700;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        .section-title i {
+            color: #FF5A5F;
+            font-size: 20px;
+        }
+
+        /* Información básica */
+        .basic-info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .basic-info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .info-value {
+            color: #212529;
+        }
+
+        /* Información de contacto */
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #FF5A5F, #FF385C);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .contact-details {
+            flex: 1;
+        }
+
+        .contact-label {
+            font-size: 12px;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-value {
+            font-weight: 600;
+            color: #212529;
+        }
+
+        /* Servicios */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            font-size: 14px;
+        }
+
+        .service-item i {
+            color: #28a745;
+            font-size: 12px;
+        }
+
+        /* Disponibilidad */
+        .availability-status {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .availability-status.available {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+        }
+
+        .availability-status.unavailable {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+        }
+
+        /* Métodos de pago */
+        .payment-methods {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .payment-method {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            min-width: 80px;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover {
+            border-color: #FF5A5F;
+            transform: translateY(-2px);
+        }
+
+        .payment-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #FF5A5F, #FF385C);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .payment-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #495057;
+            text-align: center;
+        }
+
+        /* Sección ecológica */
+        .eco-section {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb) !important;
+            border-color: #28a745 !important;
+        }
+
+        .eco-title {
+            color: #155724 !important;
+        }
+
+        .eco-title i {
+            color: #28a745 !important;
+        }
+
+        .eco-intro {
+            color: #155724;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .eco-practices {
+            display: grid;
+            gap: 10px;
+        }
+
+        .eco-practice {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+        }
+
+        .eco-check {
+            color: #28a745;
+            font-size: 14px;
+        }
+
+        /* Sección de precios */
+        .price-section {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7) !important;
+            border-color: #ffc107 !important;
+        }
+
+        .price-title {
+            color: #856404 !important;
+        }
+
+        .price-title i {
+            color: #ffc107 !important;
+        }
+
+        .price-info {
+            color: #856404;
+        }
+
+        .price-warning {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .price-warning i {
+            color: #ffc107;
+        }
+
+        .price-factors {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .price-factors li {
+            margin-bottom: 5px;
+            color: #6c757d;
+        }
+
+        .price-cta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .price-cta i {
+            color: #ffc107;
+        }
+
+        /* Métodos de pago - Estado disabled */
+        .payment-method.disabled {
+            opacity: 0.6;
+            background: #f8f9fa !important;
+            border: 2px dashed #dee2e6 !important;
+        }
+
+        .payment-method.disabled .payment-icon {
+            background: #6c757d !important;
+        }
+
+        .payment-method.disabled .payment-label {
+            color: #6c757d !important;
+            font-style: italic;
+        }
+
+        /* ✅ RESPONSIVE MEJORADO */
+        @media (max-width: 768px) {
+            .modal-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .airbnb-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                margin-top: 1.5rem;
+            }
+            
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .payment-methods {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+
+            .airbnb-image-slider {
+                height: 220px;
+            }
+            
+            .airbnb-content {
+                padding: 1.25rem;
+            }
+
+            .airbnb-badges {
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .airbnb-grid {
+                gap: 1rem;
+                margin-top: 1rem;
+            }
+            
+            .airbnb-footer {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+            
+            .capacity-info {
+                justify-content: center;
+            }
+
+            .airbnb-image-slider {
+                height: 200px;
+            }
+            
+            .airbnb-content {
+                padding: 1rem;
+            }
+        }
+
+        /* Error State */
+        .error-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #666;
+        }
+
+        .error-state i {
+            font-size: 4rem;
+            color: #dc3545;
+            margin-bottom: 1rem;
+        }
+
+        .error-state h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .error-state p {
+            margin-bottom: 2rem;
+        }
+
+        .retry-btn {
+            background: #FF5A5F;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .retry-btn:hover {
+            background: #FF385C;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer .logo {
+            color: white;
+            margin-bottom: 1rem;
+        }
+</style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-compass"></i>
+                Dirección de Turismo
+            </a>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Inicio
+                    </a>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link active">
+                        <i class="fas fa-bed"></i>
+                        Hospedaje
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="hoteles.html" class="dropdown-item">
+                            <i class="fas fa-hotel"></i>
+                            Hoteles
+                        </a>
+                        <a href="cabanas.html" class="dropdown-item">
+                            <i class="fas fa-tree"></i>
+                            Cabañas
+                        </a>
+                        <a href="airbnb.html" class="dropdown-item active">
+                            <i class="fas fa-home"></i>
+                            Airbnb
+                        </a>
+                    </div>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="tourOperadora.html" class="nav-link">
+                        <i class="fas fa-route"></i>
+                        Tours
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a href="guias.html" class="nav-link">
+                        <i class="fas fa-user-tie"></i>
+                        Guías
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="auth-buttons">
+                <a href="login.html" class="btn btn-login">Iniciar Sesión</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="page-header-content">
+            <h1><i class="fas fa-home"></i> Airbnb</h1>
+            <p>Descubre alojamientos únicos y auténticos. Vive como un local en cada destino.</p>
+        </div>
+    </section>
+
+    <!-- Search and Filters -->
+    <section class="search-section">
+        <div class="search-container">
+            <form class="search-form" id="searchForm">
+                <div class="form-group">
+                    <label for="searchQuery">Buscar alojamiento</label>
+                    <input type="text" id="searchQuery" class="form-control" placeholder="Nombre del lugar o ciudad...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="priceRange">Precio máximo</label>
+                    <select id="priceRange" class="form-control">
+                        <option value="">Cualquier precio</option>
+                        <option value="500">Hasta $500</option>
+                        <option value="800">Hasta $800</option>
+                        <option value="1200">Hasta $1,200</option>
+                        <option value="2000">Hasta $2,000</option>
+                        <option value="3000">Hasta $3,000</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="guestFilter">Huéspedes</label>
+                    <select id="guestFilter" class="form-control">
+                        <option value="">Cualquier cantidad</option>
+                        <option value="1">1 huésped</option>
+                        <option value="2">2 huéspedes</option>
+                        <option value="4">Hasta 4 huéspedes</option>
+                        <option value="6">Hasta 6 huéspedes</option>
+                        <option value="8">8 o más huéspedes</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyType">Tipo de propiedad</label>
+                    <select id="propertyType" class="form-control">
+                        <option value="">Cualquier tipo</option>
+                        <option value="casa">Casa</option>
+                        <option value="apartamento">Apartamento</option>
+                        <option value="habitacion_privada">Habitación privada</option>
+                        <option value="estudio">Estudio</option>
+                        <option value="loft">Loft</option>
+                        <option value="villa">Villa</option>
+                        <option value="zona_camping">Zona de Camping</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn-search">
+                    <i class="fas fa-search"></i>
+                    Buscar
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Airbnb Section -->
+    <section class="airbnb-section">
+        <div class="section-header">
+            <div class="results-info" id="resultsInfo">
+                Cargando alojamientos...
+            </div>
+            <select class="sort-dropdown" id="sortBy">
+                <option value="newest">Más recientes</option>
+                <option value="price-low">Precio: menor a mayor</option>
+                <option value="price-high">Precio: mayor a menor</option>
+                <option value="rating">Mejor calificados</option>
+                <option value="name">Nombre A-Z</option>
+            </select>
+        </div>
+        <!-- Loading State -->
+        <div class="loading" id="loadingState">
+            <i class="fas fa-spinner"></i>
+            <h3>Cargando alojamientos...</h3>
+            <p>Por favor espera mientras obtenemos la información</p>
+        </div>
+        <!-- Error State -->
+        <div class="error-state" id="errorState" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Error al cargar los alojamientos</h3>
+            <p>Ha ocurrido un problema al obtener la información. Por favor, intenta de nuevo.</p>
+            <button class="retry-btn" onclick="loadAirbnbData()">
+                <i class="fas fa-redo"></i>
+                Reintentar
+            </button>
+        </div>
+
+        <!-- Airbnb Grid -->
+        <div class="airbnb-grid" id="airbnbGrid">
+            <!-- Los alojamientos se cargarán aquí dinámicamente -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="logo">
+                <i class="fas fa-compass"></i>
+                Dirección de Turismo
+            </div>
+            <p>&copy; 2024 Dirección de Turismo de Jalpan de Serra. Todos los derechos reservados.</p>
+            <p>Promoviendo el desarrollo turístico de nuestra región</p>
+        </div>
+    </footer>
+
+    <script>
+        // Variables globales
+        let allAirbnb = [];
+        let filteredAirbnb = [];
+        
+        // ✅ NUEVO: Variables para los sliders
+        let cardSliders = {}; // Objeto para guardar el estado de cada slider de tarjeta
+        let currentModalImages = [];
+        let currentModalImageIndex = 0;
+
+        // ✅ NUEVO: URL base dinámica
+        const baseURL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5000/api' 
+            : 'https://jalpan-turismo.onrender.com/api';
+
+        // ✅ FUNCIÓN AGREGADA: getImageUrl para construir URLs correctamente
+        function getImageUrl(imagePath) {
+            console.log('🔍 getImageUrl recibió:', imagePath);
+            
+            if (!imagePath) {
+                console.log('⚠️ No hay imagen, usando por defecto');
+                return 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+            }
+            
+            if (imagePath.startsWith('http')) {
+                console.log('✅ URL completa:', imagePath);
+                return imagePath;
+            }
+            
+            const finalUrl = `${baseURL.replace('/api', '')}${imagePath}`;
+            console.log('✅ URL construida:', finalUrl);
+            return finalUrl;
+        }
+
+        // ✅ FUNCIÓN AGREGADA: Manejo global de errores de imágenes
+        function addImageErrorHandling() {
+            document.addEventListener('error', function(e) {
+                if (e.target.tagName === 'IMG') {
+                    console.warn('Error cargando imagen:', e.target.src);
+                    e.target.src = 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                }
+            }, true);
+        }
+
+        // Elementos del DOM
+        const airbnbGrid = document.getElementById('airbnbGrid');
+        const resultsInfo = document.getElementById('resultsInfo');
+        const loadingState = document.getElementById('loadingState');
+        const errorState = document.getElementById('errorState');
+        const searchForm = document.getElementById('searchForm');
+        const sortBy = document.getElementById('sortBy');
+
+        // ✅ MODIFICADO: Cargar datos al iniciar la página CON manejo de errores de imágenes
+        document.addEventListener('DOMContentLoaded', function() {
+            addImageErrorHandling();
+            loadAirbnbData();
+            setupEventListeners();
+        });
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            searchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                filterAirbnb();
+            });
+
+            sortBy.addEventListener('change', sortAirbnb);
+
+            document.getElementById('searchQuery').addEventListener('input', debounce(filterAirbnb, 300));
+            document.getElementById('priceRange').addEventListener('change', filterAirbnb);
+            document.getElementById('guestFilter').addEventListener('change', filterAirbnb);
+            document.getElementById('propertyType').addEventListener('change', filterAirbnb);
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // ✅ MODIFICADO: Cargar datos de Airbnb desde la API con URL dinámica
+        async function loadAirbnbData() {
+            try {
+                showLoading();
+                const response = await fetch(`${baseURL}/airbnb`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('Datos recibidos:', data);
+                
+                if (data.status === 'success' && data.data && data.data.alojamientos) {
+                    allAirbnb = data.data.alojamientos;
+                    filteredAirbnb = [...allAirbnb];
+                    renderAirbnb();
+                    hideLoading();
+                } else {
+                    throw new Error('Datos inválidos recibidos del servidor');
+                }
+            } catch (error) {
+                console.error('Error cargando alojamientos:', error);
+                showError();
+            }
+        }
+
+        function showLoading() {
+            loadingState.style.display = 'block';
+            errorState.style.display = 'none';
+            airbnbGrid.style.display = 'none';
+        }
+
+        function hideLoading() {
+            loadingState.style.display = 'none';
+            airbnbGrid.style.display = 'grid';
+        }
+
+        function showError() {
+            loadingState.style.display = 'none';
+            errorState.style.display = 'block';
+            airbnbGrid.style.display = 'none';
+        }
+
+        function filterAirbnb() {
+            const searchQuery = document.getElementById('searchQuery').value.toLowerCase();
+            const priceRange = document.getElementById('priceRange').value;
+            const guestFilter = document.getElementById('guestFilter').value;
+            const propertyType = document.getElementById('propertyType').value;
+
+            filteredAirbnb = allAirbnb.filter(alojamiento => {
+                const matchesSearch = !searchQuery || 
+                    alojamiento.nombre?.toLowerCase().includes(searchQuery) ||
+                    alojamiento.ubicacion?.ciudad?.toLowerCase().includes(searchQuery) ||
+                    alojamiento.ubicacion?.direccion?.toLowerCase().includes(searchQuery);
+
+                const matchesPrice = !priceRange || 
+                    (alojamiento.precioPorNoche && alojamiento.precioPorNoche <= parseInt(priceRange));
+
+                const matchesGuests = !guestFilter || 
+                    (alojamiento.capacidad?.huespedes && alojamiento.capacidad.huespedes >= parseInt(guestFilter));
+
+                const matchesType = !propertyType || alojamiento.tipoPropiedad === propertyType;
+
+                return matchesSearch && matchesPrice && matchesGuests && matchesType;
+            });
+
+            renderAirbnb();
+        }
+
+        function sortAirbnb() {
+            const sortType = sortBy.value;
+
+            filteredAirbnb.sort((a, b) => {
+                switch (sortType) {
+                    case 'price-low':
+                        return (a.precioPorNoche || 0) - (b.precioPorNoche || 0);
+                    case 'price-high':
+                        return (b.precioPorNoche || 0) - (a.precioPorNoche || 0);
+                    case 'rating':
+                        return (b.rating || 0) - (a.rating || 0);
+                    case 'name':
+                        return (a.nombre || '').localeCompare(b.nombre || '');
+                    case 'newest':
+                    default:
+                        return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+                }
+            });
+
+            renderAirbnb();
+        }
+
+        function renderAirbnb() {
+            if (filteredAirbnb.length === 0) {
+                airbnbGrid.innerHTML = `
+                    <div class="error-state" style="grid-column: 1 / -1;">
+                        <i class="fas fa-search"></i>
+                        <h3>No se encontraron alojamientos</h3>
+                        <p>Intenta ajustar tus filtros de búsqueda</p>
+                    </div>
+                `;
+            } else {
+                airbnbGrid.innerHTML = filteredAirbnb.map(createAirbnbCard).join('');
+                // ✅ NUEVO: Inicializar sliders después de renderizar
+                initializeCardSliders();
+            }
+            
+            updateResultsInfo();
+        }
+
+        // ✅ FUNCIÓN NUEVA: Inicializar todos los sliders de las tarjetas
+        function initializeCardSliders() {
+            filteredAirbnb.forEach(alojamiento => {
+                if (alojamiento.imagenes && alojamiento.imagenes.length > 0) {
+                    cardSliders[alojamiento._id] = {
+                        images: alojamiento.imagenes,
+                        currentIndex: 0
+                    };
+                }
+            });
+        }
+
+        // ✅ FUNCIÓN MODIFICADA: createAirbnbCard CON SLIDER
+        function createAirbnbCard(alojamiento) {
+            const precio = alojamiento.precioPorNoche || 0;
+            const rating = alojamiento.rating || 0;
+            const ciudad = alojamiento.ubicacion?.ciudad || 'Ciudad no especificada';
+            const servicios = alojamiento.servicios?.slice(0, 3) || [];
+            const tipo = formatTipoPropiedad(alojamiento.tipoPropiedad);
+            const images = alojamiento.imagenes || [];
+            
+            // Información de capacidad específica según el tipo
+            let capacidadInfo = '';
+            if (alojamiento.tipoPropiedad === 'zona_camping') {
+                capacidadInfo = `<span><i class="fas fa-users"></i> Máx. ${alojamiento.capacidad?.maxPersonas || alojamiento.capacidad?.huespedes || 'N/A'} personas</span>`;
+            } else {
+                capacidadInfo = `
+                    <span><i class="fas fa-bed"></i> ${alojamiento.capacidad?.habitaciones || 0} hab.</span>
+                    <span><i class="fas fa-users"></i> ${alojamiento.capacidad?.huespedes || 0} huéspedes</span>
+                `;
+            }
+
+            return `
+                <div class="airbnb-card">
+                    <!-- ✅ NUEVO: Slider de imágenes en lugar de imagen única -->
+                    <div class="airbnb-image-slider">
+                        <img class="airbnb-main-image" 
+                             src="${getImageUrl(images[0])}" 
+                             alt="${alojamiento.nombre}"
+                             id="cardImage_${alojamiento._id}"
+                             onerror="this.src='https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+                        
+                        <!-- Botones de navegación (solo si hay más de una imagen) -->
+                        ${images.length > 1 ? `
+                            <button class="card-slider-nav card-slider-prev" 
+                                    onclick="changeCardImage('${alojamiento._id}', -1)">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="card-slider-nav card-slider-next" 
+                                    onclick="changeCardImage('${alojamiento._id}', 1)">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                            
+                            <!-- Contador de imágenes -->
+                            <div class="card-image-counter" id="cardCounter_${alojamiento._id}">
+                                1 / ${images.length}
+                            </div>
+                        ` : ''}
+                        
+                        <!-- Badges -->
+                        <div class="airbnb-badges">
+                            <div>
+                                ${alojamiento.esEcologico ? `
+                                    <div class="eco-badge">
+                                        <i class="fas fa-leaf"></i>
+                                        Ecológico
+                                    </div>
+                                ` : ''}
+                                <div class="type-badge">${tipo}</div>
+                            </div>
+                            <div>
+                                ${precio > 0 ? `<div class="price-badge">$${precio.toLocaleString('es-MX')} / noche</div>` : ''}
+                                ${rating > 0 ? `<div class="rating-badge"><i class="fas fa-star"></i> ${rating.toFixed(1)}</div>` : ''}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="airbnb-content">
+                        <h3 class="airbnb-title">${alojamiento.nombre || 'Alojamiento sin nombre'}</h3>
+                        
+                        <div class="airbnb-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            ${ciudad}
+                        </div>
+                        
+                        ${alojamiento.descripcion ? `
+                            <div class="airbnb-description">
+                                ${alojamiento.descripcion}
+                            </div>
+                        ` : ''}
+                        
+                        ${servicios.length > 0 ? `
+                            <div class="airbnb-features">
+                                ${servicios.map(servicio => `<span class="feature-tag"><i class="fas fa-check"></i> ${formatService(servicio)}</span>`).join('')}
+                                ${alojamiento.servicios && alojamiento.servicios.length > 3 ? `<span class="feature-tag more">+${alojamiento.servicios.length - 3} más</span>` : ''}
+                            </div>
+                        ` : ''}
+                        
+                        <div class="capacity-info">
+                            ${capacidadInfo}
+                        </div>
+                        
+                        <div class="airbnb-footer">
+                            <div class="contact-info">
+                                ${alojamiento.contacto?.telefono ? `<a href="tel:${alojamiento.contacto.telefono}" class="contact-btn" title="Llamar"><i class="fas fa-phone"></i></a>` : ''}
+                                ${alojamiento.contacto?.email ? `<a href="mailto:${alojamiento.contacto.email}" class="contact-btn" title="Email"><i class="fas fa-envelope"></i></a>` : ''}
+                            </div>
+                            
+                            <button class="view-details-btn" onclick="event.stopPropagation(); openAirbnbModal('${alojamiento._id}')">
+                                <i class="fas fa-info-circle"></i>
+                                Ver detalles
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ✅ FUNCIÓN NUEVA: Cambiar imagen en slider de tarjeta
+        function changeCardImage(alojamientoId, direction) {
+            const slider = cardSliders[alojamientoId];
+            if (!slider || slider.images.length <= 1) return;
+            
+            slider.currentIndex += direction;
+            
+            // Circular navigation
+            if (slider.currentIndex >= slider.images.length) {
+                slider.currentIndex = 0;
+            } else if (slider.currentIndex < 0) {
+                slider.currentIndex = slider.images.length - 1;
+            }
+            
+            // Actualizar imagen
+            const img = document.getElementById(`cardImage_${alojamientoId}`);
+            const counter = document.getElementById(`cardCounter_${alojamientoId}`);
+            
+            if (img) {
+                img.src = getImageUrl(slider.images[slider.currentIndex]);
+            }
+            
+            if (counter) {
+                counter.textContent = `${slider.currentIndex + 1} / ${slider.images.length}`;
+            }
+        }
+
+        // ✅ FUNCIÓN NUEVA: Inicializar slider del modal
+        function initializeModalImageSlider(images) {
+            currentModalImages = images || [];
+            currentModalImageIndex = 0;
+            
+            if (currentModalImages.length === 0) {
+                return;
+            }
+            
+            updateModalMainImage();
+            updateModalNavigationButtons();
+        }
+
+        // ✅ FUNCIÓN NUEVA: Actualizar imagen principal del modal
+        function updateModalMainImage() {
+            const mainImage = document.getElementById('modalMainImage');
+            const counter = document.getElementById('modalImageCounter');
+            
+            if (mainImage && currentModalImages.length > 0) {
+                const currentImageUrl = getImageUrl(currentModalImages[currentModalImageIndex]);
+                mainImage.src = currentImageUrl;
+                mainImage.alt = `Imagen ${currentModalImageIndex + 1} del alojamiento`;
+                
+                if (counter) {
+                    counter.textContent = `${currentModalImageIndex + 1} / ${currentModalImages.length}`;
+                }
+                
+                updateModalActiveThumbnail();
+            }
+        }
+
+        // ✅ FUNCIÓN NUEVA: Actualizar miniatura activa del modal
+        function updateModalActiveThumbnail() {
+            const thumbnails = document.querySelectorAll('.modal-thumbnail');
+            thumbnails.forEach((thumb, index) => {
+                thumb.classList.toggle('active', index === currentModalImageIndex);
+            });
+            
+            const activeThumb = document.querySelector('.modal-thumbnail.active');
+            if (activeThumb) {
+                activeThumb.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'center'
+                });
+            }
+        }
+
+        // ✅ FUNCIÓN NUEVA: Actualizar botones de navegación del modal
+        function updateModalNavigationButtons() {
+            const prevBtn = document.getElementById('modalPrevBtn');
+            const nextBtn = document.getElementById('modalNextBtn');
+            
+            if (prevBtn) {
+                prevBtn.disabled = currentModalImages.length <= 1;
+            }
+            if (nextBtn) {
+                nextBtn.disabled = currentModalImages.length <= 1;
+            }
+        }
+
+        // ✅ FUNCIÓN NUEVA: Cambiar imagen en modal
+        function changeModalImage(direction) {
+            if (currentModalImages.length <= 1) return;
+            
+            currentModalImageIndex += direction;
+            
+            // Circular navigation
+            if (currentModalImageIndex >= currentModalImages.length) {
+                currentModalImageIndex = 0;
+            } else if (currentModalImageIndex < 0) {
+                currentModalImageIndex = currentModalImages.length - 1;
+            }
+            
+            updateModalMainImage();
+        }
+
+        // ✅ FUNCIÓN NUEVA: Ir a imagen específica en modal
+        function goToModalImage(index) {
+            if (index >= 0 && index < currentModalImages.length) {
+                currentModalImageIndex = index;
+                updateModalMainImage();
+            }
+        }
+
+        // ✅ FUNCIÓN NUEVA: Generar HTML del slider para el modal
+        function generateModalGalleryHTML(images) {
+            if (!images || images.length === 0) {
+                return `
+                    <div class="modal-gallery-section">
+                        <h3 class="gallery-title">
+                            <i class="fas fa-images"></i>
+                            Galería de Imágenes
+                        </h3>
+                        <div style="text-align: center; padding: 2rem; color: #666;">
+                            <i class="fas fa-image" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <p>No hay imágenes disponibles</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="modal-gallery-section">
+                    <h3 class="gallery-title">
+                        <i class="fas fa-images"></i>
+                        Galería de Imágenes
+                    </h3>
+                    
+                    <div class="modal-image-slider-container">
+                        <!-- Imagen principal -->
+                        <div class="modal-main-image-container">
+                            <img class="modal-main-image" 
+                                 id="modalMainImage" 
+                                 src="${getImageUrl(images[0])}" 
+                                 alt="Imagen principal del alojamiento"
+                                 onerror="this.src='https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
+                            
+                            <!-- Botones de navegación -->
+                            <button class="modal-slider-nav-btn modal-slider-prev" 
+                                    id="modalPrevBtn" 
+                                    onclick="changeModalImage(-1)" 
+                                    ${images.length <= 1 ? 'style="display: none;"' : ''}>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="modal-slider-nav-btn modal-slider-next" 
+                                    id="modalNextBtn" 
+                                    onclick="changeModalImage(1)" 
+                                    ${images.length <= 1 ? 'style="display: none;"' : ''}>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                            
+                            <!-- Contador -->
+                            <div class="modal-image-counter" id="modalImageCounter">1 / ${images.length}</div>
+                        </div>
+                        
+                        <!-- Miniaturas -->
+                        ${images.length > 1 ? `
+                            <div class="modal-thumbnails-container" id="modalThumbnailsContainer">
+                                ${images.map((image, index) => `
+                                    <div class="modal-thumbnail ${index === 0 ? 'active' : ''}" onclick="goToModalImage(${index})">
+                                        <img src="${getImageUrl(image)}" alt="Thumbnail ${index + 1}">
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Formatear tipo de propiedad
+       function formatTipoPropiedad(tipo) {
+            if (!tipo) return 'No especificado';
+            
+            const tipos = {
+                'cabaña': 'Cabaña',
+                'casa': 'Casa', 
+                'zona_camping': 'Zona de Camping'
+            };
+            
+            return tipos[tipo] || tipo.charAt(0).toUpperCase() + tipo.slice(1);
+        }
+
+        // Formatear nombres de servicios
+        function formatService(service) {
+            const services = {
+                'wifi': 'WiFi',
+                'estacionamiento': 'Estacionamiento',
+                'aire_acondicionado': 'Aire Acondicionado',
+                'restaurante': 'Restaurante',
+                'piscina': 'Piscina/Alberca',
+                'mascotas_permitidas': 'Admite Mascotas',
+                'servicio_transporte': 'Servicio de Transporte',
+                'accesibilidad': 'Accesibilidad para Personas con Discapacidad',
+                'television': 'Televisión',
+                'salon_eventos': 'Salón para Eventos',
+                'gimnasio': 'Gimnasio',
+                'spa': 'Spa',
+                'desayuno': 'Desayuno',
+                'cocina': 'Cocina',
+                'lavadora': 'Lavadora',
+                'calefaccion': 'Calefacción',
+                'tv': 'TV',
+                'balcon_terraza': 'Balcón/Terraza',
+                'jardin': 'Jardín',
+                'bbq': 'BBQ',
+                'chimenea': 'Chimenea',
+                'jacuzzi': 'Jacuzzi',
+                'acceso_discapacitados': 'Accesible',
+                'entrada_independiente': 'Entrada Independiente',
+                'espacio_trabajo': 'Espacio de Trabajo'
+            };
+            return services[service] || service?.charAt(0).toUpperCase() + service?.slice(1);
+        }
+
+        // 🆕 NUEVA FUNCIÓN: Generar HTML de métodos de pago dinámicamente
+        function formatMetodosPago(metodos) {
+            if (!metodos || metodos.length === 0) {
+                return `
+                    <div class="payment-method disabled">
+                        <div class="payment-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="payment-label">Contactar para información</div>
+                    </div>
+                `;
+            }
+            
+            const iconosMetodos = {
+                'efectivo': 'fas fa-money-bill-wave',
+                'transferencia': 'fas fa-university',
+                'tarjeta': 'fas fa-credit-card'
+            };
+            
+            const nombresMetodos = {
+                'efectivo': 'Efectivo',
+                'transferencia': 'Transferencia',
+                'tarjeta': 'Tarjeta'
+            };
+            
+            return metodos.map(metodo => `
+                <div class="payment-method">
+                    <div class="payment-icon">
+                        <i class="${iconosMetodos[metodo] || 'fas fa-credit-card'}"></i>
+                    </div>
+                    <div class="payment-label">${nombresMetodos[metodo] || metodo}</div>
+                </div>
+            `).join('');
+        }
+
+        // 🎯 FUNCIÓN MODIFICADA: Abrir modal con detalles del alojamiento Y SLIDER
+       function openAirbnbModal(alojamientoId) {
+            const alojamiento = allAirbnb.find(a => a._id === alojamientoId);
+            if (!alojamiento) return;
+            
+            // Información del alojamiento
+            const telefono = alojamiento.contacto?.telefono || 'No disponible';
+            const email = alojamiento.contacto?.email || 'No disponible';
+            const horario = alojamiento.contacto?.horario || 'No especificado';
+            const direccion = alojamiento.ubicacion?.direccion || 'Dirección no especificada';
+            const todosServicios = alojamiento.servicios || [];
+            const metodosPago = alojamiento.metodosPago || [];
+            const images = alojamiento.imagenes || [];
+            
+            // Información de disponibilidad
+            const disponible = alojamiento.disponible !== false;
+            
+            // Prácticas ecológicas
+            const practicasEcologicas = alojamiento.esEcologico ? [
+                'Uso de energías renovables',
+                'Reciclaje y separación de residuos',
+                'Productos de limpieza biodegradables',
+                'Ahorro de agua con sistemas eficientes',
+                'Apoyo a productores locales',
+                'Construcción con materiales sostenibles'
+            ] : [];
+
+            // Información específica según tipo de alojamiento
+            let tipoEspecifico = '';
+            if (alojamiento.tipoPropiedad === 'zona_camping') {
+                tipoEspecifico = `
+                    <div class="basic-info-item">
+                        <span class="info-label">Capacidad máxima:</span>
+                        <span class="info-value">${alojamiento.capacidad?.maxPersonas || alojamiento.capacidad?.huespedes || 'No especificada'} personas</span>
+                    </div>
+                `;
+            } else if (alojamiento.tipoPropiedad === 'casa' || alojamiento.tipoPropiedad === 'apartamento' || alojamiento.tipoPropiedad === 'villa') {
+                tipoEspecifico = `
+                    <div class="basic-info-item">
+                        <span class="info-label">Habitaciones:</span>
+                        <span class="info-value">${alojamiento.capacidad?.habitaciones || 0}</span>
+                    </div>
+                    <div class="basic-info-item">
+                        <span class="info-label">Total de huéspedes:</span>
+                        <span class="info-value">${alojamiento.capacidad?.huespedes || 0}</span>
+                    </div>
+                `;
+            }        
+            const modalHTML = `
+                <div class="airbnb-modal-overlay" id="airbnbModalOverlay" onclick="closeAirbnbModal()">
+                    <div class="airbnb-modal" onclick="event.stopPropagation()">
+                        <!-- Header del modal -->
+                        <div class="modal-header">
+                            <div class="modal-airbnb-info">
+                                <h2 class="modal-airbnb-name">
+                                    ${alojamiento.esEcologico ? '<i class="fas fa-leaf eco-icon"></i>' : ''}
+                                    ${alojamiento.nombre || 'Alojamiento'}
+                                </h2>
+                                <p class="modal-airbnb-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    ${direccion}
+                                </p>
+                            </div>
+                            <button class="modal-close-btn" onclick="closeAirbnbModal()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>                 
+                        <!-- Contenido del modal -->
+                        <div class="modal-content">
+                            <!--  Galería de imágenes con slider -->
+                            ${generateModalGalleryHTML(images)}                           
+                            <div class="modal-grid">                        
+                                <!-- Información básica -->
+                                <div class="modal-section">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-info-circle"></i>
+                                        Información Básica
+                                    </h3>                            
+                                    <div class="basic-info-item">
+                                        <span class="info-label">Precio por noche:</span>
+                                        <span class="info-value">$${(alojamiento.precioPorNoche || 0).toLocaleString('es-MX')}</span>
+                                    </div>                                
+                                    ${alojamiento.esEcologico ? `
+                                        <div class="basic-info-item">
+                                            <span class="info-label">Certificación ecológica:</span>
+                                            <span class="info-value">Alojamiento Ecológico</span>
+                                        </div>
+                                    ` : ''}                          
+                                    <div class="basic-info-item">
+                                        <span class="info-label">Tipo de establecimiento:</span>
+                                        <span class="info-value">${formatTipoPropiedad(alojamiento.tipoPropiedad)}</span>
+                                    </div>                    
+                                    <div class="basic-info-item">
+                                        <span class="info-label">Ubicación:</span>
+                                        <span class="info-value">${alojamiento.ubicacion?.ciudad || 'No especificada'}</span>
+                                    </div>            
+                                    ${tipoEspecifico}
+                                    
+                                    ${alojamiento.descripcion ? `
+                                        <div class="basic-info-item">
+                                            <span class="info-label">Descripción:</span>
+                                            <span class="info-value">${alojamiento.descripcion}</span>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                                
+                                <!-- Contacto -->
+                                <div class="modal-section">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-phone"></i>
+                                        Información de Contacto
+                                    </h3>
+                                    
+                                    <div class="contact-item">
+                                        <div class="contact-icon">
+                                            <i class="fas fa-phone"></i>
+                                        </div>
+                                        <div class="contact-details">
+                                            <div class="contact-label">Teléfono</div>
+                                            <div class="contact-value">${telefono}</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="contact-item">
+                                        <div class="contact-icon">
+                                            <i class="fas fa-envelope"></i>
+                                        </div>
+                                        <div class="contact-details">
+                                            <div class="contact-label">Correo Electrónico</div>
+                                            <div class="contact-value">${email}</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="contact-item">
+                                        <div class="contact-icon">
+                                            <i class="fas fa-clock"></i>
+                                        </div>
+                                        <div class="contact-details">
+                                            <div class="contact-label">Horario de Atención</div>
+                                            <div class="contact-value">${horario}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Disponibilidad -->
+                                <div class="modal-section">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-calendar-check"></i>
+                                        Disponibilidad
+                                    </h3>
+                                    
+                                    <div class="availability-status ${disponible ? 'available' : 'unavailable'}">
+                                        <i class="fas fa-${disponible ? 'check-circle' : 'times-circle'}"></i>
+                                        ${disponible ? 'Disponible' : 'No disponible'}
+                                    </div>
+                                </div>
+                                
+                                <!-- Servicios -->
+                                ${todosServicios.length > 0 ? `
+                                    <div class="modal-section">
+                                        <h3 class="section-title">
+                                            <i class="fas fa-concierge-bell"></i>
+                                            Servicios Incluidos
+                                        </h3>
+                                        
+                                        <div class="services-grid">
+                                            ${todosServicios.map(servicio => `
+                                                <div class="service-item">
+                                                    <i class="fas fa-check"></i>
+                                                    <span>${formatService(servicio)}</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                                
+                                <!-- Métodos de pago -->
+                                <div class="modal-section">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-credit-card"></i>
+                                        Métodos de Pago
+                                    </h3>
+                                    
+                                    <div class="payment-methods">
+                                        ${formatMetodosPago(metodosPago)}
+                                    </div>
+                                </div>
+                                   
+                                
+                                <!-- Información ecológica (si aplica) -->
+                                ${alojamiento.esEcologico ? `
+                                    <div class="modal-section eco-section">
+                                        <h3 class="section-title eco-title">
+                                            <i class="fas fa-leaf"></i>
+                                            Compromiso Ecológico
+                                        </h3>
+                                        <p class="eco-intro">
+                                            Este alojamiento está comprometido con prácticas sostenibles:
+                                        </p>
+                                        <div class="eco-practices">
+                                            ${practicasEcologicas.map(practica => `
+                                                <div class="eco-practice">
+                                                    <i class="fas fa-leaf eco-check"></i>
+                                                    <span>${practica}</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                                
+                                <!-- Nota de precios -->
+                                <div class="modal-section price-section">
+                                    <h3 class="section-title price-title">
+                                        <i class="fas fa-info-circle"></i>
+                                        Información de Precios
+                                    </h3>
+                                    <div class="price-info">
+                                        <div class="price-warning">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            <span>Los precios pueden variar según:</span>
+                                        </div>
+                                        <ul class="price-factors">
+                                            <li>Número de personas que se hospedarán</li>
+                                            <li>Tipo de habitación/alojamiento</li>
+                                            <li>Temporada y fechas</li>
+                                            <li>Servicios adicionales</li>
+                                        </ul>
+                                        <div class="price-cta">
+                                            <i class="fas fa-phone"></i>
+                                            <span>Contacta para cotización personalizada</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Agregar el modal al DOM
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            
+            // ✅ NUEVO: Inicializar el slider del modal
+            initializeModalImageSlider(images);
+            
+            // Mostrar el modal con animación
+            setTimeout(() => {
+                document.getElementById('airbnbModalOverlay').classList.add('show');
+            }, 10);
+        }
+
+        // Cerrar modal de alojamiento
+        function closeAirbnbModal() {
+            const modal = document.getElementById('airbnbModalOverlay');
+            if (modal) {
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    modal.remove();
+                }, 300);
+            }
+        }
+
+        // Ver detalles del alojamiento (función heredada, ahora abre el modal)
+        function viewAirbnbDetails(alojamientoId) {
+            openAirbnbModal(alojamientoId);
+        }
+
+        // Actualizar información de resultados
+        function updateResultsInfo() {
+            const count = filteredAirbnb.length;
+            const total = allAirbnb.length;
+            
+            if (count === total) {
+                resultsInfo.textContent = `Mostrando ${count} alojamiento${count !== 1 ? 's' : ''}`;
+            } else {
+                resultsInfo.textContent = `Mostrando ${count} de ${total} alojamiento${total !== 1 ? 's' : ''}`;
+            }
+        }
+
+        // Cerrar modal al presionar Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAirbnbModal();
+            }
+        });
+    </script>
+</body>
+</html>
