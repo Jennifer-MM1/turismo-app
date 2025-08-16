@@ -64,4 +64,5 @@ app.listen(PORT, () => {
   console.log(`🔗 API Info: http://localhost:${PORT}/api`);
   console.log(`📂 Archivos estáticos servidos desde /frontend`);
   console.log(`🖼️ Imágenes de Jalpan: /img_jalpan`);
+  console.log('✅ Server.js cargado completamente - versión actualizada v2'); // ← AGREGA ESTA LÍNEA
 });
