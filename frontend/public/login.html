@@ -500,7 +500,10 @@
         const superAdminIndicator = document.getElementById('superAdminIndicator');
 
         // API Base URL
-        const baseURL = '/api';
+      // ✅ CORREGIDO: URL dinámica igual que manage-images-cabana.html
+      const baseURL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:5000/api' 
+    : '/api';
 
         // Detectar si es email de super admin
         document.getElementById('email').addEventListener('input', function() {
