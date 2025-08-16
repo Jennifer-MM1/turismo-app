@@ -36,21 +36,17 @@ router.get('/alojamiento/:establecimientoId', (req, res) => {
   cuestionarioController.getCuestionariosEstablecimiento(req, res);
 });
 
-// Agregar al final de las rutas existentes
-router.get('/reportes-todos-establecimientos', authMiddleware.requireSuperAdmin, cuestionarioController.getReportesSemanalesTodosLosEstablecimientos);
-
 // Alias para airbnb (para mantener consistencia)
 router.get('/airbnb/:establecimientoId', (req, res) => {
   req.query.tipo = 'airbnb';
   cuestionarioController.getCuestionariosEstablecimiento(req, res);
 });
 
-module.exports = router;
-
-
-// Agregar al final del archivo:
-
 // ==================== RUTAS DE ESTADÍSTICAS AVANZADAS ====================
+
+// Reportes y estadísticas para super admin
+router.get('/reportes-todos-establecimientos', authMiddleware.requireSuperAdmin, cuestionarioController.getReportesSemanalesTodosLosEstablecimientos);
+router.get('/reportes-super-admin', authMiddleware.requireSuperAdmin, cuestionarioController.getReportesSemanalesTodosLosEstablecimientos);
 router.get('/estadisticas-avanzadas', authMiddleware.requireSuperAdmin, cuestionarioController.getEstadisticasAvanzadas);
 router.get('/analisis-fechas-concurridas', authMiddleware.requireSuperAdmin, cuestionarioController.getAnalisisFechasConcurridas);
 router.get('/analisis-procedencia', authMiddleware.requireSuperAdmin, cuestionarioController.getAnalisisProcedencia);
@@ -60,6 +56,5 @@ router.get('/estadisticas-por-tipo/:tipo', authMiddleware.requireSuperAdmin, cue
 router.get('/tendencias-mensuales', authMiddleware.requireSuperAdmin, cuestionarioController.getTendenciasMensuales);
 router.get('/top-establecimientos', authMiddleware.requireSuperAdmin, cuestionarioController.getTopEstablecimientos);
 
-// Agregar estas rutas al final de cuestionarioRoutes.js:
-router.get('/estadisticas-avanzadas', authMiddleware.requireSuperAdmin, cuestionarioController.getEstadisticasAvanzadas);
-router.get('/reportes-super-admin', authMiddleware.requireSuperAdmin, cuestionarioController.getReportesSemanalesTodosLosEstablecimientos);
+// ✅ EXPORTAR AL FINAL - DESPUÉS DE TODAS LAS RUTAS
+module.exports = router;
