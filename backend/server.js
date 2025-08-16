@@ -91,15 +91,15 @@ app.get('/debug/images/airbnb/:filename', (req, res) => {
 });
 
 // ✅ Rutas API
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/hoteles', require('./routes/hotelRoutes'));
-app.use('/api/cabanas', require('./routes/cabanaRoutes'));
-app.use('/api/airbnb', require('./routes/airbnbRoutes'));
-app.use('/api/tours', require('./routes/tourOperadoraRoutes'));
-app.use('/api/guias', require('./routes/guiaTuristicaRoutes'));
-app.use('/api/cuestionarios', require('./routes/cuestionarioRoutes'));
+// app.use('/api/auth', require('./routes/authRoutes'));
+// app.use('/api/hoteles', require('./routes/hotelRoutes'));
+// app.use('/api/cabanas', require('./routes/cabanaRoutes'));
+// app.use('/api/airbnb', require('./routes/airbnbRoutes'));
+// app.use('/api/tours', require('./routes/tourOperadoraRoutes'));
+// app.use('/api/guias', require('./routes/guiaTuristicaRoutes'));
+// app.use('/api/cuestionarios', require('./routes/cuestionarioRoutes'));
 // 🔥 NUEVA LÍNEA: Agregar esta ruta para Super Admin
-app.use('/api/super-admin', require('./routes/superAdminRoutes'));
+// app.use('/api/super-admin', require('./routes/superAdminRoutes'));
 
 // ✅ Ruta principal - CORREGIDO CON ../
 app.get('/', (req, res) => {
