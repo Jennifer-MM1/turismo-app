@@ -826,10 +826,8 @@
         let allOperators = [];
         let allTours = [];
         let filteredOperators = [];
-    // ✅ CORREGIDO: URL dinámica igual que manage-images-cabana.html
-      const baseURL = window.location.hostname === 'localhost' 
-    ? 'http://localhost:5000/api' 
-    : '/api';
+        const baseURL = '/api';
+
         // Elementos del DOM
         const loadingState = document.getElementById('loadingState');
         const toursGrid = document.getElementById('toursGrid');
