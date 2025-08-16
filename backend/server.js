@@ -31,11 +31,20 @@ app.use('/uploads', express.static(path.join(__dirname, '../frontend/public/uplo
 // 🆕 Servir imágenes desde img_jalpan
 app.use('/img_jalpan', express.static(path.join(__dirname, '../img_jalpan')));
 
+
+// ✅ Test API súper directo - SIN REQUIRES
+app.get('/api/test', (req, res) => {
+  res.json({ 
+    message: 'API test directo funcionando', 
+    status: 'success',
+    timestamp: new Date().toISOString()
+  });
+});
 // ✅ Rutas API - agregando gradualmente
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/hoteles', require('./routes/hotelRoutes'));
-app.use('/api/cabanas', require('./routes/cabanaRoutes'));
-app.use('/api/airbnb', require('./routes/airbnbRoutes'));
+//app.use('/api/auth', require('./routes/authRoutes'));
+//app.use('/api/hoteles', require('./routes/hotelRoutes'));
+//app.use('/api/cabanas', require('./routes/cabanaRoutes'));
+//app.use('/api/airbnb', require('./routes/airbnbRoutes'));
 
 // ✅ Ruta principal
 app.get('/', (req, res) => {
