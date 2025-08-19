@@ -3,34 +3,15 @@ const hotelController = require('../controllers/hotelController');
 const authMiddleware = require('../middlewares/authMiddleware');
 const Hotel = require('../models/Hotel');
 
-// 🆕 NUEVO: Imports para gestión de imágenes
+// 🆕 NUEVO: Imports para gestión de imágenes con Cloudinary
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const { hotelStorage } = require('../config/cloudinary');
 
 const router = express.Router();
 
-// 🆕 NUEVO: Configuración de Multer para Imágenes de Hoteles
-const hotelUploadsDir = path.join(__dirname, '..', 'frontend', 'public', 'uploads', 'hoteles');
-if (!fs.existsSync(hotelUploadsDir)) {
-  fs.mkdirSync(hotelUploadsDir, { recursive: true });
-  console.log('📁 Carpeta de uploads de hoteles creada');
-}
-
-const hotelImageStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, hotelUploadsDir);
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const ext = path.extname(file.originalname);
-    const name = file.originalname.replace(ext, '').replace(/[^a-zA-Z0-9]/g, '_');
-    cb(null, `hotel-${uniqueSuffix}-${name}${ext}`);
-  }
-});
-
+// 🆕 NUEVO: Configuración de Multer para Imágenes de Hoteles con Cloudinary
 const uploadHotelImages = multer({
-  storage: hotelImageStorage,
+  storage: hotelStorage,
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
@@ -62,7 +43,7 @@ router
     hotelController.createHotel
   );
 
-// 🆕 ===== NUEVAS RUTAS DE GESTIÓN DE IMÁGENES =====
+// 🆕 ===== NUEVAS RUTAS DE GESTIÓN DE IMÁGENES CON CLOUDINARY =====
 
 // 📸 Obtener todas las imágenes del hotel
 router.get('/:hotelId/images', authMiddleware.restrictTo('admin'), async (req, res) => {
@@ -82,31 +63,11 @@ router.get('/:hotelId/images', authMiddleware.restrictTo('admin'), async (req, r
       });
     }
 
-    // Verificar que las imágenes existen físicamente
-    const imagenesValidas = [];
-    if (hotel.imagenes && hotel.imagenes.length > 0) {
-      for (const imagenUrl of hotel.imagenes) {
-        const filename = imagenUrl.split('/').pop();
-        const imagePath = path.join(hotelUploadsDir, filename);
-        
-        if (fs.existsSync(imagePath)) {
-          imagenesValidas.push(imagenUrl);
-        } else {
-          console.log(`⚠️ Imagen no encontrada: ${imagePath}`);
-        }
-      }
-      
-      // Actualizar BD si hay imágenes que no existen
-      if (imagenesValidas.length !== hotel.imagenes.length) {
-        hotel.imagenes = imagenesValidas;
-        await hotel.save();
-      }
-    }
-
+    // Con Cloudinary, las URLs ya están validadas por la plataforma
     res.json({
       status: 'success',
       message: 'Imágenes obtenidas correctamente',
-      data: imagenesValidas
+      data: hotel.imagenes || []
     });
 
   } catch (error) {
@@ -119,7 +80,7 @@ router.get('/:hotelId/images', authMiddleware.restrictTo('admin'), async (req, r
   }
 });
 
-// 📤 Subir nuevas imágenes al hotel
+// 📤 Subir nuevas imágenes al hotel usando Cloudinary
 router.post('/:hotelId/images/upload', authMiddleware.restrictTo('admin'), uploadHotelImages.array('images', 10), async (req, res) => {
   try {
     const { hotelId } = req.params;
@@ -138,23 +99,14 @@ router.post('/:hotelId/images/upload', authMiddleware.restrictTo('admin'), uploa
     });
 
     if (!hotel) {
-      // Limpiar archivos si no hay hotel
-      req.files.forEach(file => {
-        fs.unlink(file.path, (err) => {
-          if (err) console.error('Error eliminando archivo:', err);
-        });
-      });
-      
       return res.status(404).json({
         status: 'error',
         message: 'No se encontró hotel asociado o no tienes permisos'
       });
     }
 
-    // Crear URLs de las nuevas imágenes
-    const nuevasImagenesUrls = req.files.map(file => {
-      return `/uploads/hoteles/${file.filename}`;
-    });
+    // Obtener URLs de Cloudinary de los archivos subidos
+    const nuevasImagenesUrls = req.files.map(file => file.path);
 
     // Agregar imágenes al hotel
     if (!hotel.imagenes) {
@@ -180,15 +132,6 @@ router.post('/:hotelId/images/upload', authMiddleware.restrictTo('admin'), uploa
 
   } catch (error) {
     console.error('❌ Error subiendo imágenes del hotel:', error);
-    
-    // Limpiar archivos en caso de error
-    if (req.files) {
-      req.files.forEach(file => {
-        fs.unlink(file.path, (err) => {
-          if (err) console.error('Error eliminando archivo:', err);
-        });
-      });
-    }
 
     res.status(500).json({
       status: 'error',
@@ -233,13 +176,19 @@ router.delete('/:hotelId/images/:imageIndex', authMiddleware.restrictTo('admin')
 
     const imagenAEliminar = hotel.imagenes[index];
     
-    // Eliminar archivo físico
-    const filename = imagenAEliminar.split('/').pop();
-    const imagePath = path.join(hotelUploadsDir, filename);
-    
-    if (fs.existsSync(imagePath)) {
-      fs.unlinkSync(imagePath);
-      console.log(`🗑️ Archivo eliminado: ${imagePath}`);
+    // 🆕 NUEVO: Eliminar imagen de Cloudinary
+    try {
+      const cloudinary = require('cloudinary').v2;
+      
+      // Extraer public_id de la URL de Cloudinary
+      const publicId = imagenAEliminar.split('/').pop().split('.')[0];
+      const fullPublicId = `turismo-app/hoteles/${publicId}`;
+      
+      const result = await cloudinary.uploader.destroy(fullPublicId);
+      console.log(`🗑️ Imagen eliminada de Cloudinary:`, result);
+    } catch (cloudinaryError) {
+      console.warn('⚠️ Error eliminando de Cloudinary (continuando):', cloudinaryError.message);
+      // Continuamos aunque falle la eliminación en Cloudinary
     }
 
     // Eliminar de la base de datos
@@ -490,4 +439,4 @@ router.use((error, req, res, next) => {
 
 module.exports = router;
 
-console.log('✅ Rutas de gestión de imágenes de hoteles configuradas en hotelRoutes.js');
+console.log('✅ Rutas de gestión de imágenes de hoteles con Cloudinary configuradas en hotelRoutes.js');

@@ -3,34 +3,15 @@ const airbnbController = require('../controllers/airbnbController');
 const authMiddleware = require('../middlewares/authMiddleware');
 const Airbnb = require('../models/Airbnb');
 
-// 🆕 NUEVO: Imports para gestión de imágenes
+// 🆕 NUEVO: Imports para gestión de imágenes con Cloudinary
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const { airbnbStorage } = require('../config/cloudinary');
 
 const router = express.Router();
 
-// 🆕 NUEVO: Configuración de Multer para Imágenes de Airbnb
-const airbnbUploadsDir = path.join(__dirname, '..', 'frontend', 'public', 'uploads', 'airbnb');
-if (!fs.existsSync(airbnbUploadsDir)) {
-  fs.mkdirSync(airbnbUploadsDir, { recursive: true });
-  console.log('📁 Carpeta de uploads de Airbnb creada');
-}
-
-const airbnbImageStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, airbnbUploadsDir);
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const ext = path.extname(file.originalname);
-    const name = file.originalname.replace(ext, '').replace(/[^a-zA-Z0-9]/g, '_');
-    cb(null, `airbnb-${uniqueSuffix}-${name}${ext}`);
-  }
-});
-
+// 🆕 NUEVO: Configuración de Multer para Imágenes de Airbnb con Cloudinary
 const uploadAirbnbImages = multer({
-  storage: airbnbImageStorage,
+  storage: airbnbStorage,
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
@@ -62,7 +43,7 @@ router
     airbnbController.createAirbnb
   );
 
-// 🆕 ===== NUEVAS RUTAS DE GESTIÓN DE IMÁGENES =====
+// 🆕 ===== NUEVAS RUTAS DE GESTIÓN DE IMÁGENES CON CLOUDINARY =====
 
 // 📸 Obtener todas las imágenes del alojamiento
 router.get('/:alojamientoId/images', authMiddleware.restrictTo('admin'), async (req, res) => {
@@ -82,7 +63,7 @@ router.get('/:alojamientoId/images', authMiddleware.restrictTo('admin'), async (
       });
     }
 
-    // ✅ CAMBIO 1: Estructura de respuesta corregida para que coincida con el frontend
+    // Con Cloudinary, las URLs ya están validadas por la plataforma
     res.json({
       status: 'success',
       data: alojamiento.imagenes || [], // Las imágenes directamente en data
@@ -102,7 +83,7 @@ router.get('/:alojamientoId/images', authMiddleware.restrictTo('admin'), async (
   }
 });
 
-// 📤 Subir múltiples imágenes al alojamiento
+// 📤 Subir múltiples imágenes al alojamiento usando Cloudinary
 router.post('/:alojamientoId/upload-images', 
   authMiddleware.restrictTo('admin'),
   uploadAirbnbImages.array('images', 10),
@@ -126,23 +107,14 @@ router.post('/:alojamientoId/upload-images',
     });
 
     if (!alojamiento) {
-      // Limpiar archivos si no hay alojamiento
-      req.files.forEach(file => {
-        fs.unlink(file.path, (err) => {
-          if (err) console.error('Error eliminando archivo:', err);
-        });
-      });
-      
       return res.status(404).json({
         status: 'error',
         message: 'No se encontró alojamiento asociado o no tienes permisos'
       });
     }
 
-    // Crear URLs de las nuevas imágenes
-    const nuevasImagenesUrls = req.files.map(file => {
-      return `/uploads/airbnb/${file.filename}`;
-    });
+    // Obtener URLs de Cloudinary de los archivos subidos
+    const nuevasImagenesUrls = req.files.map(file => file.path);
 
     // Agregar imágenes al alojamiento
     if (!alojamiento.imagenes) {
@@ -168,15 +140,6 @@ router.post('/:alojamientoId/upload-images',
 
   } catch (error) {
     console.error('❌ Error subiendo imágenes del alojamiento:', error);
-    
-    // Limpiar archivos en caso de error
-    if (req.files) {
-      req.files.forEach(file => {
-        fs.unlink(file.path, (err) => {
-          if (err) console.error('Error eliminando archivo:', err);
-        });
-      });
-    }
 
     res.status(500).json({
       status: 'error',
@@ -214,13 +177,19 @@ router.delete('/:alojamientoId/images/:imageIndex', authMiddleware.restrictTo('a
 
     const imagenAEliminar = alojamiento.imagenes[index];
     
-    // Eliminar archivo físico
-    const nombreArchivo = imagenAEliminar.split('/').pop();
-    const rutaCompleta = path.join(airbnbUploadsDir, nombreArchivo);
-    
-    if (fs.existsSync(rutaCompleta)) {
-      fs.unlinkSync(rutaCompleta);
-      console.log(`✅ Archivo eliminado: ${rutaCompleta}`);
+    // 🆕 NUEVO: Eliminar imagen de Cloudinary
+    try {
+      const cloudinary = require('cloudinary').v2;
+      
+      // Extraer public_id de la URL de Cloudinary
+      const publicId = imagenAEliminar.split('/').pop().split('.')[0];
+      const fullPublicId = `turismo-app/airbnb/${publicId}`;
+      
+      const result = await cloudinary.uploader.destroy(fullPublicId);
+      console.log(`🗑️ Imagen eliminada de Cloudinary:`, result);
+    } catch (cloudinaryError) {
+      console.warn('⚠️ Error eliminando de Cloudinary (continuando):', cloudinaryError.message);
+      // Continuamos aunque falle la eliminación en Cloudinary
     }
 
     // Eliminar de la base de datos
@@ -274,12 +243,25 @@ router.patch('/:alojamientoId/images/set-main', authMiddleware.restrictTo('admin
       });
     }
 
+    if (index === 0) {
+      return res.json({
+        status: 'success',
+        message: 'Esta imagen ya es la principal',
+        data: {
+          nuevaImagenPrincipal: alojamiento.imagenes[0],
+          totalImagenes: alojamiento.imagenes.length
+        }
+      });
+    }
+
     // Mover imagen a primera posición
     const imagenPrincipal = alojamiento.imagenes.splice(index, 1)[0];
     alojamiento.imagenes.unshift(imagenPrincipal);
     
     alojamiento.updatedAt = new Date();
     await alojamiento.save();
+
+    console.log(`⭐ Imagen principal actualizada para alojamiento ${alojamiento.nombre}`);
 
     res.json({
       status: 'success',
@@ -440,4 +422,4 @@ router.get('/:id', airbnbController.getAirbnb);
 
 module.exports = router;
 
-console.log('✅ Rutas de gestión de imágenes de Airbnb configuradas en airbnbRoutes.js');
+console.log('✅ Rutas de gestión de imágenes de Airbnb con Cloudinary configuradas en airbnbRoutes.js');

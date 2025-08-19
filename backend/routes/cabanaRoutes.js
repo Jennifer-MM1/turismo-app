@@ -3,34 +3,15 @@ const cabanaController = require('../controllers/cabanaController');
 const authMiddleware = require('../middlewares/authMiddleware');
 const Cabana = require('../models/Cabana');
 
-// 🆕 NUEVO: Imports para gestión de imágenes
+// 🆕 NUEVO: Imports para gestión de imágenes con Cloudinary
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const { cabanaStorage } = require('../config/cloudinary');
 
 const router = express.Router();
 
-// 🆕 NUEVO: Configuración de Multer para Imágenes de Cabañas
-const cabanaUploadsDir = path.join(__dirname, '..', 'frontend', 'public', 'uploads', 'cabanas');
-if (!fs.existsSync(cabanaUploadsDir)) {
-  fs.mkdirSync(cabanaUploadsDir, { recursive: true });
-  console.log('📁 Carpeta de uploads de cabañas creada');
-}
-
-const cabanaImageStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, cabanaUploadsDir);
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const ext = path.extname(file.originalname);
-    const name = file.originalname.replace(ext, '').replace(/[^a-zA-Z0-9]/g, '_');
-    cb(null, `cabana-${uniqueSuffix}-${name}${ext}`);
-  }
-});
-
+// 🆕 NUEVO: Configuración de Multer para Imágenes de Cabañas con Cloudinary
 const uploadCabanaImages = multer({
-  storage: cabanaImageStorage,
+  storage: cabanaStorage,
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
@@ -71,7 +52,7 @@ router
     cabanaController.deleteCabana
   );
 
-// 🆕 ===== NUEVAS RUTAS DE GESTIÓN DE IMÁGENES =====
+// 🆕 ===== NUEVAS RUTAS DE GESTIÓN DE IMÁGENES CON CLOUDINARY =====
 
 // 📸 Obtener todas las imágenes de la cabaña
 router.get('/:cabanaId/images', authMiddleware.restrictTo('admin'), async (req, res) => {
@@ -93,6 +74,7 @@ router.get('/:cabanaId/images', authMiddleware.restrictTo('admin'), async (req, 
 
     console.log(`📸 Obteniendo imágenes de cabaña: ${cabana.nombre}`);
 
+    // Con Cloudinary, las URLs ya están validadas por la plataforma
     res.json({
       status: 'success',
       message: 'Imágenes obtenidas exitosamente',
@@ -109,7 +91,7 @@ router.get('/:cabanaId/images', authMiddleware.restrictTo('admin'), async (req, 
   }
 });
 
-// 📤 Subir nuevas imágenes
+// 📤 Subir nuevas imágenes usando Cloudinary
 router.post('/:cabanaId/images/upload', authMiddleware.restrictTo('admin'), 
   uploadCabanaImages.array('images'), async (req, res) => {
   try {
@@ -130,21 +112,14 @@ router.post('/:cabanaId/images/upload', authMiddleware.restrictTo('admin'),
     });
 
     if (!cabana) {
-      // Eliminar archivos subidos si no se encuentra la cabaña
-      files.forEach(file => {
-        if (fs.existsSync(file.path)) {
-          fs.unlinkSync(file.path);
-        }
-      });
-      
       return res.status(404).json({
         status: 'error',
         message: 'No se encontró cabaña asociada o no tienes permisos'
       });
     }
 
-    // 🔧 CORREGIDO: Crear URLs con barra inicial (igual que hoteles)
-    const imageUrls = files.map(file => `/uploads/cabanas/${file.filename}`);
+    // Obtener URLs de Cloudinary de los archivos subidos
+    const imageUrls = files.map(file => file.path);
 
     // Agregar a la base de datos
     if (!cabana.imagenes) {
@@ -167,16 +142,6 @@ router.post('/:cabanaId/images/upload', authMiddleware.restrictTo('admin'),
     });
 
   } catch (error) {
-    // Limpiar archivos en caso de error
-    if (req.files) {
-      req.files.forEach(file => {
-        if (fs.existsSync(file.path)) {
-          fs.unlinkSync(file.path);
-          console.log(`🗑️ Archivo limpiado tras error: ${file.path}`);
-        }
-      });
-    }
-
     console.error('❌ Error subiendo imágenes de cabaña:', error);
     res.status(500).json({
       status: 'error',
@@ -221,13 +186,19 @@ router.delete('/:cabanaId/images/:index', authMiddleware.restrictTo('admin'), as
 
     const imagenAEliminar = cabana.imagenes[imageIndex];
     
-    // Eliminar archivo físico
-    const filename = imagenAEliminar.split('/').pop();
-    const imagePath = path.join(cabanaUploadsDir, filename);
-    
-    if (fs.existsSync(imagePath)) {
-      fs.unlinkSync(imagePath);
-      console.log(`🗑️ Archivo eliminado: ${imagePath}`);
+    // 🆕 NUEVO: Eliminar imagen de Cloudinary
+    try {
+      const cloudinary = require('cloudinary').v2;
+      
+      // Extraer public_id de la URL de Cloudinary
+      const publicId = imagenAEliminar.split('/').pop().split('.')[0];
+      const fullPublicId = `turismo-app/cabanas/${publicId}`;
+      
+      const result = await cloudinary.uploader.destroy(fullPublicId);
+      console.log(`🗑️ Imagen eliminada de Cloudinary:`, result);
+    } catch (cloudinaryError) {
+      console.warn('⚠️ Error eliminando de Cloudinary (continuando):', cloudinaryError.message);
+      // Continuamos aunque falle la eliminación en Cloudinary
     }
 
     // Eliminar de la base de datos
@@ -291,6 +262,16 @@ router.patch('/:cabanaId/images/set-main', authMiddleware.restrictTo('admin'), a
       return res.status(400).json({
         status: 'error',
         message: 'Índice de imagen inválido'
+      });
+    }
+
+    if (index === 0) {
+      return res.json({
+        status: 'success',
+        message: 'Esta imagen ya es la principal',
+        data: {
+          imagenPrincipal: cabana.imagenes[0]
+        }
       });
     }
 
@@ -464,4 +445,4 @@ router.get('/:id', cabanaController.getCabana);
 
 module.exports = router;
 
-console.log('✅ Rutas de gestión de imágenes de cabañas configuradas en cabanaRoutes.js');
+console.log('✅ Rutas de gestión de imágenes de cabañas con Cloudinary configuradas en cabanaRoutes.js');
