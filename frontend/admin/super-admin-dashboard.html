@@ -2895,11 +2895,31 @@
     
    <script>
         // Configuración
-        const baseURL = 'http://localhost:5000/api';
-        const API_BASE_URL = baseURL; // Para compatibilidad con las funciones Excel
-        const authToken = localStorage.getItem('authToken');
-        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-        
+      // ✅ POR ESTA configuración dinámica:
+const baseURL = (() => {
+    const hostname = window.location.hostname;
+    
+    console.log('🌐 Hostname detectado:', hostname);
+    
+    // Solo usar localhost si REALMENTE estamos en desarrollo local
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        console.log('🛠️ Modo desarrollo detectado');
+        return 'http://localhost:5000/api';
+    }
+    
+    // Para Railway y cualquier otro hosting
+    console.log('🚀 Modo producción detectado');
+    return `${window.location.protocol}//${window.location.host}/api`;
+})();
+
+console.log('✅ BaseURL configurado:', baseURL);
+
+// El resto mantenerlo igual:
+const API_BASE_URL = baseURL; // Para compatibilidad con las funciones Excel
+const authToken = localStorage.getItem('authToken');
+const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+
+
         // Verificar acceso de super admin
         if (!userData.email || (userData.email !== 'direcciondeturismojalpan@gmail.com' && !userData.isSuperAdmin)) {
             alert('Acceso denegado. Solo para Super Administradores.');
