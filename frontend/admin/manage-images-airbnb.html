@@ -767,9 +767,22 @@
 
     <script>
         //  URL dinámico
-        const API_BASE = window.location.origin.includes('localhost') 
-            ? 'http://localhost:5000/api' 
-            : 'https://jalpan-turismo.onrender.com/api'; // URL de producción actualizada
+      // ✅ REEMPLAZAR POR:
+const API_BASE = (() => {
+    const hostname = window.location.hostname;
+    
+    console.log('🌐 Hostname detectado en manage-images-airbnb:', hostname);
+    
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        console.log('🛠️ Modo desarrollo detectado');
+        return 'http://localhost:5000/api';
+    }
+    
+    console.log('🚀 Modo producción detectado');
+    return `${window.location.protocol}//${window.location.host}/api`;
+})();
+
+
         //  getImageUrl para construir URLs correctamente
         function getImageUrl(imagePath) {
             console.log(' getImageUrl recibió:', imagePath);
