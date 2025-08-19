@@ -5886,7 +5886,7 @@ const userData = JSON.parse(localStorage.getItem('userData') || '{}');
             if (confirm('¿Estás seguro de que deseas cerrar la sesión de Super Administrador?')) {
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('userData');
-                window.location.href = '../public/index.html';
+                window.location.href = '/index.html';
             }
         }
         
