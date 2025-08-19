@@ -1230,11 +1230,35 @@
 
     <script>
         // Variables globales
-        const userData = JSON.parse(localStorage.getItem('userData')) || {};
-        const authToken = localStorage.getItem('authToken');
-        const baseURL = window.location.origin.includes('localhost') 
-            ? 'http://localhost:5000/api' 
-            : 'https://tu-servidor.com/api'; // ✅ Cambiar por tu URL de producción
+      // ✅ REEMPLAZAR POR ESTA CONFIGURACIÓN DINÁMICA:
+
+const baseURL = (() => {
+    const hostname = window.location.hostname;
+    
+    console.log('🌐 Hostname detectado en hoteles-admin:', hostname);
+    
+    // Solo usar localhost si REALMENTE estamos en desarrollo local
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        console.log('🛠️ Modo desarrollo detectado');
+        return 'http://localhost:5000/api';
+    }
+    
+    // Para Railway y cualquier otro hosting
+    console.log('🚀 Modo producción detectado');
+    return `${window.location.protocol}//${window.location.host}/api`;
+})();
+
+console.log('✅ BaseURL configurado para hoteles-admin:', baseURL);
+
+// 🎯 TAMBIÉN verifica que estas líneas estén correctas:
+const userData = JSON.parse(localStorage.getItem('userData')) || {};
+const authToken = localStorage.getItem('authToken');
+
+// ✅ Agregar validación de autenticación:
+if (!authToken) {
+    console.log('❌ No hay token, redirigiendo al login');
+    window.location.href = '../login.html';
+}
 
         // Variable global para el hotel actual
         let currentHotel = null;
