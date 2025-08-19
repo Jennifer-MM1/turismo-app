@@ -672,10 +672,22 @@
 
     <script>
         // ✅ CONFIGURACIÓN CORREGIDA: URL dinámico
-        const API_BASE = window.location.origin.includes('localhost') 
-            ? 'http://localhost:5000/api' 
-            : 'https://tu-servidor.com/api'; // ✅ Cambiar por tu URL de producción
+    // ✅ REEMPLAZAR POR esta configuración dinámica:
+const API_BASE = (() => {
+    const hostname = window.location.hostname;
+    
+    console.log('🌐 Hostname detectado en manage-images-hotel:', hostname);
+    
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        console.log('🛠️ Modo desarrollo detectado');
+        return 'http://localhost:5000/api';
+    }
+    
+    console.log('🚀 Modo producción detectado');
+    return `${window.location.protocol}//${window.location.host}/api`;
+})();
 
+console.log('✅ API_BASE configurado para manage-images-hotel:', API_BASE);
         // ✅ FUNCIÓN AGREGADA: getImageUrl para construir URLs correctamente
         function getImageUrl(imagePath) {
             console.log('🔍 getImageUrl recibió:', imagePath);
