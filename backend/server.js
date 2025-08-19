@@ -82,3 +82,4 @@ app.listen(PORT, () => {
   console.log(`🖼️ Imágenes de Jalpan: /img_jalpan`);
   console.log('✅ Server.js cargado completamente - versión final');
 });
+
