@@ -694,8 +694,11 @@
                 localStorage.removeItem('currentCabanaId'); // ✅ LIMPIAR ID guardado
                 localStorage.removeItem('currentHotelId');
                 localStorage.removeItem('currentAirbnbId');
-                window.location.href = 'http://localhost:3000/frontend/public/index.html';
-            }
+                    // Redirigir al login
+        window.location.href = '../login.html';
+        
+        console.log('🔄 Redirigiendo al login...');
+    }
         });
         // Función para formatear tiempo relativo
         function formatTimeAgo(date) {

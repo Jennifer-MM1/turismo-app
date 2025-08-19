@@ -1134,7 +1134,22 @@
     <script>
         // Variables globales
         let currentGuia = null;
-        const baseURL = 'http://localhost:5000/api';
+    // ✅ REEMPLAZAR POR:
+const baseURL = (() => {
+    const hostname = window.location.hostname;
+    
+    console.log('🌐 Hostname detectado en tour-operadora:', hostname);
+    
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        console.log('🛠️ Modo desarrollo detectado');
+        return 'http://localhost:5000/api';
+    }
+    
+    console.log('🚀 Modo producción detectado');
+    return `${window.location.protocol}//${window.location.host}/api`;
+})();
+
+console.log('✅ BaseURL configurado para actualizar-tourOperadora:', baseURL);
         const authToken = localStorage.getItem('authToken');
         const userData = JSON.parse(localStorage.getItem('userData') || '{}');
 
