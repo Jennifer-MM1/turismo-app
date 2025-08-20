@@ -1666,66 +1666,87 @@
     </footer>
 
     <script>
-        // ===== NAVEGACIÓN MÓVIL =====
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const navMenu = document.getElementById('navMenu');
-        const mobileOverlay = document.getElementById('mobileOverlay');
-        const hospedajeDropdown = document.getElementById('hospedajeDropdown');
+      // ===== NAVEGACIÓN MÓVIL - VERSIÓN CORREGIDA =====
+const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+const navMenu = document.getElementById('navMenu');
+const mobileOverlay = document.getElementById('mobileOverlay');
+const hospedajeDropdown = document.getElementById('hospedajeDropdown');
 
-        // Toggle del menú móvil
-        mobileMenuToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            mobileOverlay.classList.toggle('active');
-            
-            // Cambiar icono
-            const icon = mobileMenuToggle.querySelector('i');
-            if (navMenu.classList.contains('active')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-        });
+// Toggle del menú móvil
+mobileMenuToggle.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
+    mobileOverlay.classList.toggle('active');
+    
+    // Cambiar icono
+    const icon = mobileMenuToggle.querySelector('i');
+    if (navMenu.classList.contains('active')) {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-times');
+    } else {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+    }
+});
 
-        // Cerrar menú al hacer click en overlay
-        mobileOverlay.addEventListener('click', closeMenu);
+// Cerrar menú al hacer click en overlay
+mobileOverlay.addEventListener('click', closeMenu);
 
-        // Función para cerrar el menú
-        function closeMenu() {
-            navMenu.classList.remove('active');
-            mobileOverlay.classList.remove('active');
-            hospedajeDropdown.classList.remove('active');
-            
-            const icon = mobileMenuToggle.querySelector('i');
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
+// Función para cerrar el menú
+function closeMenu() {
+    navMenu.classList.remove('active');
+    mobileOverlay.classList.remove('active');
+    hospedajeDropdown.classList.remove('active');
+    
+    const icon = mobileMenuToggle.querySelector('i');
+    icon.classList.remove('fa-times');
+    icon.classList.add('fa-bars');
+}
+
+// ✅ CORRECCIÓN: Toggle del dropdown hospedaje en móvil
+hospedajeDropdown.addEventListener('click', (e) => {
+    if (window.innerWidth <= 768) {
+        // Solo prevenir el default si se hace clic en el enlace principal del dropdown
+        // No en los elementos del dropdown
+        if (e.target.closest('.nav-link') && !e.target.closest('.dropdown-item')) {
+            e.preventDefault();
+            hospedajeDropdown.classList.toggle('active');
         }
+        // Si se hace clic en un dropdown-item, permitir navegación normal
+    }
+});
 
-        // Toggle del dropdown hospedaje en móvil
-        hospedajeDropdown.addEventListener('click', (e) => {
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                hospedajeDropdown.classList.toggle('active');
-            }
-        });
-
-        // Cerrar menú al hacer click en enlaces (solo móvil)
-        document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
-            link.addEventListener('click', (e) => {
-                // Solo cerrar en móvil y si no es el dropdown toggle
-                if (window.innerWidth <= 768 && !e.target.closest('.dropdown')) {
-                    closeMenu();
-                }
-            });
-        });
-
-        // Manejar redimensionamiento de ventana
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > 768) {
+// ✅ CORRECCIÓN: Manejar clicks en elementos del dropdown
+const dropdownItems = document.querySelectorAll('.dropdown-item');
+dropdownItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+        // En móvil, cerrar el menú después de hacer clic en un elemento del dropdown
+        if (window.innerWidth <= 768) {
+            // No prevenir el default para permitir navegación
+            setTimeout(() => {
                 closeMenu();
-            }
-        });
+            }, 100);
+        }
+    });
+});
+
+// Cerrar menú al hacer click en enlaces principales (NO en dropdown items)
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+        // Solo cerrar en móvil y si NO es el dropdown toggle y NO es un dropdown item
+        if (window.innerWidth <= 768 && 
+            !e.target.closest('#hospedajeDropdown') && 
+            !e.target.closest('.dropdown-item')) {
+            closeMenu();
+        }
+    });
+});
+
+// Manejar redimensionamiento de ventana
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+        closeMenu();
+    }
+});
 
         // ===== CARRUSEL HERO =====
         const heroSlides = document.querySelectorAll('.hero-slide');
