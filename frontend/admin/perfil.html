@@ -1027,7 +1027,7 @@ console.log('✅ BaseURL configurado:', baseURL);
             document.getElementById('userRole').textContent = `Administrador - ${businessConfig.name}`;
         }
 
-        // ✅ NUEVA FUNCIÓN: Personalizar menú según tipo de negocio
+        // ✅ FUNCIÓN CORREGIDA: Personalizar menú según tipo de negocio
         async function customizeMenuByBusinessType() {
             const sidebarMenu = document.getElementById('sidebarMenu');
             const gestionServiciosSection = sidebarMenu.querySelector('.menu-section:nth-child(3)'); // "Gestión de Servicios"
@@ -1070,12 +1070,26 @@ console.log('✅ BaseURL configurado:', baseURL);
                     </a>
                 `;
                 
-                // Crear elemento de gestión de imágenes
+                // ✅ NUEVO: Mapeo correcto de parámetros para gestión de imágenes
+                const parameterMapping = {
+                    'hotel': 'hotelId',
+                    'cabana': 'cabanaId', 
+                    'airbnb': 'airbnbId',
+                    'ayb': 'airbnbId',  // ← AQUÍ ESTÁ LA CORRECCIÓN: ayb usa airbnbId
+                    'touroperadora': 'tourId',
+                    'guiaturistica': 'guiaId'
+                };
+                
+                // Crear elemento de gestión de imágenes con parámetro correcto
                 const imageManagementItem = document.createElement('li');
                 imageManagementItem.className = 'menu-item submenu-item';
-                const imageHref = establishmentId 
-                    ? `${businessConfig.imageManagementUrl}?${userData.tipoNegocio}Id=${establishmentId}`
-                    : businessConfig.imageManagementUrl;
+                
+                let imageHref = businessConfig.imageManagementUrl;
+                if (establishmentId) {
+                    const correctParameter = parameterMapping[userData.tipoNegocio] || `${userData.tipoNegocio}Id`;
+                    imageHref = `${businessConfig.imageManagementUrl}?${correctParameter}=${establishmentId}`;
+                }
+                
                 imageManagementItem.innerHTML = `
                     <a href="${imageHref}" class="menu-link submenu-link">
                         <i class="fas fa-images"></i>
@@ -1089,6 +1103,7 @@ console.log('✅ BaseURL configurado:', baseURL);
                 
                 console.log(`✅ Menú personalizado para ${businessConfig.name} en perfil`);
                 console.log('Enlace de gestión de imágenes:', imageHref);
+                console.log('Parámetro usado:', parameterMapping[userData.tipoNegocio]);
                 
             } catch (error) {
                 console.error('❌ Error personalizando menú:', error);
@@ -1120,7 +1135,7 @@ console.log('✅ BaseURL configurado:', baseURL);
                             totalCapacity += establishment.capacidad.habitaciones;
                         } else if (userData.tipoNegocio === 'cabana' && establishment.capacidad?.huespedes) {
                             totalCapacity += establishment.capacidad.huespedes;
-                        } else if (userData.tipoNegocio === 'airbnb' && establishment.capacidad?.huespedes) {
+                        } else if ((userData.tipoNegocio === 'airbnb' || userData.tipoNegocio === 'ayb') && establishment.capacidad?.huespedes) {
                             totalCapacity += establishment.capacidad.huespedes;
                         }
                         
