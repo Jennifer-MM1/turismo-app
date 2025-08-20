@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jalpan de Serra - Pueblo Mágico</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
     
     <style>
        /* ===== VARIABLES CSS - COLORES DE RESTAURANTEWEB ===== */
@@ -38,9 +38,10 @@
     --accent: var(--restaurant);
     --secondary: var(--cafe);
     
-    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-display: 'Playfair Display', Georgia, serif;
-    
+ /* DESPUÉS: */
+--font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+--font-display: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
     --spacing-xs: 0.25rem;
     --spacing-sm: 0.5rem;
     --spacing-md: 1rem;
@@ -1116,7 +1117,7 @@ body {
 
 /* ===== FOOTER COMPACTO ===== */
 .footer {
-    background: #2c3e50;
+    background: #090f22;
     color: #ecf0f1;
     padding: 3rem 0 1rem 0;
 }
@@ -1405,7 +1406,7 @@ body {
                 <h1 class="logo">
                     <img src="/img_jalpan/logo_pueblos_magicos.jpg" alt="Logo Turismo" class="logo-image">
                     <div class="logo-text">
-                        <i class="fas fa-compass"></i>
+                    
                         Dirección de Turismo
                     </div>
                 </h1>
@@ -1420,27 +1421,27 @@ body {
             <ul class="nav-menu" id="navMenu">
                 <li class="nav-item">
                     <a href="index.html" class="nav-link">
-                        <i class="fas fa-home"></i>
+                    
                         Inicio
                     </a>
                 </li>
 
                 <li class="nav-item dropdown" id="hospedajeDropdown">
                     <a href="#" class="nav-link">
-                        <i class="fas fa-bed"></i>
+                       
                         Alojamiento
                     </a>
                     <div class="dropdown-menu">
                         <a href="hoteles.html" class="dropdown-item">
-                            <i class="fas fa-hotel"></i>
+                           
                             Hoteles
                         </a>
                         <a href="cabanas.html" class="dropdown-item">
-                            <i class="fas fa-tree"></i>
+                          
                             Cabañas
                         </a>
                         <a href="airbnb.html" class="dropdown-item">
-                            <i class="fas fa-home"></i>
+                         
                             Airbnb
                         </a>
                     </div>
@@ -1448,21 +1449,21 @@ body {
 
                 <li class="nav-item">
                     <a href="https://restaurante-web-production-721f.up.railway.app/" class="nav-link">
-                        <i class="fas fa-utensils"></i>
+                  
                         Alimentos
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a href="tourOperadora.html" class="nav-link">
-                        <i class="fas fa-route"></i>
+                   
                         Tours
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a href="guias.html" class="nav-link">
-                        <i class="fas fa-user-tie"></i>
+                      
                         Guías
                     </a>
                 </li>
@@ -1470,7 +1471,7 @@ body {
                 <!-- Botones de autenticación -->
                 <li class="nav-item auth-buttons">
                     <a href="login.html" class="btn btn-login">
-                        <i class="fas fa-sign-in-alt"></i>
+                       
                         Iniciar Sesión
                     </a>
                 </li>
@@ -1588,87 +1589,97 @@ body {
         </div>
     </section>
 
-    <!-- Sección Categorías de Servicios -->
-    <section class="categories-section" id="services">
-        <div class="categories-container">
-            <h2 class="categories-title">Servicios Turísticos</h2>
-            <p class="categories-subtitle">Descubre todo lo que Jalpan tiene para ofrecerte</p>
+    <!-- Sección Actividades Turísticas -->
+<section class="categories-section" id="activities">
+    <div class="categories-container">
+        <h2 class="categories-title">Experiencias Turísticas</h2>
+        <p class="categories-subtitle">Descubre las aventuras que Jalpan tiene para ofrecerte</p>
+        
+        <div class="categories-slider">
+            <button class="slider-nav slider-prev" id="sliderPrev">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="slider-nav slider-next" id="sliderNext">
+                <i class="fas fa-chevron-right"></i>
+            </button>
             
-            <div class="categories-slider">
-                <button class="slider-nav slider-prev" id="sliderPrev">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button class="slider-nav slider-next" id="sliderNext">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-                
-                <div class="categories-track" id="categoriesTrack">
-                    <div class="category-slide">
-                        <div class="category-card" onclick="window.location.href='hoteles.html'">
-                            <div class="category-icon">
-                                <i class="fas fa-hotel"></i>
-                            </div>
-                            <h3 class="category-name">Hoteles</h3>
-                            <p class="category-description">Hospedaje cómodo y moderno en el corazón de Jalpan</p>
+            <div class="categories-track" id="categoriesTrack">
+                <div class="category-slide">
+                    <div class="category-card" onclick="window.location.href='tourOperadora.html'">
+                        <div class="category-icon">
+                            <i class="fas fa-mountain"></i>
                         </div>
-                    </div>
-                    
-                    <div class="category-slide">
-                        <div class="category-card" onclick="window.location.href='cabanas.html'">
-                            <div class="category-icon">
-                                <i class="fas fa-tree"></i>
-                            </div>
-                            <h3 class="category-name">Cabañas</h3>
-                            <p class="category-description">Conecta con la naturaleza en cabañas rústicas y acogedoras</p>
-                        </div>
-                    </div>
-                    
-                    <div class="category-slide">
-                        <div class="category-card" onclick="window.location.href='airbnb.html'">
-                            <div class="category-icon">
-                                <i class="fas fa-home"></i>
-                            </div>
-                            <h3 class="category-name">Airbnb</h3>
-                            <p class="category-description">Experiencias únicas en alojamientos locales</p>
-                        </div>
-                    </div>
-                    
-                    <div class="category-slide">
-                        <div class="category-card" onclick="window.location.href='tourOperadora.html'">
-                            <div class="category-icon">
-                                <i class="fas fa-route"></i>
-                            </div>
-                            <h3 class="category-name">Tours</h3>
-                            <p class="category-description">Descubre los tesoros ocultos de la Sierra Gorda</p>
-                        </div>
-                    </div>
-                    
-                    <div class="category-slide">
-                        <div class="category-card" onclick="window.location.href='guias.html'">
-                            <div class="category-icon">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <h3 class="category-name">Guías</h3>
-                            <p class="category-description">Expertos locales para enriquecer tu experiencia</p>
-                        </div>
-                    </div>
-                    
-                    <div class="category-slide">
-                        <div class="category-card" onclick="window.location.href='http://localhost:3003/'">
-                            <div class="category-icon">
-                                <i class="fas fa-utensils"></i>
-                            </div>
-                            <h3 class="category-name">Gastronomía</h3>
-                            <p class="category-description">Sabores auténticos de la región</p>
-                        </div>
+                        <h3 class="category-name">Espeleísmo</h3>
+                        <p class="category-description">Explora cuevas y cavernas subterráneas en aventuras únicas</p>
                     </div>
                 </div>
                 
-                <div class="slider-indicators">
-                    <span class="indicator active" data-slide="0"></span>
-                    <span class="indicator" data-slide="1"></span>
-                    <span class="indicator" data-slide="2"></span>
+                <div class="category-slide">
+                    <div class="category-card" onclick="window.location.href='tourOperadora.html'">
+                        <div class="category-icon">
+                            <i class="fas fa-landmark"></i>
+                        </div>
+                        <h3 class="category-name">Turismo Cultural</h3>
+                        <p class="category-description">Descubre sitios arqueológicos y patrimonio histórico</p>
+                    </div>
                 </div>
+                
+                <div class="category-slide">
+                    <div class="category-card" onclick="window.location.href='tourOperadora.html'">
+                        <div class="category-icon">
+                            <i class="fas fa-dove"></i>
+                        </div>
+                        <h3 class="category-name">Aviturismo</h3>
+                        <p class="category-description">Observación de aves en su hábitat natural</p>
+                    </div>
+                </div>
+                
+                <div class="category-slide">
+                    <div class="category-card" onclick="window.location.href='tourOperadora.html'">
+                        <div class="category-icon">
+                            <i class="fas fa-hiking"></i>
+                        </div>
+                        <h3 class="category-name">Senderismo</h3>
+                        <p class="category-description">Caminatas por senderos naturales y rutas de montaña</p>
+                    </div>
+                </div>
+                
+                <div class="category-slide">
+                    <div class="category-card" onclick="window.location.href='tourOperadora.html'">
+                        <div class="category-icon">
+                            <i class="fas fa-water"></i>
+                        </div>
+                        <h3 class="category-name">Kayak</h3>
+                        <p class="category-description">Navegación en ríos y cuerpos de agua cristalina</p>
+                    </div>
+                </div>
+                
+                <div class="category-slide">
+                    <div class="category-card" onclick="window.location.href='tourOperadora.html'">
+                        <div class="category-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <h3 class="category-name">RZR</h3>
+                        <p class="category-description">Aventuras todoterreno en vehículos especializados</p>
+                    </div>
+                </div>
+                
+                <div class="category-slide">
+                    <div class="category-card" onclick="window.location.href='tourOperadora.html'">
+                        <div class="category-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="category-name">Rutas Comunitarias</h3>
+                        <p class="category-description">Experiencias auténticas con comunidades locales</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slider-indicators">
+                <span class="indicator active" data-slide="0"></span>
+                <span class="indicator" data-slide="1"></span>
+                <span class="indicator" data-slide="2"></span>
+            </div>
             </div>
         </div>
     </section>
@@ -1682,7 +1693,7 @@ body {
                     Descubre los sabores auténticos de la Sierra Gorda. Desde platillos tradicionales 
                     hasta propuestas gastronómicas innovadoras que honran nuestras raíces culinarias.
                 </p>
-                <a href="http://localhost:3003/" class="gastronomy-button">
+                <a href="https://restaurante-web-production-721f.up.railway.app/" class="gastronomy-button">
                     <i class="fas fa-utensils"></i>
                     Explorar Restaurantes
                 </a>
@@ -1695,7 +1706,7 @@ body {
         <div class="map-container">
             <div class="map-content">
                 <div class="map-info">
-                    <h2>Ubicación Privilegiada</h2>
+                    <h2>Ubicación </h2>
                     <p>
                         Jalpan de Serra se encuentra estratégicamente ubicado en el corazón de la Sierra Gorda, 
                         ofreciendo fácil acceso a diversos atractivos naturales y culturales.
@@ -1752,18 +1763,13 @@ body {
                         Conectamos a las personas con los mejores destinos, alojamientos y experiencias gastronómicas de Jalpan de Serra, Pueblo Mágico.
                     </p>
                     <div class="footer-social">
-                        <a href="#" class="social-link" title="Facebook">
+                        <a href="https://www.facebook.com/profile.php?id=61573849871475" class="social-link" title="Facebook">
                             <i class="fab fa-facebook-f"></i>
                         </a>
                         <a href="#" class="social-link" title="Instagram">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="#" class="social-link" title="Twitter">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="social-link" title="YouTube">
-                            <i class="fab fa-youtube"></i>
-                        </a>
+                       
                     </div>
                 </div>
 
@@ -1774,13 +1780,13 @@ body {
                 <div class="footer-section">
                     <h3>Navegación</h3>
                     <ul class="footer-links">
-                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="https://restaurante-web-production-721f.up.railway.app/">Alimentos</a></li>
                         <li><a href="hoteles.html">Hoteles</a></li>
                         <li><a href="cabanas.html">Cabañas</a></li>
                         <li><a href="airbnb.html">Airbnb</a></li>
                         <li><a href="tourOperadora.html">Tours</a></li>
                         <li><a href="guias.html">Guías</a></li>
-                        <li><a href="admin/login.html">Panel Admin</a></li>
+                      
                     </ul>
                 </div>
 
@@ -1803,11 +1809,11 @@ body {
                     <div class="footer-contact">
                         <div class="contact-item">
                             <i class="fas fa-envelope"></i>
-                            <span>turismo@jalpan.gob.mx</span>
+                            <span>direcciondeturismojalpan@gmail.com</span>
                         </div>
                         <div class="contact-item">
                             <i class="fas fa-phone"></i>
-                            <span>+52 (441) 296-0123</span>
+                            <span>+52 441-296-0285</span>
                         </div>
                         <div class="contact-item">
                             <i class="fas fa-map-marker-alt"></i>
@@ -1815,7 +1821,7 @@ body {
                         </div>
                         <div class="contact-item">
                             <i class="fas fa-clock"></i>
-                            <span>Lun - Vie: 9:00 AM - 6:00 PM</span>
+                            <span>Lun - Vie: 8:00 AM - 3:30 PM</span>
                         </div>
                     </div>
                 </div>
@@ -1827,9 +1833,8 @@ body {
                     © 2024 Dirección de Turismo - Jalpan de Serra. Todos los derechos reservados.
                 </p>
                 <div class="footer-bottom-links">
-                    <a href="#terminos">Términos de Servicio</a>
-                    <a href="#privacidad">Política de Privacidad</a>
-                    <a href="#ayuda">Ayuda</a>
+                    <a href="https://www.facebook.com/jenni.munoz.5011">Creado por</a>
+                    
                 </div>
             </div>
         </div>
