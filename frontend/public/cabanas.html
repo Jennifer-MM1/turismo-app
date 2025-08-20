@@ -1266,6 +1266,113 @@
                 gap: 6px;
             }
         }
+
+        .mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #333;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle:hover {
+    background: rgba(76, 175, 80, 0.1);
+    color: #4CAF50;
+}
+
+.mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.mobile-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 320px;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 2rem 1rem;
+        transition: all 0.3s ease;
+        z-index: 1000;
+        box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+    }
+
+    .nav-menu.active {
+        right: 0;
+    }
+
+    .nav-item {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    .nav-link {
+        width: 100%;
+        padding: 1rem;
+        border-radius: 10px;
+        justify-content: flex-start;
+    }
+
+    .dropdown-menu {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        background: rgba(76, 175, 80, 0.1);
+        margin-top: 0.5rem;
+        display: none;
+    }
+
+    .dropdown.active .dropdown-menu {
+        display: block;
+    }
+
+    .dropdown-item {
+        padding: 0.75rem 1rem;
+        margin: 0.25rem 0;
+        border-radius: 8px;
+    }
+
+    .auth-buttons {
+        width: 100%;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
     </style>
 </head>
 <body>
@@ -1276,6 +1383,73 @@
      
                 Dirección de Turismo
             </a>
+
+               <!-- ✅ AGREGAR ESTE BOTÓN QUE FALTABA -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- ✅ AGREGAR ID AL MENÚ -->
+        <ul class="nav-menu" id="navMenu">
+            <li class="nav-item">
+                <a href="index.html" class="nav-link">
+              
+                    Inicio
+                </a>
+            </li>
+            
+            <li class="nav-item dropdown" id="hospedajeDropdown">
+                <a href="#" class="nav-link active">
+                 
+                    Hospedaje
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+                <div class="dropdown-menu">
+                    <a href="hoteles.html" class="dropdown-item">
+           
+                        Hoteles
+                    </a>
+                    <a href="cabanas.html" class="dropdown-item active">
+                    
+                        Cabañas
+                    </a>
+                    <a href="airbnb.html" class="dropdown-item">
+                     
+                        Airbnb
+                    </a>
+                </div>
+            </li>
+            
+            <li class="nav-item">
+                <a href="https://restaurante-web-production-721f.up.railway.app/" class="nav-link">
+                
+                    Alimentos
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="tourOperadora.html" class="nav-link">
+                 
+                    Tours
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="guias.html" class="nav-link">
+                  
+                    Guías
+                </a>
+            </li>
+        </ul>
+        
+        <div class="auth-buttons">
+            <a href="login.html" class="btn btn-login">Iniciar Sesión</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ✅ AGREGAR OVERLAY PARA MÓVIL -->
+<div class="mobile-overlay" id="mobileOverlay"></div>
             
             <ul class="nav-menu">
                 <li class="nav-item">
@@ -2338,7 +2512,85 @@
         });
 
         console.log('✅ Cabañas cargadas con slider de imágenes integrado');
+// ✅ AGREGAR ESTE JAVASCRIPT PARA FUNCIONALIDAD MÓVIL
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const navMenu = document.getElementById('navMenu');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const hospedajeDropdown = document.getElementById('hospedajeDropdown');
+
+    // Toggle del menú móvil
+    mobileMenuToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        mobileOverlay.classList.toggle('active');
+        
+        // Cambiar icono
+        const icon = mobileMenuToggle.querySelector('i');
+        if (navMenu.classList.contains('active')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+        } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+    });
+
+    // Cerrar menú al hacer click en overlay
+    mobileOverlay.addEventListener('click', closeMenu);
+
+    // Función para cerrar el menú
+    function closeMenu() {
+        navMenu.classList.remove('active');
+        mobileOverlay.classList.remove('active');
+        hospedajeDropdown.classList.remove('active');
+        
+        const icon = mobileMenuToggle.querySelector('i');
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+    }
+
+    // Toggle del dropdown en hospedaje en móvil
+    hospedajeDropdown.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+            if (e.target.closest('.nav-link') && !e.target.closest('.dropdown-item')) {
+                e.preventDefault();
+                hospedajeDropdown.classList.toggle('active');
+            }
+        }
+    });
+
+    // Manejar clicks en elementos del dropdown
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768) {
+                setTimeout(() => {
+                    closeMenu();
+                }, 100);
+            }
+        });
+    });
+
+    // Cerrar menú al hacer click en enlaces principales
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768 && 
+                !e.target.closest('#hospedajeDropdown') && 
+                !e.target.closest('.dropdown-item')) {
+                closeMenu();
+            }
+        });
+    });
+
+    // Manejar redimensionamiento de ventana
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            closeMenu();
+        }
+    });
+});
+
+        
     </script>
 </body>
 </html>
-
