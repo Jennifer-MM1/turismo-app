@@ -1176,22 +1176,22 @@
     <script src="js/alerts.js"></script>
     <script>
         // Variables globales
-      // ✅ REEMPLAZAR POR:
-const baseURL = (() => {
-    const hostname = window.location.hostname;
-    
-    console.log('🌐 Hostname detectado en airbnb-admin:', hostname);
-    
-    if (hostname === 'localhost' || hostname === '127.0.0.1') {
-        console.log('🛠️ Modo desarrollo detectado');
-        return 'http://localhost:5000/api';
-    }
-    
-    console.log('🚀 Modo producción detectado');
-    return `${window.location.protocol}//${window.location.host}/api`;
-})();
+        // ✅ CONFIGURACIÓN DINÁMICA DE baseURL
+        const baseURL = (() => {
+            const hostname = window.location.hostname;
+            
+            console.log('🌐 Hostname detectado en airbnb-admin:', hostname);
+            
+            if (hostname === 'localhost' || hostname === '127.0.0.1') {
+                console.log('🛠️ Modo desarrollo detectado');
+                return 'http://localhost:5000/api';
+            }
+            
+            console.log('🚀 Modo producción detectado');
+            return `${window.location.protocol}//${window.location.host}/api`;
+        })();
 
-console.log('✅ BaseURL configurado para airbnb-admin:', baseURL);
+        console.log('✅ BaseURL configurado para airbnb-admin:', baseURL);
         
         let authToken = localStorage.getItem('authToken');
         let currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
@@ -1280,6 +1280,39 @@ console.log('✅ BaseURL configurado para airbnb-admin:', baseURL);
             });
         }
 
+        // ✅ FUNCIÓN MEJORADA: Asegurar que el campo airbnbId exista
+        function ensureAirbnbIdField() {
+            // Verificar si el campo oculto airbnbId ya existe
+            let airbnbIdField = document.getElementById('airbnbId');
+            
+            if (!airbnbIdField) {
+                // Crear el campo oculto si no existe
+                airbnbIdField = document.createElement('input');
+                airbnbIdField.type = 'hidden';
+                airbnbIdField.id = 'airbnbId';
+                airbnbIdField.name = 'airbnbId';
+                
+                // Agregarlo al formulario del cuestionario
+                const surveyForm = document.querySelector('#weeklySurveyForm, .survey-form form');
+                if (surveyForm) {
+                    surveyForm.appendChild(airbnbIdField);
+                    console.log('✅ Campo airbnbId creado y agregado al formulario');
+                }
+            }
+            
+            // Establecer el valor del campo si tenemos el ID disponible
+            if (currentAirbnb && currentAirbnb._id) {
+                airbnbIdField.value = currentAirbnb._id;
+                console.log('✅ Campo airbnbId actualizado con valor:', currentAirbnb._id);
+            } else {
+                const storedId = localStorage.getItem('currentAirbnbId');
+                if (storedId && storedId !== 'null') {
+                    airbnbIdField.value = storedId;
+                    console.log('✅ Campo airbnbId actualizado desde localStorage:', storedId);
+                }
+            }
+        }
+
         // Configurar menú de gestión de imágenes siguiendo el patrón de cabañas
         function setupImageManagementMenu() {
             const menuEdicionImagenes = document.getElementById('menu-edicion-imagenes');
@@ -1333,12 +1366,19 @@ console.log('✅ BaseURL configurado para airbnb-admin:', baseURL);
                 if (data.status === 'success' && data.data.alojamientos.length > 0) {
                     const propiedad = data.data.alojamientos[0];
                     currentAirbnb = propiedad;
+                    
+                    // ✅ NUEVO: Guardar en localStorage para referencia futura
+                    localStorage.setItem('currentAirbnbId', propiedad._id);
+                    
                     updateStats([propiedad]);
                     displayAirbnb(propiedad);
                     showAirbnbContent();
                     
                     // ✅ NUEVO: Actualizar información del cuestionario
                     updateSurveyInfo(propiedad);
+                    
+                    // ✅ NUEVO: Asegurar que el campo del formulario esté configurado
+                    ensureAirbnbIdField();
                     
                     // Configurar menú de gestión de imágenes después de cargar la propiedad
                     setupImageManagementMenu();
@@ -1615,21 +1655,48 @@ console.log('✅ BaseURL configurado para airbnb-admin:', baseURL);
             };
         }
 
-        // ✅ NUEVA FUNCIÓN: Obtener ID del Airbnb
+        // ✅ FUNCIÓN CORREGIDA: Obtener ID del Airbnb
         function getCurrentAirbnbId() {
-            const airbnbId = document.getElementById('airbnbId').value;
-            if (!airbnbId) {
-                throw new Error('No se pudo obtener el ID del alojamiento');
+            // Opción 1: Desde la variable global currentAirbnb
+            if (currentAirbnb && currentAirbnb._id) {
+                console.log('✅ ID obtenido desde currentAirbnb:', currentAirbnb._id);
+                return currentAirbnb._id;
             }
-            return airbnbId;
+            
+            // Opción 2: Desde un campo oculto en el DOM
+            const airbnbIdElement = document.getElementById('airbnbId');
+            if (airbnbIdElement && airbnbIdElement.value) {
+                console.log('✅ ID obtenido desde elemento DOM:', airbnbIdElement.value);
+                return airbnbIdElement.value;
+            }
+            
+            // Opción 3: Desde localStorage
+            const storedId = localStorage.getItem('currentAirbnbId');
+            if (storedId && storedId !== 'null' && storedId !== 'undefined') {
+                console.log('✅ ID obtenido desde localStorage:', storedId);
+                return storedId;
+            }
+            
+            // Si no encontramos el ID en ningún lugar
+            console.error('❌ No se pudo obtener el ID del alojamiento');
+            throw new Error('No se pudo obtener el ID del alojamiento. Asegúrate de que el alojamiento esté cargado correctamente.');
         }
 
-        // ✅ NUEVA FUNCIÓN: Manejar envío del cuestionario
+        // ✅ FUNCIÓN COMPLETAMENTE CORREGIDA: Manejar envío del cuestionario
         async function handleSurveySubmit(e) {
             e.preventDefault();
             
             const form = e.target;
             const formData = new FormData(form);
+            
+            // ✅ VERIFICACIÓN TEMPRANA del ID del alojamiento
+            try {
+                const airbnbId = getCurrentAirbnbId();
+                console.log('🆔 ID del alojamiento verificado:', airbnbId);
+            } catch (error) {
+                showAlert('Error: ' + error.message, 'error');
+                return;
+            }
             
             // Validación de procedencia
             const procedenciaInput = document.getElementById('procedenciaTuristas');
@@ -1689,13 +1756,13 @@ console.log('✅ BaseURL configurado para airbnb-admin:', baseURL);
                 const airbnbId = getCurrentAirbnbId();
                 const { fechaInicio, fechaFin } = getCurrentWeekDates();
                 
+                // ✅ ESTRUCTURA COMPLETAMENTE CORREGIDA del cuestionario
                 const cuestionarioData = {
-                    alojamientoId: airbnbId,
-                    tipoEstablecimiento: 'airbnb',
+                    airbnbId: airbnbId,  // ✅ CAMBIO PRINCIPAL: usar airbnbId en lugar de alojamientoId
                     fechaInicio: fechaInicio,
                     fechaFin: fechaFin,
                     datos: {
-                        // ✅ NUEVO: Incluir procedencia de turistas
+                        // ✅ Incluir procedencia de turistas
                         procedenciaTuristas: procedenciaValue,
                         
                         // Campos específicos para Airbnb
@@ -1712,7 +1779,7 @@ console.log('✅ BaseURL configurado para airbnb-admin:', baseURL);
                     notas: formData.get('notas') || ''
                 };
                 
-                console.log('📤 Enviando cuestionario de Airbnb con procedencia:', cuestionarioData);
+                console.log('📤 Enviando cuestionario de Airbnb:', cuestionarioData);
                 
                 const response = await fetch(`${baseURL}/cuestionarios`, {
                     method: 'POST',
@@ -1728,12 +1795,12 @@ console.log('✅ BaseURL configurado para airbnb-admin:', baseURL);
                 
                 if (response.ok && result.status === 'success') {
                     form.classList.remove('survey-loading');
-                    showAlert('¡Cuestionario de Airbnb enviado correctamente! Incluyendo información de procedencia de turistas.', 'success');
+                    showAlert('¡Cuestionario enviado correctamente!', 'success');
                     
                     // Resetear formulario
                     form.reset();
                     
-                    // Limpiar clases de validación y contador
+                    // Limpiar clases de validación
                     const inputs = form.querySelectorAll('input, textarea');
                     inputs.forEach(input => {
                         input.classList.remove('error', 'success');
@@ -1746,7 +1813,7 @@ console.log('✅ BaseURL configurado para airbnb-admin:', baseURL);
                         counter.className = 'char-counter';
                     }
                     
-                    console.log('✅ Cuestionario de Airbnb guardado exitosamente con procedencia:', result.data);
+                    console.log('✅ Cuestionario guardado exitosamente:', result.data);
                     
                 } else {
                     throw new Error(result.message || 'Error al enviar el cuestionario');
@@ -1754,24 +1821,16 @@ console.log('✅ BaseURL configurado para airbnb-admin:', baseURL);
                 
             } catch (error) {
                 form.classList.remove('survey-loading');
-                console.error('❌ Error al enviar cuestionario de Airbnb:', error);
+                console.error('❌ Error al enviar cuestionario:', error);
                 
                 // Manejo específico de errores
                 if (error.message.includes('Ya existe un cuestionario')) {
                     showAlert('Ya existe un cuestionario para esta semana. Solo se puede enviar un cuestionario por semana.', 'warning');
                 } else if (error.message.includes('No tienes permiso')) {
                     showAlert('No tienes permisos para enviar este cuestionario.', 'error');
-                } else if (error.message.includes('not authenticated') || error.message.includes('jwt')) {
-                    showAlert('Sesión expirada. Por favor, inicia sesión nuevamente.', 'error');
-                    setTimeout(() => {
-                        window.location.href = '../login.html';
-                    }, 2000);
-                } else if (error.message.includes('Error de validación')) {
-                    showAlert('Error de validación: ' + error.message, 'error');
-                } else if (error.message.includes('procedencia de turistas')) {
-                    showAlert('Error: ' + error.message, 'error');
-                } else if (error.message.includes('fetch')) {
-                    showAlert('Error de conexión. Verifica tu conexión a internet.', 'error');
+                } else if (error.message.includes('not authenticated')) {
+                    showAlert('Sesión expirada. Redirigiendo al login...', 'error');
+                    setTimeout(() => window.location.href = '../login.html', 2000);
                 } else {
                     showAlert(error.message || 'Error al enviar el cuestionario. Inténtelo de nuevo.', 'error');
                 }
@@ -1841,8 +1900,16 @@ console.log('✅ BaseURL configurado para airbnb-admin:', baseURL);
         function logout() {
             localStorage.removeItem('authToken');
             localStorage.removeItem('currentUser');
+            localStorage.removeItem('currentAirbnbId'); // ✅ NUEVO: Limpiar también este dato
             window.location.href = '../login.html';
         }
+
+        // ✅ NUEVO: Llamar ensureAirbnbIdField después de cargar datos
+        setTimeout(() => {
+            if (currentAirbnb || localStorage.getItem('currentAirbnbId')) {
+                ensureAirbnbIdField();
+            }
+        }, 2000);
     </script>
 </body>
 </html>
