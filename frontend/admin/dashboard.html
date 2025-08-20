@@ -656,7 +656,112 @@
         // Variables globales
         const userData = JSON.parse(localStorage.getItem('userData')) || {};
         const authToken = localStorage.getItem('authToken');
-        const baseURL = 'http://localhost:5000/api';
+        const baseURL = (() => {
+    const hostname = window.location.hostname;
+    
+    console.log('🌐 Hostname detectado en dashboard:', hostname);
+    
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        console.log('🛠️ Modo desarrollo detectado');
+        return 'http://localhost:5000/api';
+    }
+    
+    console.log('🚀 Modo producción detectado');
+    return `${window.location.protocol}//${window.location.host}/api`;
+})();
+
+console.log('✅ BaseURL configurado para dashboard:', baseURL);
+
+
+
+// ✅ FUNCIÓN PARA MANEJAR ERRORES DE CONEXIÓN
+async function loadBusinessDataWithRetry() {
+    console.log('📥 Cargando datos del negocio con reintento...');
+    
+    try {
+        switch(userData.tipoNegocio) {
+            case 'airbnb':
+            case 'ayb':
+                console.log('🏠 Intentando cargar datos de Airbnb...');
+                console.log('URL completa:', `${baseURL}/airbnb/mis-alojamientos`);
+                
+                const airbnbResponse = await fetch(`${baseURL}/airbnb/mis-alojamientos`, {
+                    headers: { 
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!airbnbResponse.ok) {
+                    throw new Error(`HTTP ${airbnbResponse.status}: ${airbnbResponse.statusText}`);
+                }
+                
+                const airbnbData = await airbnbResponse.json();
+                console.log('✅ Respuesta exitosa de Airbnb:', airbnbData);
+                
+                if (airbnbData.status === 'success' && airbnbData.data.alojamientos.length > 0) {
+                    const airbnb = airbnbData.data.alojamientos[0];
+                    currentAirbnb = airbnb;
+                    localStorage.setItem('currentAirbnbId', airbnb._id);
+                    console.log('✅ Airbnb cargado exitosamente:', airbnb.nombre, 'ID:', airbnb._id);
+                    
+                    // Reconfigurar el menú después de cargar datos
+                    setupImageManagementMenu();
+                    return true;
+                } else {
+                    console.warn('⚠️ No se encontraron alojamientos:', airbnbData);
+                    return false;
+                }
+                break;
+                
+            // Agregar otros casos si es necesario
+            case 'cabana':
+            case 'hotel':
+                console.log(`📋 Carga de ${userData.tipoNegocio} no implementada en esta función`);
+                return false;
+        }
+    } catch (error) {
+        console.error('❌ Error cargando datos del negocio:', error);
+        
+        // Si hay error de conexión, mostrar mensaje útil
+        if (error.message.includes('Failed to fetch') || error.message.includes('CONNECTION_REFUSED')) {
+            console.error('🚨 Error de conexión al servidor');
+            showConnectionError();
+        }
+        
+        return false;
+    }
+}
+
+// ✅ FUNCIÓN PARA MOSTRAR ERROR DE CONEXIÓN
+function showConnectionError() {
+    const warningBanner = document.getElementById('warningBanner');
+    if (warningBanner) {
+        const warningText = document.getElementById('warningText');
+        warningText.textContent = '⚠️ No se pudo conectar al servidor. Verifica tu conexión.';
+        warningBanner.style.backgroundColor = '#f8d7da';
+        warningBanner.style.color = '#721c24';
+        warningBanner.style.display = 'flex';
+    }
+}
+
+// ✅ FUNCIÓN MEJORADA PARA CREAR LA FUNCIÓN manageImages
+function createManageImagesFunction() {
+    if (userData.tipoNegocio === 'ayb' || userData.tipoNegocio === 'airbnb') {
+        const airbnbId = currentAirbnb?._id || localStorage.getItem('currentAirbnbId');
+        
+        if (airbnbId) {
+            window.manageImages = function() {
+                console.log('🖼️ Navegando a gestión de imágenes con ID:', airbnbId);
+                window.location.href = `manage-images-airbnb.html?airbnbId=${airbnbId}`;
+            };
+            console.log('✅ Función manageImages creada exitosamente');
+        } else {
+            console.warn('⚠️ No se pudo crear manageImages - falta ID del alojamiento');
+        }
+    }
+}
+
         // ✅ VARIABLES GLOBALES para almacenar datos de negocio
         let currentCabana = null;
         let currentHotel = null;
