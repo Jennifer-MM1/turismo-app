@@ -50,6 +50,23 @@
             gap: 0.5rem;
         }
 
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #333;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-toggle:hover {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4CAF50;
+        }
+
         .nav-menu {
             display: flex;
             list-style: none;
@@ -145,6 +162,24 @@
             background: #4CAF50;
             color: white;
             transform: translateY(-2px);
+        }
+
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
 
         /* Page Header */
@@ -361,7 +396,6 @@
             backdrop-filter: blur(10px);
         }
 
-        /* Etiqueta ecológica */
         .eco-badge {
             position: absolute;
             top: 60px;
@@ -396,7 +430,6 @@
             }
         }
 
-        /* ✅ NUEVO: Contenido de la cabaña (igual que hoteles.html) */
         .cabana-content {
             padding: 1.5rem;
         }
@@ -425,7 +458,6 @@
             overflow: hidden;
         }
 
-        /* ✅ NUEVO: Servicios compactos (igual que hoteles.html) */
         .cabana-features {
             display: flex;
             flex-wrap: wrap;
@@ -722,218 +754,7 @@
             text-align: left;
         }
 
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .contact-item {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            padding: 15px;
-            background: white;
-            border-radius: 10px;
-            border: 2px solid #ecf0f1;
-            transition: all 0.3s ease;
-        }
-
-        .contact-item:hover {
-            border-color: #8BC34A;
-            transform: translateY(-2px);
-        }
-
-        .contact-item i {
-            color: #8BC34A;
-            font-size: 20px;
-        }
-
-        .contact-item a {
-            color: #8BC34A;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .contact-item a:hover {
-            color: #689F38;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 10px;
-        }
-
-        .service-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px;
-            background: white;
-            border-radius: 8px;
-            border: 2px solid #ecf0f1;
-            transition: all 0.3s ease;
-        }
-
-        .service-item:hover {
-            border-color: #8BC34A;
-            transform: translateY(-2px);
-        }
-
-        .service-item i {
-            color: #8BC34A;
-            font-size: 16px;
-            width: 20px;
-        }
-
-        .payment-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-        }
-
-        .payment-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            padding: 15px;
-            background: white;
-            border-radius: 12px;
-            border: 2px solid #e9ecef;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .payment-item:hover {
-            border-color: #8BC34A;
-            transform: translateY(-2px);
-        }
-
-        .payment-item i {
-            color: #8BC34A;
-            font-size: 24px;
-        }
-
-        .payment-item span {
-            font-weight: 500;
-            color: #2c3e50;
-            font-size: 14px;
-        }
-
-        .payment-item.disabled {
-            opacity: 0.6;
-            border-color: #dee2e6;
-            cursor: not-allowed;
-        }
-
-        .payment-item.disabled:hover {
-            transform: none;
-            border-color: #dee2e6;
-        }
-
-        .payment-item.disabled i {
-            color: #6c757d;
-        }
-
-        .payment-item.disabled span {
-            color: #6c757d;
-        }
-
-        .eco-section {
-            background: linear-gradient(135deg, #e8f8f5, #f0fdf4) !important;
-            border: 2px solid #27ae60 !important;
-        }
-
-        .eco-title {
-            color: #27ae60 !important;
-            border-bottom-color: #27ae60 !important;
-        }
-
-        .eco-title i {
-            color: #27ae60 !important;
-        }
-
-        .eco-intro {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-style: italic;
-            line-height: 1.6;
-        }
-
-        .eco-practices {
-            display: grid;
-            gap: 10px;
-        }
-
-        .eco-practice {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            background: rgba(39, 174, 96, 0.1);
-            border-radius: 8px;
-            border-left: 4px solid #27ae60;
-        }
-
-        .eco-check {
-            color: #27ae60;
-            font-size: 14px;
-        }
-
-        .price-section {
-            background: linear-gradient(135deg, #fff3e0, #fffbf0) !important;
-            border: 2px solid #f39c12 !important;
-            grid-column: 1 / -1;
-        }
-
-        .price-title {
-            color: #e67e22 !important;
-            border-bottom-color: #f39c12 !important;
-        }
-
-        .price-title i {
-            color: #f39c12 !important;
-        }
-
-        .price-warning {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 15px;
-            font-weight: 600;
-            color: #e67e22;
-        }
-
-        .price-warning i {
-            color: #f39c12;
-        }
-
-        .price-factors {
-            margin: 15px 0;
-            padding-left: 20px;
-        }
-
-        .price-factors li {
-            margin-bottom: 8px;
-            color: #5d4e75;
-        }
-
-        .price-cta {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(243, 156, 18, 0.1);
-            padding: 12px;
-            border-radius: 8px;
-            border-left: 4px solid #f39c12;
-            font-weight: 600;
-            color: #e67e22;
-            margin-top: 15px;
-        }
-
-        /* ✨ SLIDER DE IMÁGENES PARA MODAL - ADAPTADO PARA CABAÑAS */
+        /* Galería de imágenes */
         .cabana-gallery-section {
             background: #f8f9fa;
             padding: 20px;
@@ -941,11 +762,6 @@
             border: 1px solid #e9ecef;
             transition: all 0.3s ease;
             margin-bottom: 25px;
-        }
-
-        .cabana-gallery-section:hover {
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
         }
 
         .gallery-title {
@@ -1058,20 +874,6 @@
             scrollbar-color: #cbd5e0 #f7fafc;
         }
 
-        .thumbnails-container::-webkit-scrollbar {
-            height: 6px;
-        }
-
-        .thumbnails-container::-webkit-scrollbar-track {
-            background: #f7fafc;
-            border-radius: 3px;
-        }
-
-        .thumbnails-container::-webkit-scrollbar-thumb {
-            background: #cbd5e0;
-            border-radius: 3px;
-        }
-
         .thumbnail {
             flex-shrink: 0;
             width: 60px;
@@ -1100,32 +902,7 @@
             box-shadow: 0 4px 12px rgba(139, 195, 74, 0.4);
         }
 
-        .no-images-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 200px;
-            color: #7f8c8d;
-        }
-
-        .no-images-state i {
-            font-size: 48px;
-            margin-bottom: 15px;
-            opacity: 0.5;
-        }
-
-        .no-images-state h4 {
-            margin: 0 0 8px;
-            font-size: 18px;
-        }
-
-        .no-images-state p {
-            margin: 0;
-            font-size: 14px;
-            opacity: 0.8;
-        }
-
+        /* Image Modal */
         .image-modal-overlay {
             position: fixed;
             top: 0;
@@ -1172,10 +949,75 @@
             transform: scale(1.1);
         }
 
-        /* Responsive */
+        /* Responsive para móviles */
         @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
             .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 320px;
+                height: 100vh;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 2rem 1rem;
+                transition: all 0.3s ease;
+                z-index: 1000;
+                box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            }
+
+            .nav-menu.active {
+                right: 0;
+            }
+
+            .nav-item {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .nav-link {
+                width: 100%;
+                padding: 1rem;
+                border-radius: 10px;
+                justify-content: flex-start;
+            }
+
+            .dropdown-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                box-shadow: none;
+                background: rgba(76, 175, 80, 0.1);
+                margin-top: 0.5rem;
                 display: none;
+            }
+
+            .dropdown.active .dropdown-menu {
+                display: block;
+            }
+
+            .dropdown-item {
+                padding: 0.75rem 1rem;
+                margin: 0.25rem 0;
+                border-radius: 8px;
+            }
+
+            .auth-buttons {
+                width: 100%;
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid rgba(0,0,0,0.1);
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
             }
 
             .page-header h1 {
@@ -1225,18 +1067,6 @@
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
-            
-            .contact-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .payment-grid {
-                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            }
-            
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
 
             .main-image-container {
                 height: 250px;
@@ -1266,113 +1096,6 @@
                 gap: 6px;
             }
         }
-
-        .mobile-menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: #333;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
-
-.mobile-menu-toggle:hover {
-    background: rgba(76, 175, 80, 0.1);
-    color: #4CAF50;
-}
-
-.mobile-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-}
-
-.mobile-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Responsive para móviles */
-@media (max-width: 768px) {
-    .mobile-menu-toggle {
-        display: block;
-    }
-
-    .nav-menu {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 320px;
-        height: 100vh;
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(20px);
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 2rem 1rem;
-        transition: all 0.3s ease;
-        z-index: 1000;
-        box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-    }
-
-    .nav-menu.active {
-        right: 0;
-    }
-
-    .nav-item {
-        width: 100%;
-        margin-bottom: 0.5rem;
-    }
-
-    .nav-link {
-        width: 100%;
-        padding: 1rem;
-        border-radius: 10px;
-        justify-content: flex-start;
-    }
-
-    .dropdown-menu {
-        position: static;
-        opacity: 1;
-        visibility: visible;
-        transform: none;
-        box-shadow: none;
-        background: rgba(76, 175, 80, 0.1);
-        margin-top: 0.5rem;
-        display: none;
-    }
-
-    .dropdown.active .dropdown-menu {
-        display: block;
-    }
-
-    .dropdown-item {
-        padding: 0.75rem 1rem;
-        margin: 0.25rem 0;
-        border-radius: 8px;
-    }
-
-    .auth-buttons {
-        width: 100%;
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px solid rgba(0,0,0,0.1);
-    }
-
-    .btn {
-        width: 100%;
-        justify-content: center;
-    }
-}
     </style>
 </head>
 <body>
@@ -1380,126 +1103,63 @@
     <nav class="navbar">
         <div class="nav-container">
             <a href="index.html" class="logo">
-     
+              
                 Dirección de Turismo
             </a>
 
-               <!-- ✅ AGREGAR ESTE BOTÓN QUE FALTABA -->
-        <button class="mobile-menu-toggle" id="mobileMenuToggle">
-            <i class="fas fa-bars"></i>
-        </button>
-        
-        <!-- ✅ AGREGAR ID AL MENÚ -->
-        <ul class="nav-menu" id="navMenu">
-            <li class="nav-item">
-                <a href="index.html" class="nav-link">
-              
-                    Inicio
-                </a>
-            </li>
+            <!-- Botón de menú móvil -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
             
-            <li class="nav-item dropdown" id="hospedajeDropdown">
-                <a href="#" class="nav-link active">
-                 
-                    Hospedaje
-                    <i class="fas fa-chevron-down"></i>
-                </a>
-                <div class="dropdown-menu">
-                    <a href="hoteles.html" class="dropdown-item">
-           
-                        Hoteles
-                    </a>
-                    <a href="cabanas.html" class="dropdown-item active">
-                    
-                        Cabañas
-                    </a>
-                    <a href="airbnb.html" class="dropdown-item">
-                     
-                        Airbnb
-                    </a>
-                </div>
-            </li>
-            
-            <li class="nav-item">
-                <a href="https://restaurante-web-production-721f.up.railway.app/" class="nav-link">
-                
-                    Alimentos
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="tourOperadora.html" class="nav-link">
-                 
-                    Tours
-                </a>
-            </li>
-            
-            <li class="nav-item">
-                <a href="guias.html" class="nav-link">
-                  
-                    Guías
-                </a>
-            </li>
-        </ul>
-        
-        <div class="auth-buttons">
-            <a href="login.html" class="btn btn-login">Iniciar Sesión</a>
-        </div>
-    </div>
-</nav>
-
-<!-- ✅ AGREGAR OVERLAY PARA MÓVIL -->
-<div class="mobile-overlay" id="mobileOverlay"></div>
-            
-            <ul class="nav-menu">
+            <!-- Menú de navegación -->
+            <ul class="nav-menu" id="navMenu">
                 <li class="nav-item">
                     <a href="index.html" class="nav-link">
-                      
+              
                         Inicio
                     </a>
                 </li>
                 
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown" id="hospedajeDropdown">
                     <a href="#" class="nav-link active">
-                    
+                 
                         Hospedaje
                         <i class="fas fa-chevron-down"></i>
                     </a>
                     <div class="dropdown-menu">
                         <a href="hoteles.html" class="dropdown-item">
-                        
+                  
                             Hoteles
                         </a>
                         <a href="cabanas.html" class="dropdown-item active">
-                     
+                       
                             Cabañas
                         </a>
                         <a href="airbnb.html" class="dropdown-item">
-                       
+                        
                             Airbnb
                         </a>
                     </div>
                 </li>
                 
-   <li class="nav-item">
+                <li class="nav-item">
                     <a href="https://restaurante-web-production-721f.up.railway.app/" class="nav-link">
-                       
+                     
                         Alimentos
                     </a>
                 </li>
 
-
-
                 <li class="nav-item">
                     <a href="tourOperadora.html" class="nav-link">
-              
+                   
                         Tours
                     </a>
                 </li>
                 
                 <li class="nav-item">
                     <a href="guias.html" class="nav-link">
-                       
+                    
                         Guías
                     </a>
                 </li>
@@ -1510,6 +1170,9 @@
             </div>
         </div>
     </nav>
+
+    <!-- Overlay para móvil -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
 
     <!-- Page Header -->
     <section class="page-header">
@@ -1606,12 +1269,12 @@
         let allCabanas = [];
         let filteredCabanas = [];
         
-        // ✅ CORREGIDO: URL dinámica igual que manage-images-cabana.html
-      const baseURL = window.location.hostname === 'localhost' 
-    ? 'http://localhost:5000/api' 
-    : '/api';
+        // URL dinámica 
+        const baseURL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5000/api' 
+            : '/api';
 
-        // ✨ VARIABLES GLOBALES DEL SLIDER
+        // Variables globales del slider
         let currentCabanaImages = [];
         let currentImageIndex = 0;
 
@@ -1623,29 +1286,26 @@
         const searchForm = document.getElementById('searchForm');
         const sortBy = document.getElementById('sortBy');
 
-        // ✅ FUNCIÓN CORREGIDA: getImageUrl (igual que manage-images-cabana.html que SÍ funciona)
+        // Función para obtener URL de imagen
         function getImageUrl(imagePath) {
             console.log('🔍 getImageUrl para cabaña recibió:', imagePath);
             
-            // Si no hay imagen, usar imagen por defecto
             if (!imagePath) {
                 console.log('⚠️ No hay imagen, usando por defecto');
                 return 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
             }
             
-            // Si ya es una URL completa (http/https), devolverla tal como está
             if (imagePath.startsWith('http')) {
                 console.log('✅ URL completa:', imagePath);
                 return imagePath;
             }
             
-            // ✅ CORRECCIÓN CLAVE: Usar baseURL.replace('/api', '') igual que manage-images-cabana.html
             const finalUrl = `${baseURL.replace('/api', '')}${imagePath}`;
             console.log('✅ URL construida:', finalUrl);
             return finalUrl;
         }
 
-        // ✅ FUNCIÓN AGREGADA: addImageErrorHandling
+        // Manejo de errores de imágenes
         function addImageErrorHandling() {
             document.addEventListener('error', function(e) {
                 if (e.target.tagName === 'IMG') {
@@ -1655,7 +1315,7 @@
             }, true);
         }
 
-        // 🔄 FUNCIÓN PARA GENERAR EL HTML DE LA GALERÍA DE CABAÑAS
+        // Generar HTML de galería de imágenes
         function generateImageGalleryHTML(images) {
             if (!images || images.length === 0) {
                 return `
@@ -1681,11 +1341,9 @@
                     </h3>
                     
                     <div class="image-slider-container" id="imageSlider">
-                        <!-- Imagen principal -->
                         <div class="main-image-container">
                             <img id="mainImage" src="${getImageUrl(images[0])}" alt="Cabaña imagen" class="main-image" onclick="openImageModal('${getImageUrl(images[0])}')">
                             
-                            <!-- Botones de navegación -->
                             <button class="slider-nav-btn slider-prev" id="prevBtn" onclick="changeImage(-1)" ${images.length <= 1 ? 'style="display: none;"' : ''}>
                                 <i class="fas fa-chevron-left"></i>
                             </button>
@@ -1693,11 +1351,9 @@
                                 <i class="fas fa-chevron-right"></i>
                             </button>
                             
-                            <!-- Contador -->
                             <div class="image-counter" id="imageCounter">1 / ${images.length}</div>
                         </div>
                         
-                        <!-- Miniaturas -->
                         <div class="thumbnails-container" id="thumbnailsContainer">
                             ${images.map((image, index) => `
                                 <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="goToImage(${index})">
@@ -1710,7 +1366,7 @@
             `;
         }
 
-        // 🖼️ INICIALIZAR EL SLIDER CON IMÁGENES
+        // Inicializar slider de imágenes
         function initializeImageSlider(images) {
             currentCabanaImages = images || [];
             currentImageIndex = 0;
@@ -1723,7 +1379,7 @@
             updateNavigationButtons();
         }
 
-        // 🔄 ACTUALIZAR IMAGEN PRINCIPAL
+        // Actualizar imagen principal
         function updateMainImage() {
             const mainImage = document.getElementById('mainImage');
             const counter = document.getElementById('imageCounter');
@@ -1734,24 +1390,21 @@
                 mainImage.alt = `Imagen ${currentImageIndex + 1} de la cabaña`;
                 mainImage.onclick = () => openImageModal(currentImageUrl);
                 
-                // Actualizar contador
                 if (counter) {
                     counter.textContent = `${currentImageIndex + 1} / ${currentCabanaImages.length}`;
                 }
                 
-                // Actualizar miniaturas activas
                 updateActiveThumbnail();
             }
         }
 
-        // 🖼️ ACTUALIZAR MINIATURA ACTIVA
+        // Actualizar miniatura activa
         function updateActiveThumbnail() {
             const thumbnails = document.querySelectorAll('.thumbnail');
             thumbnails.forEach((thumb, index) => {
                 thumb.classList.toggle('active', index === currentImageIndex);
             });
             
-            // Scroll automático de miniaturas
             const activeThumb = document.querySelector('.thumbnail.active');
             if (activeThumb) {
                 activeThumb.scrollIntoView({
@@ -1762,13 +1415,12 @@
             }
         }
 
-        // ⬅️➡️ CAMBIAR IMAGEN
+        // Cambiar imagen
         function changeImage(direction) {
             if (currentCabanaImages.length === 0) return;
             
             currentImageIndex += direction;
             
-            // Loop circular
             if (currentImageIndex >= currentCabanaImages.length) {
                 currentImageIndex = 0;
             } else if (currentImageIndex < 0) {
@@ -1779,7 +1431,7 @@
             updateNavigationButtons();
         }
 
-        // 🎯 IR A IMAGEN ESPECÍFICA
+        // Ir a imagen específica
         function goToImage(index) {
             if (index >= 0 && index < currentCabanaImages.length) {
                 currentImageIndex = index;
@@ -1788,7 +1440,7 @@
             }
         }
 
-        // 🔘 ACTUALIZAR BOTONES DE NAVEGACIÓN
+        // Actualizar botones de navegación
         function updateNavigationButtons() {
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
@@ -1802,7 +1454,7 @@
             }
         }
 
-        // 🔍 ABRIR MODAL DE IMAGEN AMPLIADA
+        // Abrir modal de imagen ampliada
         function openImageModal(imageSrc) {
             const overlay = document.getElementById('imageModalOverlay');
             const enlargedImage = document.getElementById('enlargedImage');
@@ -1810,96 +1462,30 @@
             if (overlay && enlargedImage) {
                 enlargedImage.src = imageSrc;
                 overlay.classList.add('show');
-                document.body.style.overflow = 'hidden'; // Prevenir scroll
+                document.body.style.overflow = 'hidden';
             }
         }
 
-        // ❌ CERRAR MODAL DE IMAGEN AMPLIADA
+        // Cerrar modal de imagen ampliada
         function closeImageModal() {
             const overlay = document.getElementById('imageModalOverlay');
             if (overlay) {
                 overlay.classList.remove('show');
-                document.body.style.overflow = 'auto'; // Restaurar scroll
+                document.body.style.overflow = 'auto';
             }
         }
-
-        // ⌨️ CONTROL DE TECLADO PARA EL SLIDER
-        document.addEventListener('keydown', function(e) {
-            const overlay = document.getElementById('imageModalOverlay');
-            
-            // Si el modal de imagen está abierto
-            if (overlay && overlay.classList.contains('show')) {
-                if (e.key === 'Escape') {
-                    closeImageModal();
-                }
-                return;
-            }
-            
-            // Control del slider
-            if (e.key === 'ArrowLeft') {
-                changeImage(-1);
-            } else if (e.key === 'ArrowRight') {
-                changeImage(1);
-            }
-        });
-
-        // 📱 TOUCH/SWIPE SUPPORT PARA MÓVILES
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        document.addEventListener('touchstart', function(e) {
-            const slider = document.getElementById('imageSlider');
-            if (slider && e.target.closest('#imageSlider')) {
-                touchStartX = e.changedTouches[0].screenX;
-            }
-        });
-
-        document.addEventListener('touchend', function(e) {
-            const slider = document.getElementById('imageSlider');
-            if (slider && e.target.closest('#imageSlider')) {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            }
-        });
-
-        function handleSwipe() {
-            const swipeThreshold = 50;
-            const diff = touchStartX - touchEndX;
-            
-            if (Math.abs(diff) > swipeThreshold) {
-                if (diff > 0) {
-                    // Swipe izquierda - siguiente imagen
-                    changeImage(1);
-                } else {
-                    // Swipe derecha - imagen anterior
-                    changeImage(-1);
-                }
-            }
-        }
-
-        // ✅ CORREGIDO: DOMContentLoaded con addImageErrorHandling
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Iniciando cabanas.html con corrección de imágenes...');
-            
-            // ✅ AGREGADO: Manejo de errores de imágenes
-            addImageErrorHandling();
-            
-            loadCabanas();
-            setupEventListeners();
-        });
 
         // Configurar event listeners
         function setupEventListeners() {
             searchForm.addEventListener('submit', handleSearch);
             sortBy.addEventListener('change', handleSort);
             
-            // Búsqueda en tiempo real
             document.getElementById('searchQuery').addEventListener('input', debounce(handleSearch, 300));
             document.getElementById('priceRange').addEventListener('change', handleSearch);
             document.getElementById('guestFilter').addEventListener('change', handleSearch);
         }
 
-        // Función debounce para optimizar búsquedas
+        // Función debounce
         function debounce(func, wait) {
             let timeout;
             return function executedFunction(...args) {
@@ -1912,7 +1498,7 @@
             };
         }
 
-        // ✅ CORREGIDA: Cargar cabañas desde la API con debug
+        // Cargar cabañas
         async function loadCabanas() {
             try {
                 showLoading();
@@ -1930,27 +1516,11 @@
                     allCabanas = data.data.cabanas;
                     filteredCabanas = [...allCabanas];
                     
-                    // ✅ DEBUG: Verificar imágenes al cargar
-                    console.log('🔍 Verificando imágenes de todas las cabañas...');
-                    allCabanas.forEach((cabana, index) => {
-                        console.log(`Cabaña ${index + 1}: ${cabana.nombre}`);
-                        console.log('  Imágenes:', cabana.imagenes);
-                        if (cabana.imagenes && cabana.imagenes.length > 0) {
-                            const finalUrl = getImageUrl(cabana.imagenes[0]);
-                            console.log('  Primera imagen:', cabana.imagenes[0], '→', finalUrl);
-                        }
-                    });
-                    
                     displayCabanas();
                     updateResultsInfo();
                     showCabanas();
                     
-                    // ✅ AGREGADO: Debug automático de las primeras cabañas
                     console.log('✅ Cabañas cargadas:', allCabanas.length);
-                    if (allCabanas.length > 0 && allCabanas[0].imagenes) {
-                        console.log('🖼️ Primera cabaña tiene imágenes, ejecutando debug...');
-                        debugCabanaImages(allCabanas[0]);
-                    }
                 } else {
                     console.warn('⚠️ No se encontraron cabañas:', data);
                     showEmpty();
@@ -1970,16 +1540,13 @@
             const guestFilter = document.getElementById('guestFilter').value;
             
             filteredCabanas = allCabanas.filter(cabana => {
-                // Filtro por texto
                 const matchesSearch = !searchQuery || 
                     cabana.nombre.toLowerCase().includes(searchQuery) ||
                     (cabana.descripcion && cabana.descripcion.toLowerCase().includes(searchQuery)) ||
                     cabana.ubicacion?.ciudad?.toLowerCase().includes(searchQuery);
                 
-                // Filtro por precio
                 const matchesPrice = !priceRange || cabana.precio <= parseInt(priceRange);
                 
-                // Filtro por huéspedes
                 const matchesGuests = !guestFilter || 
                     (cabana.capacidad?.huespedes && cabana.capacidad.huespedes >= parseInt(guestFilter));
                 
@@ -2029,19 +1596,15 @@
             cabanasGrid.innerHTML = cabanasHTML;
         }
 
-        // ✅ FUNCIÓN CORREGIDA: Crear tarjeta de cabaña (igual que hoteles.html)
+        // Crear tarjeta de cabaña
         function createCabanaCard(cabana) {
-            // ✅ USAR getImageUrl para procesar la imagen
             const imageUrl = getImageUrl(cabana.imagenes?.[0]);
             const tipoPropiedad = cabana.caracteristicas?.tipoPropiedad || 'cabana';
             const price = cabana.precio || 0;
             const ciudad = cabana.ubicacion?.ciudad || 'Ciudad no especificada';
             const capacidad = cabana.capacidad?.huespedes || 0;
             
-            // ✅ NUEVO: Servicios limitados para mostrar en la vista compacta (igual que hoteles.html)
             const servicios = cabana.servicios?.slice(0, 3) || [];
-            
-            console.log(`🖼️ Creando card para ${cabana.nombre} con imagen: ${imageUrl}`);
             
             return `
                 <div class="cabana-card" onclick="openCabanaModal('${cabana._id}')">
@@ -2140,56 +1703,7 @@
             return services[service] || service.charAt(0).toUpperCase() + service.slice(1);
         }
 
-        // Formatear métodos de pago
-        function formatPaymentMethods(metodos) {
-            if (!metodos || metodos.length === 0) {
-                return `
-                    <div class="payment-item disabled">
-                        <i class="fas fa-info-circle"></i>
-                        <span>Contactar para información de pago</span>
-                    </div>
-                `;
-            }
-            
-            const iconosMetodos = {
-                'efectivo': 'fas fa-money-bill-wave',
-                'transferencia': 'fas fa-exchange-alt',
-                'tarjeta': 'fas fa-credit-card'
-            };
-            
-            const nombresMetodos = {
-                'efectivo': 'Efectivo',
-                'transferencia': 'Transferencia',
-                'tarjeta': 'Tarjeta'
-            };
-            
-            return metodos.map(metodo => `
-                <div class="payment-item">
-                    <i class="${iconosMetodos[metodo] || 'fas fa-credit-card'}"></i>
-                    <span>${nombresMetodos[metodo] || metodo}</span>
-                </div>
-            `).join('');
-        }
-
-        // Obtener métodos de pago
-        function getMetodosPago(cabanaId, cabana) {
-            let metodosPago = cabana.metodosPago || [];
-            
-            if (!metodosPago || metodosPago.length === 0) {
-                const savedMetodos = localStorage.getItem(`cabana_${cabanaId}_metodosPago`);
-                if (savedMetodos) {
-                    try {
-                        metodosPago = JSON.parse(savedMetodos);
-                    } catch (e) {
-                        metodosPago = [];
-                    }
-                }
-            }
-            
-            return metodosPago;
-        }
-
-        // Abrir modal de cabaña - MODIFICADA CON SLIDER
+        // Abrir modal de cabaña
         function openCabanaModal(cabanaId) {
             const cabana = allCabanas.find(c => c._id === cabanaId);
             if (!cabana) return;
@@ -2199,10 +1713,6 @@
             const horario = cabana.contacto?.horario || 'No especificado';
             const direccion = cabana.ubicacion?.direccion || 'Dirección no especificada';
             
-            // Obtener métodos de pago
-            const metodosPago = getMetodosPago(cabanaId, cabana);
-            
-            // Servicios con compatibilidad
             let serviciosArray = [];
             if (cabana.servicios) {
                 if (Array.isArray(cabana.servicios)) {
@@ -2212,21 +1722,6 @@
                 }
             }
             
-            const esConjunto = cabana.caracteristicas?.esConjunto || false;
-            const totalCabanas = cabana.conjunto?.totalCabanas || 1;
-            const cabanasDisponibles = cabana.conjunto?.cabanasDisponibles || 0;
-            const disponibleIndividual = cabana.individual?.disponible || false;
-            
-            const practicasEcologicas = cabana.esEcologico ? [
-                'Uso de energías renovables',
-                'Reciclaje y separación de residuos',
-                'Productos de limpieza biodegradables',
-                'Ahorro de agua con sistemas eficientes',
-                'Apoyo a productores locales',
-                'Construcción con materiales sostenibles'
-            ] : [];
-            
-            // ✨ NUEVO: Generar HTML de la galería de imágenes
             const galleryHTML = generateImageGalleryHTML(cabana.imagenes);
             
             const modalHTML = `
@@ -2249,11 +1744,9 @@
                         </div>
                         
                         <div class="modal-content">
-                            <!-- ✨ NUEVA SECCIÓN: Galería de imágenes -->
                             ${galleryHTML}
                             
                             <div class="modal-grid">
-                                
                                 <div class="modal-section">
                                     <h3 class="section-title">
                                         <i class="fas fa-info-circle"></i>
@@ -2272,25 +1765,10 @@
                                             <span class="info-label">Descripción:</span>
                                             <span class="info-value">${cabana.descripcion || 'No disponible'}</span>
                                         </div>
-                                        ${esConjunto ? `
-                                            <div class="info-item">
-                                                <span class="info-label">Total de cabañas:</span>
-                                                <span class="info-value">${totalCabanas}</span>
-                                            </div>
-                                            <div class="info-item">
-                                                <span class="info-label">Cabañas disponibles:</span>
-                                                <span class="info-value">${cabanasDisponibles}</span>
-                                            </div>
-                                        ` : `
-                                            <div class="info-item">
-                                                <span class="info-label">Habitaciones:</span>
-                                                <span class="info-value">${cabana.capacidad?.habitaciones || 1}</span>
-                                            </div>
-                                            <div class="info-item">
-                                                <span class="info-label">Disponible:</span>
-                                                <span class="info-value">${disponibleIndividual ? 'Sí' : 'No'}</span>
-                                            </div>
-                                        `}
+                                        <div class="info-item">
+                                            <span class="info-label">Habitaciones:</span>
+                                            <span class="info-value">${cabana.capacidad?.habitaciones || 1}</span>
+                                        </div>
                                         <div class="info-item">
                                             <span class="info-label">Total de huéspedes:</span>
                                             <span class="info-value">${cabana.capacidad?.huespedes || 0}</span>
@@ -2307,28 +1785,22 @@
                                         <i class="fas fa-phone"></i>
                                         Contacto
                                     </h3>
-                                    <div class="contact-grid">
-                                        <div class="contact-item">
-                                            ${telefono !== 'No disponible' ? `
-                                                <i class="fas fa-phone"></i>
-                                                <a href="tel:${telefono}">${telefono}</a>
-                                            ` : `
-                                                <i class="fas fa-phone"></i>
-                                                <span>No disponible</span>
-                                            `}
+                                    <div class="info-grid">
+                                        <div class="info-item">
+                                            <span class="info-label">Teléfono:</span>
+                                            <span class="info-value">
+                                                ${telefono !== 'No disponible' ? `<a href="tel:${telefono}">${telefono}</a>` : telefono}
+                                            </span>
                                         </div>
-                                        <div class="contact-item">
-                                            ${email !== 'No disponible' ? `
-                                                <i class="fas fa-envelope"></i>
-                                                <a href="mailto:${email}">${email}</a>
-                                            ` : `
-                                                <i class="fas fa-envelope"></i>
-                                                <span>No disponible</span>
-                                            `}
+                                        <div class="info-item">
+                                            <span class="info-label">Email:</span>
+                                            <span class="info-value">
+                                                ${email !== 'No disponible' ? `<a href="mailto:${email}">${email}</a>` : email}
+                                            </span>
                                         </div>
-                                        <div class="contact-item">
-                                            <i class="fas fa-clock"></i>
-                                            <span>${horario}</span>
+                                        <div class="info-item">
+                                            <span class="info-label">Horario:</span>
+                                            <span class="info-value">${horario}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -2338,69 +1810,15 @@
                                         <i class="fas fa-concierge-bell"></i>
                                         Servicios Disponibles
                                     </h3>
-                                    <div class="services-grid">
+                                    <div class="info-grid">
                                         ${serviciosArray.length > 0 ? serviciosArray.map(servicio => `
-                                            <div class="service-item">
-                                                <i class="fas fa-check"></i>
+                                            <div class="info-item">
+                                                <i class="fas fa-check" style="color: #8BC34A;"></i>
                                                 <span>${formatServiceName(servicio)}</span>
                                             </div>
                                         `).join('') : '<p>No hay servicios especificados</p>'}
                                     </div>
                                 </div>
-                                
-                                <div class="modal-section">
-                                    <h3 class="section-title">
-                                        <i class="fas fa-credit-card"></i>
-                                        Métodos de Pago
-                                    </h3>
-                                    <div class="payment-grid">
-                                        ${formatPaymentMethods(metodosPago)}
-                                    </div>
-                                </div>
-                                
-                                ${cabana.esEcologico ? `
-                                    <div class="modal-section eco-section">
-                                        <h3 class="section-title eco-title">
-                                            <i class="fas fa-leaf"></i>
-                                            Compromiso Ecológico
-                                        </h3>
-                                        <p class="eco-intro">
-                                            Esta cabaña está comprometida con prácticas sostenibles:
-                                        </p>
-                                        <div class="eco-practices">
-                                            ${practicasEcologicas.map(practica => `
-                                                <div class="eco-practice">
-                                                    <i class="fas fa-leaf eco-check"></i>
-                                                    <span>${practica}</span>
-                                                </div>
-                                            `).join('')}
-                                        </div>
-                                    </div>
-                                ` : ''}
-                                
-                                <div class="modal-section price-section">
-                                    <h3 class="section-title price-title">
-                                        <i class="fas fa-info-circle"></i>
-                                        Información de Precios
-                                    </h3>
-                                    <div class="price-info">
-                                        <div class="price-warning">
-                                            <i class="fas fa-exclamation-triangle"></i>
-                                            <span>Los precios pueden variar según:</span>
-                                        </div>
-                                        <ul class="price-factors">
-                                            <li>Número de personas que se hospedarán</li>
-                                            <li>Tipo de habitación/cabaña</li>
-                                            <li>Temporada y fechas</li>
-                                            <li>Servicios adicionales</li>
-                                        </ul>
-                                        <div class="price-cta">
-                                            <i class="fas fa-phone"></i>
-                                            <span>Contacta para cotización personalizada</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
                             </div>
                         </div>
                     </div>
@@ -2413,7 +1831,6 @@
                 document.getElementById('cabanaModalOverlay').classList.add('show');
             }, 10);
 
-            // ✨ NUEVO: Inicializar el slider después de insertar el HTML
             setTimeout(() => {
                 initializeImageSlider(cabana.imagenes);
             }, 100);
@@ -2469,131 +1886,146 @@
             `;
         }
 
-        // ✅ FUNCIÓN DE DEBUG AGREGADA: Para diagnosticar problemas de imágenes
-        function debugCabanaImages(cabana) {
-            console.log('🔍 === DEBUG DETALLADO DE IMÁGENES DE CABAÑA ===');
-            console.log('Cabaña:', cabana.nombre);
-            console.log('Array de imágenes:', cabana.imagenes);
-            console.log('Cantidad de imágenes:', cabana.imagenes?.length || 0);
+        // JavaScript para el menú móvil
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Iniciando cabanas.html con menú corregido...');
             
-            if (cabana.imagenes && cabana.imagenes.length > 0) {
-                cabana.imagenes.forEach((img, index) => {
-                    const finalUrl = getImageUrl(img);
-                    console.log(`--- Imagen ${index + 1} ---`);
-                    console.log('  Original:', img);
-                    console.log('  URL final:', finalUrl);
-                    
-                    // Probar si la imagen es accesible
-                    const testImg = new Image();
-                    testImg.onload = () => console.log(`✅ Imagen ${index + 1} carga correctamente`);
-                    testImg.onerror = () => console.log(`❌ Imagen ${index + 1} no se puede cargar`);
-                    testImg.src = finalUrl;
+            addImageErrorHandling();
+            loadCabanas();
+            setupEventListeners();
+            
+            // Configuración del menú móvil
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const navMenu = document.getElementById('navMenu');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            const hospedajeDropdown = document.getElementById('hospedajeDropdown');
+
+            // Toggle del menú móvil
+            mobileMenuToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                mobileOverlay.classList.toggle('active');
+                
+                // Cambiar icono
+                const icon = mobileMenuToggle.querySelector('i');
+                if (navMenu.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+
+            // Cerrar menú al hacer click en overlay
+            mobileOverlay.addEventListener('click', closeMenu);
+
+            // Función para cerrar el menú
+            function closeMenu() {
+                navMenu.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+                hospedajeDropdown.classList.remove('active');
+                
+                const icon = mobileMenuToggle.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+
+            // Toggle del dropdown en hospedaje en móvil
+            hospedajeDropdown.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    if (e.target.closest('.nav-link') && !e.target.closest('.dropdown-item')) {
+                        e.preventDefault();
+                        hospedajeDropdown.classList.toggle('active');
+                    }
+                }
+            });
+
+            // Manejar clicks en elementos del dropdown
+            const dropdownItems = document.querySelectorAll('.dropdown-item');
+            dropdownItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 768) {
+                        setTimeout(() => {
+                            closeMenu();
+                        }, 100);
+                    }
                 });
-            } else {
-                console.log('⚠️ No hay imágenes para esta cabaña');
+            });
+
+            // Cerrar menú al hacer click en enlaces principales
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 768 && 
+                        !e.target.closest('#hospedajeDropdown') && 
+                        !e.target.closest('.dropdown-item')) {
+                        closeMenu();
+                    }
+                });
+            });
+
+            // Manejar redimensionamiento de ventana
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    closeMenu();
+                }
+            });
+        });
+
+        // Control de teclado para el slider y modal
+        document.addEventListener('keydown', function(e) {
+            const overlay = document.getElementById('imageModalOverlay');
+            
+            // Si el modal de imagen está abierto
+            if (overlay && overlay.classList.contains('show')) {
+                if (e.key === 'Escape') {
+                    closeImageModal();
+                }
+                return;
             }
             
-            console.log('🔍 === FIN DEBUG ===');
-        }
-
-        // ✅ HACER FUNCIONES GLOBALES para debugging en consola
-        window.debugCabanaImages = debugCabanaImages;
-        window.getImageUrl = getImageUrl;
-        window.debugAllCabanas = function() {
-            console.log('🔍 Debugging todas las imágenes de cabañas');
-            allCabanas.forEach(cabana => debugCabanaImages(cabana));
-        };
-// Forzar rebuild - versión corregida
-        // Cerrar modal con Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
+            // Control del slider
+            if (e.key === 'ArrowLeft') {
+                changeImage(-1);
+            } else if (e.key === 'ArrowRight') {
+                changeImage(1);
+            } else if (e.key === 'Escape') {
                 closeCabanaModal();
             }
         });
 
-        console.log('✅ Cabañas cargadas con slider de imágenes integrado');
-// ✅ AGREGAR ESTE JAVASCRIPT PARA FUNCIONALIDAD MÓVIL
-document.addEventListener('DOMContentLoaded', function() {
-    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-    const navMenu = document.getElementById('navMenu');
-    const mobileOverlay = document.getElementById('mobileOverlay');
-    const hospedajeDropdown = document.getElementById('hospedajeDropdown');
+        // Touch/swipe support para móviles
+        let touchStartX = 0;
+        let touchEndX = 0;
 
-    // Toggle del menú móvil
-    mobileMenuToggle.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-        mobileOverlay.classList.toggle('active');
-        
-        // Cambiar icono
-        const icon = mobileMenuToggle.querySelector('i');
-        if (navMenu.classList.contains('active')) {
-            icon.classList.remove('fa-bars');
-            icon.classList.add('fa-times');
-        } else {
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-        }
-    });
-
-    // Cerrar menú al hacer click en overlay
-    mobileOverlay.addEventListener('click', closeMenu);
-
-    // Función para cerrar el menú
-    function closeMenu() {
-        navMenu.classList.remove('active');
-        mobileOverlay.classList.remove('active');
-        hospedajeDropdown.classList.remove('active');
-        
-        const icon = mobileMenuToggle.querySelector('i');
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
-    }
-
-    // Toggle del dropdown en hospedaje en móvil
-    hospedajeDropdown.addEventListener('click', (e) => {
-        if (window.innerWidth <= 768) {
-            if (e.target.closest('.nav-link') && !e.target.closest('.dropdown-item')) {
-                e.preventDefault();
-                hospedajeDropdown.classList.toggle('active');
-            }
-        }
-    });
-
-    // Manejar clicks en elementos del dropdown
-    const dropdownItems = document.querySelectorAll('.dropdown-item');
-    dropdownItems.forEach(item => {
-        item.addEventListener('click', (e) => {
-            if (window.innerWidth <= 768) {
-                setTimeout(() => {
-                    closeMenu();
-                }, 100);
+        document.addEventListener('touchstart', function(e) {
+            const slider = document.getElementById('imageSlider');
+            if (slider && e.target.closest('#imageSlider')) {
+                touchStartX = e.changedTouches[0].screenX;
             }
         });
-    });
 
-    // Cerrar menú al hacer click en enlaces principales
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-            if (window.innerWidth <= 768 && 
-                !e.target.closest('#hospedajeDropdown') && 
-                !e.target.closest('.dropdown-item')) {
-                closeMenu();
+        document.addEventListener('touchend', function(e) {
+            const slider = document.getElementById('imageSlider');
+            if (slider && e.target.closest('#imageSlider')) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
             }
         });
-    });
 
-    // Manejar redimensionamiento de ventana
-    window.addEventListener('resize', () => {
-        if (window.innerWidth > 768) {
-            closeMenu();
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    changeImage(1);
+                } else {
+                    changeImage(-1);
+                }
+            }
         }
-    });
-});
 
-            // PRUEBA
+        console.log('✅ Cabañas cargadas con menú y slider funcionando correctamente');
     </script>
 </body>
 </html>
-
-
-

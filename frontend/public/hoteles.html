@@ -50,6 +50,23 @@
             gap: 0.5rem;
         }
 
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #333;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-toggle:hover {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4CAF50;
+        }
+
         .nav-menu {
             display: flex;
             list-style: none;
@@ -90,12 +107,13 @@
             background: white;
             min-width: 200px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-            border-radius: 10px;
-            padding: 1rem 0;
+            border-radius: 15px;
             opacity: 0;
             visibility: hidden;
             transform: translateY(-10px);
             transition: all 0.3s ease;
+            z-index: 1001;
+            padding: 1rem 0;
         }
 
         .dropdown:hover .dropdown-menu {
@@ -105,18 +123,18 @@
         }
 
         .dropdown-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1.5rem;
+            display: block;
+            padding: 0.7rem 1.5rem;
             color: #333;
             text-decoration: none;
             transition: all 0.3s ease;
+            border-left: 3px solid transparent;
         }
 
         .dropdown-item:hover, .dropdown-item.active {
             background: linear-gradient(135deg, #4CAF50, #45a049);
             color: white;
+            border-left: 3px solid #fff;
         }
 
         .auth-buttons {
@@ -125,23 +143,43 @@
         }
 
         .btn {
-            padding: 0.5rem 1.5rem;
+            padding: 0.7rem 1.5rem;
+            border: none;
             border-radius: 25px;
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;
-            border: none;
             cursor: pointer;
         }
 
         .btn-login {
-            background: linear-gradient(135deg, #2196F3, #1976D2);
-            color: white;
+            background: transparent;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
         }
 
         .btn-login:hover {
+            background: #4CAF50;
+            color: white;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
 
         /* Page Header */
@@ -429,6 +467,39 @@
             gap: 0.25rem;
         }
 
+        .eco-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+            z-index: 5;
+            animation: pulse-eco 2s infinite;
+        }
+
+        .eco-badge i {
+            font-size: 14px;
+        }
+
+        @keyframes pulse-eco {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+            }
+        }
+
         .hotel-content {
             padding: 1.5rem;
         }
@@ -500,21 +571,26 @@
             gap: 0.3rem;
         }
 
-        .view-details {
-            background: linear-gradient(135deg, #2196F3, #1976D2);
+        .view-details-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
-            padding: 0.6rem 1.2rem;
             border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 0.9rem;
+            padding: 10px 18px;
+            border-radius: 20px;
             font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
             transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
         }
 
-        .view-details:hover {
+        .view-details-btn:hover {
+            background: linear-gradient(135deg, #2980b9, #1f4e72);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
         }
 
         /* Empty State */
@@ -543,74 +619,7 @@
             font-size: 1.1rem;
         }
 
-        /* Mobile Navigation */
-        .mobile-menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: #333;
-            cursor: pointer;
-        }
-
-        /* 🌿 TARJETAS - Para mostrar la etiqueta verde */
-        .eco-badge {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
-            z-index: 5;
-            animation: pulse-eco 2s infinite;
-        }
-
-        .eco-badge i {
-            font-size: 14px;
-        }
-
-        @keyframes pulse-eco {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
-            }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
-            }
-        }
-
-        /* 🎯 MODAL DE DETALLES DEL HOTEL */
-        .view-details-btn {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.3s ease;
-            box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
-        }
-
-        .view-details-btn:hover {
-            background: linear-gradient(135deg, #2980b9, #1f4e72);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
-        }
-
-        /* Overlay del modal */
+        /* Modal Styles */
         .hotel-modal-overlay {
             position: fixed;
             top: 0;
@@ -634,7 +643,6 @@
             visibility: visible;
         }
 
-        /* Modal principal */
         .hotel-modal {
             background: white;
             border-radius: 20px;
@@ -652,7 +660,6 @@
             transform: scale(1) translateY(0);
         }
 
-        /* Header del modal */
         .modal-header {
             background: linear-gradient(135deg, #3498db, #2980b9);
             color: white;
@@ -727,7 +734,6 @@
             transform: scale(1.1);
         }
 
-        /* Contenido del modal */
         .modal-content {
             padding: 30px;
         }
@@ -738,7 +744,6 @@
             gap: 25px;
         }
 
-        /* Secciones del modal */
         .modal-section {
             background: #f8f9fa;
             padding: 20px;
@@ -769,7 +774,6 @@
             font-size: 20px;
         }
 
-        /* Información general */
         .info-grid {
             display: grid;
             gap: 12px;
@@ -803,7 +807,6 @@
             font-weight: 500;
         }
 
-        /* Contacto */
         .contact-grid {
             display: grid;
             gap: 15px;
@@ -885,7 +888,6 @@
             font-size: 20px;
         }
 
-        /* Servicios */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -907,7 +909,6 @@
             font-size: 14px;
         }
 
-        /* Métodos de pago */
         .payment-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -950,7 +951,6 @@
             grid-column: 1 / -1;
         }
 
-        /* Sección ecológica */
         .eco-section {
             background: linear-gradient(135deg, #e8f8f5, #f0fdf4) !important;
             border: 2px solid #27ae60 !important;
@@ -992,7 +992,6 @@
             font-size: 14px;
         }
 
-        /* Sección de precios */
         .price-section {
             background: linear-gradient(135deg, #fff3e0, #fffbf0) !important;
             border: 2px solid #ff9800 !important;
@@ -1044,7 +1043,7 @@
             margin-top: 15px;
         }
 
-        /* ✨ SLIDER DE IMÁGENES PARA MODAL */
+        /* Galería de imágenes */
         .hotel-gallery-section {
             background: #f8f9fa;
             padding: 20px;
@@ -1283,26 +1282,75 @@
             transform: scale(1.1);
         }
 
-        /* Responsive */
+        /* Responsive para móviles */
         @media (max-width: 768px) {
             .mobile-menu-toggle {
                 display: block;
             }
 
             .nav-menu {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: white;
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 320px;
+                height: 100vh;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(20px);
                 flex-direction: column;
-                padding: 1rem;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                align-items: flex-start;
+                padding: 2rem 1rem;
+                transition: all 0.3s ease;
+                z-index: 1000;
+                box-shadow: -5px 0 20px rgba(0,0,0,0.1);
             }
 
             .nav-menu.active {
-                display: flex;
+                right: 0;
+            }
+
+            .nav-item {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .nav-link {
+                width: 100%;
+                padding: 1rem;
+                border-radius: 10px;
+                justify-content: flex-start;
+            }
+
+            .dropdown-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                box-shadow: none;
+                background: rgba(76, 175, 80, 0.1);
+                margin-top: 0.5rem;
+                display: none;
+            }
+
+            .dropdown.active .dropdown-menu {
+                display: block;
+            }
+
+            .dropdown-item {
+                padding: 0.75rem 1rem;
+                margin: 0.25rem 0;
+                border-radius: 8px;
+            }
+
+            .auth-buttons {
+                width: 100%;
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid rgba(0,0,0,0.1);
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
             }
 
             .page-header h1 {
@@ -1412,61 +1460,63 @@
     <nav class="navbar">
         <div class="nav-container">
             <a href="index.html" class="logo">
-    
+            
                 Dirección de Turismo
             </a>
-            
+
+            <!-- Botón de menú móvil -->
             <button class="mobile-menu-toggle" id="mobileMenuToggle">
                 <i class="fas fa-bars"></i>
             </button>
             
+            <!-- Menú de navegación -->
             <ul class="nav-menu" id="navMenu">
                 <li class="nav-item">
                     <a href="index.html" class="nav-link">
-                    
+                     
                         Inicio
                     </a>
                 </li>
                 
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown" id="hospedajeDropdown">
                     <a href="#" class="nav-link active">
-                
+                 
                         Hospedaje
                         <i class="fas fa-chevron-down"></i>
                     </a>
                     <div class="dropdown-menu">
                         <a href="hoteles.html" class="dropdown-item active">
-                    
+                      
                             Hoteles
                         </a>
                         <a href="cabanas.html" class="dropdown-item">
-                      
+                         
                             Cabañas
                         </a>
                         <a href="airbnb.html" class="dropdown-item">
-                 
+                      
                             Airbnb
                         </a>
                     </div>
                 </li>
                 
-   <li class="nav-item">
+                <li class="nav-item">
                     <a href="https://restaurante-web-production-721f.up.railway.app/" class="nav-link">
-                      
+                   
                         Alimentos
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a href="tourOperadora.html" class="nav-link">
-                  
+        
                         Tours
                     </a>
                 </li>
                 
                 <li class="nav-item">
                     <a href="guias.html" class="nav-link">
-                      
+                   
                         Guías
                     </a>
                 </li>
@@ -1477,6 +1527,9 @@
             </div>
         </div>
     </nav>
+
+    <!-- Overlay para móvil -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
 
     <!-- Page Header -->
     <section class="page-header">
@@ -1583,12 +1636,13 @@
         // Variables globales
         let allHotels = [];
         let filteredHotels = [];
-    // ✅ CORREGIDO: URL dinámica igual que manage-images-cabana.html
-      const baseURL = window.location.hostname === 'localhost' 
-    ? 'http://localhost:5000/api' 
-    : '/api';
+        
+        // URL dinámica
+        const baseURL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5000/api' 
+            : '/api';
 
-        // ✨ VARIABLES GLOBALES DEL SLIDER
+        // Variables globales del slider
         let currentHotelImages = [];
         let currentImageIndex = 0;
 
@@ -1600,10 +1654,8 @@
         const resultsInfo = document.getElementById('resultsInfo');
         const searchForm = document.getElementById('searchForm');
         const sortBy = document.getElementById('sortBy');
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const navMenu = document.getElementById('navMenu');
 
-        // ✅ FUNCIÓN HELPER para URLs de imágenes
+        // Función para obtener URL de imagen
         function getImageUrl(imagePath) {
             if (!imagePath) {
                 return 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
@@ -1616,7 +1668,7 @@
             return `${baseURL.replace('/api', '')}${imagePath}`;
         }
 
-        // ✅ FUNCIÓN para agregar manejo global de errores de imágenes
+        // Manejo de errores de imágenes
         function addImageErrorHandling() {
             document.addEventListener('error', function(e) {
                 if (e.target.tagName === 'IMG') {
@@ -1626,27 +1678,27 @@
             }, true);
         }
 
-        //  FUNCIÓN de debug para verificar imágenes
+        // Debug de imágenes
         function debugHotelImages(hotel) {
-            console.log(' Debugging imágenes del hotel:', hotel.nombre);
-            console.log(' Array de imágenes:', hotel.imagenes);
+            console.log('🔍 Debugging imágenes del hotel:', hotel.nombre);
+            console.log('📸 Array de imágenes:', hotel.imagenes);
             
             if (hotel.imagenes && hotel.imagenes.length > 0) {
                 hotel.imagenes.forEach((img, index) => {
                     const finalUrl = getImageUrl(img);
                     console.log(`Imagen ${index}: ${img} → ${finalUrl}`);
                     
-                    // Probar si la imagen es accesible
                     const testImg = new Image();
-                    testImg.onload = () => console.log(` Imagen ${index} OK`);
-                    testImg.onerror = () => console.error(`Imagen ${index} ERROR`);
+                    testImg.onload = () => console.log(`✅ Imagen ${index} OK`);
+                    testImg.onerror = () => console.error(`❌ Imagen ${index} ERROR`);
                     testImg.src = finalUrl;
                 });
             } else {
-                console.log(' No hay imágenes para este hotel');
+                console.log('⚠️ No hay imágenes para este hotel');
             }
         }
-        // FUNCIÓN PARA LA GALERÍA
+
+        // Generar HTML de galería de imágenes
         function generateImageGalleryHTML(images) {
             if (!images || images.length === 0) {
                 return `
@@ -1663,6 +1715,7 @@
                     </div>
                 `;
             }
+
             return `
                 <div class="hotel-gallery-section">
                     <h3 class="gallery-title">
@@ -1670,11 +1723,9 @@
                         Galería de Imágenes (${images.length} foto${images.length !== 1 ? 's' : ''})
                     </h3>     
                     <div class="image-slider-container" id="imageSlider">
-                        <!-- Imagen principal -->
                         <div class="main-image-container">
                             <img id="mainImage" src="${getImageUrl(images[0])}" alt="Hotel imagen" class="main-image" onclick="openImageModal('${getImageUrl(images[0])}')">
                             
-                            <!-- Botones de navegación -->
                             <button class="slider-nav-btn slider-prev" id="prevBtn" onclick="changeImage(-1)" ${images.length <= 1 ? 'style="display: none;"' : ''}>
                                 <i class="fas fa-chevron-left"></i>
                             </button>
@@ -1682,11 +1733,9 @@
                                 <i class="fas fa-chevron-right"></i>
                             </button>
                             
-                            <!-- Contador -->
                             <div class="image-counter" id="imageCounter">1 / ${images.length}</div>
                         </div>
                         
-                        <!-- Miniaturas -->
                         <div class="thumbnails-container" id="thumbnailsContainer">
                             ${images.map((image, index) => `
                                 <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="goToImage(${index})">
@@ -1699,7 +1748,7 @@
             `;
         }
 
-        // INICIALIZAR EL SLIDER CON IMÁGENES
+        // Inicializar slider de imágenes
         function initializeImageSlider(images) {
             currentHotelImages = images || [];
             currentImageIndex = 0;
@@ -1712,7 +1761,7 @@
             updateNavigationButtons();
         }
 
-        // ACTUALIZAR IMAGEN PRINCIPAL
+        // Actualizar imagen principal
         function updateMainImage() {
             const mainImage = document.getElementById('mainImage');
             const counter = document.getElementById('imageCounter');
@@ -1723,24 +1772,21 @@
                 mainImage.alt = `Imagen ${currentImageIndex + 1} del hotel`;
                 mainImage.onclick = () => openImageModal(currentImageUrl);
                 
-                // Actualizar contador
                 if (counter) {
                     counter.textContent = `${currentImageIndex + 1} / ${currentHotelImages.length}`;
                 }
                 
-                // Actualizar miniaturas activas
                 updateActiveThumbnail();
             }
         }
 
-        //  ACTUALIZAR MINIATURA ACTIVA
+        // Actualizar miniatura activa
         function updateActiveThumbnail() {
             const thumbnails = document.querySelectorAll('.thumbnail');
             thumbnails.forEach((thumb, index) => {
                 thumb.classList.toggle('active', index === currentImageIndex);
             });
             
-            // Scroll automático de miniaturas
             const activeThumb = document.querySelector('.thumbnail.active');
             if (activeThumb) {
                 activeThumb.scrollIntoView({
@@ -1751,13 +1797,12 @@
             }
         }
 
-        // ⬅️➡️ CAMBIAR IMAGEN
+        // Cambiar imagen
         function changeImage(direction) {
             if (currentHotelImages.length === 0) return;
             
             currentImageIndex += direction;
             
-            // Loop circular
             if (currentImageIndex >= currentHotelImages.length) {
                 currentImageIndex = 0;
             } else if (currentImageIndex < 0) {
@@ -1768,7 +1813,7 @@
             updateNavigationButtons();
         }
 
-        // 🎯 IR A IMAGEN ESPECÍFICA
+        // Ir a imagen específica
         function goToImage(index) {
             if (index >= 0 && index < currentHotelImages.length) {
                 currentImageIndex = index;
@@ -1777,7 +1822,7 @@
             }
         }
 
-        // 🔘 ACTUALIZAR BOTONES DE NAVEGACIÓN
+        // Actualizar botones de navegación
         function updateNavigationButtons() {
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
@@ -1791,7 +1836,7 @@
             }
         }
 
-        // 🔍 ABRIR MODAL DE IMAGEN AMPLIADA
+        // Abrir modal de imagen ampliada
         function openImageModal(imageSrc) {
             const overlay = document.getElementById('imageModalOverlay');
             const enlargedImage = document.getElementById('enlargedImage');
@@ -1799,96 +1844,30 @@
             if (overlay && enlargedImage) {
                 enlargedImage.src = imageSrc;
                 overlay.classList.add('show');
-                document.body.style.overflow = 'hidden'; // Prevenir scroll
+                document.body.style.overflow = 'hidden';
             }
         }
 
-        // ❌ CERRAR MODAL DE IMAGEN AMPLIADA
+        // Cerrar modal de imagen ampliada
         function closeImageModal() {
             const overlay = document.getElementById('imageModalOverlay');
             if (overlay) {
                 overlay.classList.remove('show');
-                document.body.style.overflow = 'auto'; // Restaurar scroll
+                document.body.style.overflow = 'auto';
             }
         }
-
-        // ⌨️ CONTROL DE TECLADO PARA EL SLIDER
-        document.addEventListener('keydown', function(e) {
-            const overlay = document.getElementById('imageModalOverlay');
-            
-            // Si el modal de imagen está abierto
-            if (overlay && overlay.classList.contains('show')) {
-                if (e.key === 'Escape') {
-                    closeImageModal();
-                }
-                return;
-            }
-            
-            // Control del slider
-            if (e.key === 'ArrowLeft') {
-                changeImage(-1);
-            } else if (e.key === 'ArrowRight') {
-                changeImage(1);
-            }
-        });
-
-        // TOUCH/SWIPE SUPPORT PARA MÓVILES
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        document.addEventListener('touchstart', function(e) {
-            const slider = document.getElementById('imageSlider');
-            if (slider && e.target.closest('#imageSlider')) {
-                touchStartX = e.changedTouches[0].screenX;
-            }
-        });
-        document.addEventListener('touchend', function(e) {
-            const slider = document.getElementById('imageSlider');
-            if (slider && e.target.closest('#imageSlider')) {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            }
-        });
-        function handleSwipe() {
-            const swipeThreshold = 50;
-            const diff = touchStartX - touchEndX;
-            
-            if (Math.abs(diff) > swipeThreshold) {
-                if (diff > 0) {
-                    // Swipe izquierda - siguiente imagen
-                    changeImage(1);
-                } else {
-                    // Swipe derecha - imagen anterior
-                    changeImage(-1);
-                }
-            }
-        }
-
-        // Mobile menu toggle
-        mobileMenuToggle.addEventListener('click', function() {
-            navMenu.classList.toggle('active');
-        });
-
-        // Cargar hoteles al iniciar la página
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Página cargada, iniciando carga de hoteles...');
-            addImageErrorHandling(); // ✅ NUEVO: Agregar manejo de errores
-            loadHotels();
-            setupEventListeners();
-        });
 
         // Configurar event listeners
         function setupEventListeners() {
             searchForm.addEventListener('submit', handleSearch);
             sortBy.addEventListener('change', handleSort);
             
-            // Búsqueda en tiempo real
             document.getElementById('searchQuery').addEventListener('input', debounce(handleSearch, 300));
             document.getElementById('priceRange').addEventListener('change', handleSearch);
             document.getElementById('serviceFilter').addEventListener('change', handleSearch);
         }
 
-        // Función debounce para optimizar búsquedas
+        // Función debounce
         function debounce(func, wait) {
             let timeout;
             return function executedFunction(...args) {
@@ -1901,7 +1880,7 @@
             };
         }
 
-        // Cargar hoteles desde la API
+        // Cargar hoteles
         async function loadHotels() {
             try {
                 console.log('Iniciando carga de hoteles...');
@@ -1954,16 +1933,13 @@
             console.log('Aplicando filtros:', { searchQuery, priceRange, serviceFilter });
             
             filteredHotels = allHotels.filter(hotel => {
-                // Filtro por texto
                 const matchesSearch = !searchQuery || 
                     hotel.nombre?.toLowerCase().includes(searchQuery) ||
                     hotel.descripcion?.toLowerCase().includes(searchQuery) ||
                     hotel.ubicacion?.ciudad?.toLowerCase().includes(searchQuery);
                 
-                // Filtro por precio
                 const matchesPrice = !priceRange || (hotel.precio && hotel.precio <= parseInt(priceRange));
                 
-                // Filtro por servicios
                 const matchesService = !serviceFilter || 
                     (hotel.servicios && hotel.servicios.includes(serviceFilter));
                 
@@ -2023,12 +1999,11 @@
             }
         }
 
-        // ✅ FUNCIÓN CORREGIDA: Crear tarjeta de hotel con URLs de imágenes correctas
+        // Crear tarjeta de hotel
         function createHotelCard(hotel) {
             const rating = hotel.calificacion?.promedio || 0;
             const reviewCount = hotel.calificacion?.totalReviews || 0;
             
-            // ✅ CORREGIDO: Usar función helper para construir URL de imagen correctamente
             const imageUrl = getImageUrl(hotel.imagenes?.[0]);
             
             const price = hotel.precio || 0;
@@ -2036,7 +2011,6 @@
             const capacidad = hotel.capacidad?.personasMax || 0;
             const habitaciones = hotel.capacidad?.habitaciones || 0;
             
-            // Servicios limitados para mostrar en la vista compacta
             const servicios = hotel.servicios?.slice(0, 3) || [];
             
             return `
@@ -2047,7 +2021,6 @@
                              onerror="this.src='https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'"
                              loading="lazy">
                         
-                        <!-- 🌿 Etiqueta ecológica -->
                         ${hotel.esEcologico ? `
                             <div class="eco-badge">
                                 <i class="fas fa-leaf"></i>
@@ -2086,7 +2059,6 @@
                                 <span><i class="fas fa-users"></i> ${capacidad} huéspedes</span>
                             </div>
                             
-                            <!-- Botón para abrir modal -->
                             <button class="view-details-btn" onclick="event.stopPropagation(); openHotelModal('${hotel._id}')">
                                 <i class="fas fa-info-circle"></i>
                                 Ver detalles
@@ -2100,7 +2072,6 @@
         // Ver detalles del hotel
         function viewHotelDetails(hotelId) {
             console.log('Ver detalles del hotel:', hotelId);
-            // ✅ NUEVO: Debug de imágenes cuando se hace clic
             const hotel = allHotels.find(h => h._id === hotelId);
             if (hotel) {
                 debugHotelImages(hotel);
@@ -2108,21 +2079,19 @@
             openHotelModal(hotelId);
         }
 
-        // Función para abrir el modal con detalles del hotel con SLIDER
+        // Abrir modal de hotel
         function openHotelModal(hotelId) {
             const hotel = allHotels.find(h => h._id === hotelId);
-            if (!hotel) return;    
-            // Información del hotel
+            if (!hotel) return;
+            
             const telefono = hotel.contacto?.telefono || 'No disponible';
             const email = hotel.contacto?.email || 'No disponible';
             const direccion = hotel.ubicacion?.direccion || 'Dirección no especificada';
             const todosServicios = hotel.servicios || [];
             const horario = hotel.contacto?.horario || 'No especificado';
             
-            // Obtener métodos de pago del hotel
             let metodosPago = hotel.metodosPago || [];
             
-            // Si no hay métodos en el backend, intentar cargar desde localStorage
             if (!metodosPago || metodosPago.length === 0) {
                 const savedMetodos = localStorage.getItem(`hotel_${hotelId}_metodosPago`);
                 if (savedMetodos) {
@@ -2133,12 +2102,11 @@
                     }
                 }
             }
-            // Obtener prácticas ecológicas del hotel
+
             let practicasEcologicasDetalladas = [];
             if (hotel.esEcologico) {
                 let practicasGuardadas = hotel.practicasEcologicas || [];
                 
-                // Si no hay prácticas en el backend, intentar cargar desde localStorage
                 if (!practicasGuardadas || practicasGuardadas.length === 0) {
                     const savedPracticas = localStorage.getItem(`hotel_${hotelId}_practicasEcologicas`);
                     if (savedPracticas) {
@@ -2150,7 +2118,6 @@
                     }
                 }
                 
-                // Mapear códigos a descripciones
                 const mapaPracticas = {
                     'energia': 'Uso de energías renovables',
                     'reciclaje': 'Reciclaje y separación de residuos',
@@ -2172,10 +2139,8 @@
                     ];
             }
             
-            //  galería de imágenes
             const galleryHTML = generateImageGalleryHTML(hotel.imagenes);
             
-            // Función: Generar HTML de métodos de pago dinámicamente
             function generarMetodosPagoHTML() {
                 if (!metodosPago || metodosPago.length === 0) {
                     return `
@@ -2209,7 +2174,6 @@
             const modalHTML = `
                 <div class="hotel-modal-overlay" id="hotelModalOverlay" onclick="closeHotelModal()">
                     <div class="hotel-modal" onclick="event.stopPropagation()">
-                        <!-- Header del modal -->
                         <div class="modal-header">
                             <div class="modal-hotel-info">
                                 <h2 class="modal-hotel-name">
@@ -2226,15 +2190,10 @@
                             </button>
                         </div>
                         
-                        <!-- Contenido del modal -->
                         <div class="modal-content">
-                            <!-- ✨ NUEVA SECCIÓN: Galería de imágenes -->
                             ${galleryHTML}
                             
-                            <!-- El resto del modal grid existente -->
                             <div class="modal-grid">
-                                
-                                <!-- Información básica -->
                                 <div class="modal-section">
                                     <h3 class="section-title">
                                         <i class="fas fa-info-circle"></i>
@@ -2260,7 +2219,6 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Contacto -->
                                 <div class="modal-section">
                                     <h3 class="section-title">
                                         <i class="fas fa-phone"></i>
@@ -2307,7 +2265,6 @@
                                             `}
                                         </div>
                                         
-                                        <!-- Horario de atención -->
                                         <div class="contact-item full-width">
                                             <div class="schedule-info">
                                                 <i class="fas fa-clock"></i>
@@ -2320,7 +2277,6 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Servicios -->
                                 ${todosServicios.length > 0 ? `
                                     <div class="modal-section">
                                         <h3 class="section-title">
@@ -2338,7 +2294,6 @@
                                     </div>
                                 ` : ''}
                                 
-                                <!-- Métodos de pago dinámicos -->
                                 <div class="modal-section">
                                     <h3 class="section-title">
                                         <i class="fas fa-credit-card"></i>
@@ -2350,7 +2305,6 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Prácticas ecológicas -->
                                 ${hotel.esEcologico ? `
                                     <div class="modal-section eco-section">
                                         <h3 class="section-title eco-title">
@@ -2371,7 +2325,6 @@
                                     </div>
                                 ` : ''}
                                 
-                                <!-- Nota de precios -->
                                 <div class="modal-section price-section">
                                     <h3 class="section-title price-title">
                                         <i class="fas fa-info-circle"></i>
@@ -2394,28 +2347,24 @@
                                         </div>
                                     </div>
                                 </div>
-                                
                             </div>
                         </div>
                     </div>
                 </div>
             `;
 
-           // Insertar modal en el DOM
             document.body.insertAdjacentHTML('beforeend', modalHTML);
             
-            // Animación de entrada
             setTimeout(() => {
                 document.getElementById('hotelModalOverlay').classList.add('show');
             }, 10);
 
-            // ✨ NUEVO: Inicializar el slider después de insertar el HTML
             setTimeout(() => {
                 initializeImageSlider(hotel.imagenes);
             }, 100);
         }
 
-        // Función para cerrar el modal
+        // Cerrar modal
         function closeHotelModal() {
             const overlay = document.getElementById('hotelModalOverlay');
             if (overlay) {
@@ -2426,7 +2375,7 @@
             }
         }
 
-        // Función para formatear nombres de servicios
+        // Formatear servicios
         function formatService(service) {
             const services = {
                 'wifi': 'WiFi Gratis',
@@ -2442,13 +2391,6 @@
             };
             return services[service] || service.charAt(0).toUpperCase() + service.slice(1);
         }
-
-        // Cerrar modal con tecla Escape
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeHotelModal();
-            }
-        });
 
         // Actualizar información de resultados
         function updateResultsInfo() {
@@ -2498,13 +2440,152 @@
             emptyState.style.display = 'none';
         }
 
-        // ✅ FUNCIONES GLOBALES para debug (usar en consola del navegador)
+        // JavaScript para el menú móvil
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Iniciando hoteles.html con menú corregido...');
+            
+            addImageErrorHandling();
+            loadHotels();
+            setupEventListeners();
+            
+            // Configuración del menú móvil
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const navMenu = document.getElementById('navMenu');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            const hospedajeDropdown = document.getElementById('hospedajeDropdown');
+
+            // Toggle del menú móvil
+            mobileMenuToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+                mobileOverlay.classList.toggle('active');
+                
+                // Cambiar icono
+                const icon = mobileMenuToggle.querySelector('i');
+                if (navMenu.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+
+            // Cerrar menú al hacer click en overlay
+            mobileOverlay.addEventListener('click', closeMenu);
+
+            // Función para cerrar el menú
+            function closeMenu() {
+                navMenu.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+                hospedajeDropdown.classList.remove('active');
+                
+                const icon = mobileMenuToggle.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+
+            // Toggle del dropdown en hospedaje en móvil
+            hospedajeDropdown.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    if (e.target.closest('.nav-link') && !e.target.closest('.dropdown-item')) {
+                        e.preventDefault();
+                        hospedajeDropdown.classList.toggle('active');
+                    }
+                }
+            });
+
+            // Manejar clicks en elementos del dropdown
+            const dropdownItems = document.querySelectorAll('.dropdown-item');
+            dropdownItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 768) {
+                        setTimeout(() => {
+                            closeMenu();
+                        }, 100);
+                    }
+                });
+            });
+
+            // Cerrar menú al hacer click en enlaces principales
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 768 && 
+                        !e.target.closest('#hospedajeDropdown') && 
+                        !e.target.closest('.dropdown-item')) {
+                        closeMenu();
+                    }
+                });
+            });
+
+            // Manejar redimensionamiento de ventana
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    closeMenu();
+                }
+            });
+        });
+
+        // Control de teclado para el slider y modal
+        document.addEventListener('keydown', function(e) {
+            const overlay = document.getElementById('imageModalOverlay');
+            
+            if (overlay && overlay.classList.contains('show')) {
+                if (e.key === 'Escape') {
+                    closeImageModal();
+                }
+                return;
+            }
+            
+            if (e.key === 'ArrowLeft') {
+                changeImage(-1);
+            } else if (e.key === 'ArrowRight') {
+                changeImage(1);
+            } else if (e.key === 'Escape') {
+                closeHotelModal();
+            }
+        });
+
+        // Touch/swipe support para móviles
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            const slider = document.getElementById('imageSlider');
+            if (slider && e.target.closest('#imageSlider')) {
+                touchStartX = e.changedTouches[0].screenX;
+            }
+        });
+
+        document.addEventListener('touchend', function(e) {
+            const slider = document.getElementById('imageSlider');
+            if (slider && e.target.closest('#imageSlider')) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    changeImage(1);
+                } else {
+                    changeImage(-1);
+                }
+            }
+        }
+
+        // Funciones globales para debug
         window.debugHotelImages = debugHotelImages;
         window.getImageUrl = getImageUrl;
         window.debugAllHotels = function() {
             console.log('🔍 Debugging todas las imágenes de hoteles');
             allHotels.forEach(hotel => debugHotelImages(hotel));
         };
+
+        console.log('✅ Hoteles cargados con menú y slider funcionando correctamente');
     </script>
 </body>
 </html>
