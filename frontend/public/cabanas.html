@@ -994,61 +994,6 @@
             line-height: 1.4;
         }
 
-        /* Policies Grid */
-        .policies-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .policy-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            border: 1px solid #e9ecef;
-            transition: all 0.3s ease;
-        }
-
-        .policy-item:hover {
-            background: #e8f5e8;
-            border-color: #8BC34A;
-            transform: translateY(-2px);
-            box-shadow: 0 3px 10px rgba(139, 195, 74, 0.15);
-        }
-
-        .policy-icon {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, #8BC34A, #689F38);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-
-        .policy-details {
-            flex: 1;
-        }
-
-        .policy-label {
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 3px;
-            font-size: 13px;
-        }
-
-        .policy-value {
-            color: #5d6d7e;
-            font-size: 14px;
-            line-height: 1.3;
-        }
-
         /* Galería de imágenes */
         .cabana-gallery-section {
             background: #f8f9fa;
@@ -1441,29 +1386,6 @@
 
             .eco-practice-item {
                 padding: 10px 12px;
-            }
-
-            .policies-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
-            .policy-item {
-                padding: 12px;
-            }
-
-            .policy-icon {
-                width: 30px;
-                height: 30px;
-                font-size: 12px;
-            }
-
-            .policy-label {
-                font-size: 12px;
-            }
-
-            .policy-value {
-                font-size: 13px;
             }
 
             .availability-status {
@@ -2335,74 +2257,6 @@
                                     </div>
                                 </div>
                                 ` : ''}
-                                
-                                <div class="modal-section">
-                                    <h3 class="section-title">
-                                        <i class="fas fa-clipboard-list"></i>
-                                        Políticas y Normas
-                                    </h3>
-                                    <div class="policies-grid">
-                                        <div class="policy-item">
-                                            <div class="policy-icon">
-                                                <i class="fas fa-clock"></i>
-                                            </div>
-                                            <div class="policy-details">
-                                                <div class="policy-label">Check-in</div>
-                                                <div class="policy-value">${cabana.politicas?.checkIn || '15:00'}</div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="policy-item">
-                                            <div class="policy-icon">
-                                                <i class="fas fa-clock"></i>
-                                            </div>
-                                            <div class="policy-details">
-                                                <div class="policy-label">Check-out</div>
-                                                <div class="policy-value">${cabana.politicas?.checkOut || '11:00'}</div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="policy-item">
-                                            <div class="policy-icon">
-                                                <i class="fas fa-ban"></i>
-                                            </div>
-                                            <div class="policy-details">
-                                                <div class="policy-label">Cancelación</div>
-                                                <div class="policy-value">${cabana.politicas?.cancelacion || 'Flexible (24 horas antes)'}</div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="policy-item">
-                                            <div class="policy-icon">
-                                                <i class="fas fa-${cabana.politicas?.mascotas !== false ? 'check' : 'times'}"></i>
-                                            </div>
-                                            <div class="policy-details">
-                                                <div class="policy-label">Mascotas</div>
-                                                <div class="policy-value">${cabana.politicas?.mascotas !== false ? 'Permitidas' : 'No permitidas'}</div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="policy-item">
-                                            <div class="policy-icon">
-                                                <i class="fas fa-smoking-ban"></i>
-                                            </div>
-                                            <div class="policy-details">
-                                                <div class="policy-label">Fumar</div>
-                                                <div class="policy-value">${cabana.politicas?.noFumar !== false ? 'Prohibido' : 'Permitido'}</div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="policy-item">
-                                            <div class="policy-icon">
-                                                <i class="fas fa-users"></i>
-                                            </div>
-                                            <div class="policy-details">
-                                                <div class="policy-label">Huéspedes adicionales</div>
-                                                <div class="policy-value">${cabana.politicas?.huespedesAdicionales || 'Consultar disponibilidad'}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
