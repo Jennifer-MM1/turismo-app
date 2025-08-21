@@ -160,6 +160,13 @@ exports.updateAirbnb = async (req, res) => {
     // ✅ PREPARAR DATOS PARA ACTUALIZAR (igual que hoteles)
     const updateData = { ...req.body };
     
+    // 🔧 MAPEAR PRECIO A PRECIEPORNOCHE (diferencia con hoteles/cabañas)
+    if (updateData.precio) {
+        updateData.precioPorNoche = updateData.precio;
+        delete updateData.precio; // Eliminar el campo precio original
+        console.log(`🔄 Mapeado precio -> precioPorNoche: ${updateData.precioPorNoche}`);
+    }
+    
     // ✅ PARSEAR OBJETOS JSON (desde FormData) - LISTA COMPLETA
     const fieldsToParseAsJSON = [
         'ubicacion', 
@@ -192,7 +199,7 @@ exports.updateAirbnb = async (req, res) => {
     console.log('📊 Datos estructurados:', {
         nombre: updateData.nombre ? '✅' : '❌',
         descripcion: updateData.descripcion ? '✅' : '❌',
-        precio: updateData.precio ? '✅' : '❌',
+        precioPorNoche: updateData.precioPorNoche ? '✅' : '❌',
         ubicacion: updateData.ubicacion ? '✅' : '❌',
         contacto: updateData.contacto ? '✅' : '❌',
         capacidad: updateData.capacidad ? '✅' : '❌',
