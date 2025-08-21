@@ -767,6 +767,288 @@
             text-align: left;
         }
 
+        /* Modal Styling Extensions */
+        .contact-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #8BC34A, #689F38);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .contact-details {
+            flex: 1;
+        }
+
+        .contact-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 3px;
+            font-size: 14px;
+        }
+
+        .contact-value {
+            color: #5d6d7e;
+            font-size: 15px;
+        }
+
+        .contact-value a {
+            color: #8BC34A;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-value a:hover {
+            color: #689F38;
+            text-decoration: underline;
+        }
+
+        /* Availability Status */
+        .availability-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .availability-status.available {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: #155724;
+            border: 2px solid #b8dacc;
+        }
+
+        .availability-status.unavailable {
+            background: linear-gradient(135deg, #f8d7da, #f1aeb5);
+            color: #721c24;
+            border: 2px solid #f1aeb5;
+        }
+
+        .availability-status i {
+            font-size: 18px;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 3px solid #8BC34A;
+            transition: all 0.3s ease;
+        }
+
+        .service-item:hover {
+            background: #e8f5e8;
+            transform: translateX(3px);
+        }
+
+        .service-item i {
+            color: #8BC34A;
+            font-size: 14px;
+            width: 16px;
+            text-align: center;
+        }
+
+        .service-item span {
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        /* Payment Methods */
+        .payment-methods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .payment-method {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 20px 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .payment-method:hover {
+            border-color: #8BC34A;
+            background: #e8f5e8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 195, 74, 0.2);
+        }
+
+        .payment-method.no-methods {
+            grid-column: 1 / -1;
+            background: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+        }
+
+        .payment-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #8BC34A, #689F38);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .payment-method.no-methods .payment-icon {
+            background: linear-gradient(135deg, #ffc107, #ff8f00);
+        }
+
+        .payment-label {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .payment-method.no-methods .payment-label {
+            color: #856404;
+        }
+
+        /* Eco Practices */
+        .eco-section {
+            background: linear-gradient(135deg, #e8f5e8, #f1f8f1) !important;
+            border: 2px solid #c8e6c9 !important;
+        }
+
+        .eco-practices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .eco-practice-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            border-left: 4px solid #4caf50;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .eco-practice-item:hover {
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateX(3px);
+            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.2);
+        }
+
+        .eco-practice-item i {
+            color: #4caf50;
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .eco-practice-item span {
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        /* Policies Grid */
+        .policies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .policy-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .policy-item:hover {
+            background: #e8f5e8;
+            border-color: #8BC34A;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(139, 195, 74, 0.15);
+        }
+
+        .policy-icon {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #8BC34A, #689F38);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .policy-details {
+            flex: 1;
+        }
+
+        .policy-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 3px;
+            font-size: 13px;
+        }
+
+        .policy-value {
+            color: #5d6d7e;
+            font-size: 14px;
+            line-height: 1.3;
+        }
+
         /* Galería de imágenes */
         .cabana-gallery-section {
             background: #f8f9fa;
@@ -1107,6 +1389,90 @@
             .thumbnails-container {
                 padding: 12px;
                 gap: 6px;
+            }
+
+            /* Mobile styles for new modal sections */
+            .contact-grid {
+                gap: 15px;
+            }
+
+            .contact-item {
+                padding: 10px 0;
+            }
+
+            .contact-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .service-item {
+                padding: 8px 10px;
+            }
+
+            .payment-methods-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 12px;
+            }
+
+            .payment-method {
+                padding: 15px 10px;
+            }
+
+            .payment-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .payment-label {
+                font-size: 13px;
+            }
+
+            .eco-practices-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .eco-practice-item {
+                padding: 10px 12px;
+            }
+
+            .policies-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .policy-item {
+                padding: 12px;
+            }
+
+            .policy-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+            }
+
+            .policy-label {
+                font-size: 12px;
+            }
+
+            .policy-value {
+                font-size: 13px;
+            }
+
+            .availability-status {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+
+            .availability-status i {
+                font-size: 16px;
             }
         }
     </style>
@@ -1716,6 +2082,41 @@
             return services[service] || service.charAt(0).toUpperCase() + service.slice(1);
         }
 
+        // Generar HTML de métodos de pago
+        function generatePaymentMethodsHTML(metodos) {
+            if (!metodos || metodos.length === 0) {
+                return `
+                    <div class="payment-method no-methods">
+                        <div class="payment-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="payment-label">Contactar para información de pago</div>
+                    </div>
+                `;
+            }
+            
+            const iconosMetodos = {
+                'efectivo': 'fas fa-money-bill-wave',
+                'transferencia': 'fas fa-exchange-alt',
+                'tarjeta': 'fas fa-credit-card'
+            };
+            
+            const nombresMetodos = {
+                'efectivo': 'Efectivo',
+                'transferencia': 'Transferencia',
+                'tarjeta': 'Tarjeta'
+            };
+            
+            return metodos.map(metodo => `
+                <div class="payment-method">
+                    <div class="payment-icon">
+                        <i class="${iconosMetodos[metodo] || 'fas fa-credit-card'}"></i>
+                    </div>
+                    <div class="payment-label">${nombresMetodos[metodo] || metodo}</div>
+                </div>
+            `).join('');
+        }
+
         // Abrir modal de cabaña
         function openCabanaModal(cabanaId) {
             const cabana = allCabanas.find(c => c._id === cabanaId);
@@ -1725,6 +2126,8 @@
             const email = cabana.contacto?.email || 'No disponible';
             const horario = cabana.contacto?.horario || 'No especificado';
             const direccion = cabana.ubicacion?.direccion || 'Dirección no especificada';
+            const metodosPago = cabana.metodosPago || [];
+            const disponible = cabana.disponible !== false;
             
             let serviciosArray = [];
             if (cabana.servicios) {
@@ -1733,6 +2136,47 @@
                 } else {
                     serviciosArray = Object.keys(cabana.servicios).filter(key => cabana.servicios[key]);
                 }
+            }
+            
+            // Prácticas ecológicas para cabañas
+            const practicasEcologicas = cabana.esEcologico ? (cabana.practicasEcologicas || [
+                'Uso de energías renovables',
+                'Reciclaje y separación de residuos',
+                'Productos de limpieza biodegradables',
+                'Ahorro de agua con sistemas eficientes',
+                'Apoyo a productores locales',
+                'Construcción con materiales sostenibles',
+                'Jardines orgánicos',
+                'Compostaje de residuos orgánicos'
+            ]) : [];
+            
+            // Tipo específico de cabaña
+            let tipoEspecifico = '';
+            const tipoPropiedad = cabana.caracteristicas?.tipoPropiedad || 'cabana';
+            const esConjunto = cabana.caracteristicas?.esConjunto;
+            
+            if (esConjunto) {
+                tipoEspecifico = `
+                    <div class="info-item">
+                        <span class="info-label">Tipo:</span>
+                        <span class="info-value">Complejo de Cabañas</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Cabañas total:</span>
+                        <span class="info-value">${cabana.conjunto?.totalCabanas || 'No especificado'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Cabañas disponibles:</span>
+                        <span class="info-value">${cabana.conjunto?.cabanasDisponibles || 'No especificado'}</span>
+                    </div>
+                `;
+            } else {
+                tipoEspecifico = `
+                    <div class="info-item">
+                        <span class="info-label">Tipo:</span>
+                        <span class="info-value">${formatTipoPropiedad(tipoPropiedad)}</span>
+                    </div>
+                `;
             }
             
             const galleryHTML = generateImageGalleryHTML(cabana.imagenes);
@@ -1778,6 +2222,7 @@
                                             <span class="info-label">Descripción:</span>
                                             <span class="info-value">${cabana.descripcion || 'No disponible'}</span>
                                         </div>
+                                        ${tipoEspecifico}
                                         <div class="info-item">
                                             <span class="info-label">Habitaciones:</span>
                                             <span class="info-value">${cabana.capacidad?.habitaciones || 1}</span>
@@ -1798,38 +2243,164 @@
                                         <i class="fas fa-phone"></i>
                                         Contacto
                                     </h3>
-                                    <div class="info-grid">
-                                        <div class="info-item">
-                                            <span class="info-label">Teléfono:</span>
-                                            <span class="info-value">
-                                                ${telefono !== 'No disponible' ? `<a href="tel:${telefono}">${telefono}</a>` : telefono}
-                                            </span>
+                                    <div class="contact-grid">
+                                        <div class="contact-item">
+                                            <div class="contact-icon">
+                                                <i class="fas fa-phone"></i>
+                                            </div>
+                                            <div class="contact-details">
+                                                <div class="contact-label">Teléfono</div>
+                                                <div class="contact-value">
+                                                    ${telefono !== 'No disponible' ? `<a href="tel:${telefono}">${telefono}</a>` : telefono}
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="info-item">
-                                            <span class="info-label">Email:</span>
-                                            <span class="info-value">
-                                                ${email !== 'No disponible' ? `<a href="mailto:${email}">${email}</a>` : email}
-                                            </span>
+                                        
+                                        <div class="contact-item">
+                                            <div class="contact-icon">
+                                                <i class="fas fa-envelope"></i>
+                                            </div>
+                                            <div class="contact-details">
+                                                <div class="contact-label">Email</div>
+                                                <div class="contact-value">
+                                                    ${email !== 'No disponible' ? `<a href="mailto:${email}">${email}</a>` : email}
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="info-item">
-                                            <span class="info-label">Horario:</span>
-                                            <span class="info-value">${horario}</span>
+                                        
+                                        <div class="contact-item">
+                                            <div class="contact-icon">
+                                                <i class="fas fa-clock"></i>
+                                            </div>
+                                            <div class="contact-details">
+                                                <div class="contact-label">Horario de Atención</div>
+                                                <div class="contact-value">${horario}</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="modal-section">
                                     <h3 class="section-title">
+                                        <i class="fas fa-calendar-check"></i>
+                                        Disponibilidad
+                                    </h3>
+                                    
+                                    <div class="availability-status ${disponible ? 'available' : 'unavailable'}">
+                                        <i class="fas fa-${disponible ? 'check-circle' : 'times-circle'}"></i>
+                                        ${disponible ? 'Disponible' : 'No disponible'}
+                                    </div>
+                                </div>
+                                
+                                ${serviciosArray.length > 0 ? `
+                                <div class="modal-section">
+                                    <h3 class="section-title">
                                         <i class="fas fa-concierge-bell"></i>
                                         Servicios Disponibles
                                     </h3>
-                                    <div class="info-grid">
-                                        ${serviciosArray.length > 0 ? serviciosArray.map(servicio => `
-                                            <div class="info-item">
-                                                <i class="fas fa-check" style="color: #8BC34A;"></i>
+                                    <div class="services-grid">
+                                        ${serviciosArray.map(servicio => `
+                                            <div class="service-item">
+                                                <i class="fas fa-check"></i>
                                                 <span>${formatServiceName(servicio)}</span>
                                             </div>
-                                        `).join('') : '<p>No hay servicios especificados</p>'}
+                                        `).join('')}
+                                    </div>
+                                </div>
+                                ` : ''}
+                                
+                                <div class="modal-section">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-credit-card"></i>
+                                        Métodos de Pago
+                                    </h3>
+                                    <div class="payment-methods-grid">
+                                        ${generatePaymentMethodsHTML(metodosPago)}
+                                    </div>
+                                </div>
+                                
+                                ${cabana.esEcologico ? `
+                                <div class="modal-section eco-section">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-leaf"></i>
+                                        Prácticas Ecológicas
+                                    </h3>
+                                    <div class="eco-practices-grid">
+                                        ${practicasEcologicas.map(practica => `
+                                            <div class="eco-practice-item">
+                                                <i class="fas fa-leaf"></i>
+                                                <span>${practica}</span>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                                ` : ''}
+                                
+                                <div class="modal-section">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-clipboard-list"></i>
+                                        Políticas y Normas
+                                    </h3>
+                                    <div class="policies-grid">
+                                        <div class="policy-item">
+                                            <div class="policy-icon">
+                                                <i class="fas fa-clock"></i>
+                                            </div>
+                                            <div class="policy-details">
+                                                <div class="policy-label">Check-in</div>
+                                                <div class="policy-value">${cabana.politicas?.checkIn || '15:00'}</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="policy-item">
+                                            <div class="policy-icon">
+                                                <i class="fas fa-clock"></i>
+                                            </div>
+                                            <div class="policy-details">
+                                                <div class="policy-label">Check-out</div>
+                                                <div class="policy-value">${cabana.politicas?.checkOut || '11:00'}</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="policy-item">
+                                            <div class="policy-icon">
+                                                <i class="fas fa-ban"></i>
+                                            </div>
+                                            <div class="policy-details">
+                                                <div class="policy-label">Cancelación</div>
+                                                <div class="policy-value">${cabana.politicas?.cancelacion || 'Flexible (24 horas antes)'}</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="policy-item">
+                                            <div class="policy-icon">
+                                                <i class="fas fa-${cabana.politicas?.mascotas !== false ? 'check' : 'times'}"></i>
+                                            </div>
+                                            <div class="policy-details">
+                                                <div class="policy-label">Mascotas</div>
+                                                <div class="policy-value">${cabana.politicas?.mascotas !== false ? 'Permitidas' : 'No permitidas'}</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="policy-item">
+                                            <div class="policy-icon">
+                                                <i class="fas fa-smoking-ban"></i>
+                                            </div>
+                                            <div class="policy-details">
+                                                <div class="policy-label">Fumar</div>
+                                                <div class="policy-value">${cabana.politicas?.noFumar !== false ? 'Prohibido' : 'Permitido'}</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="policy-item">
+                                            <div class="policy-icon">
+                                                <i class="fas fa-users"></i>
+                                            </div>
+                                            <div class="policy-details">
+                                                <div class="policy-label">Huéspedes adicionales</div>
+                                                <div class="policy-value">${cabana.politicas?.huespedesAdicionales || 'Consultar disponibilidad'}</div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
