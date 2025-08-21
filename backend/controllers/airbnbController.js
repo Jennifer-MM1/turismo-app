@@ -130,9 +130,14 @@ exports.getMisAirbnb = async (req, res) => {
   }
 };
 
-// Actualizar alojamiento
+// ✅ ACTUALIZAR ALOJAMIENTO - CORREGIDO (como hoteles que funciona)
 exports.updateAirbnb = async (req, res) => {
   try {
+    console.log('🏠 === INICIO ACTUALIZACIÓN AIRBNB ===');
+    console.log('🆔 Alojamiento ID:', req.params.id);
+    console.log('👤 Usuario:', req.user.email);
+    console.log('📝 Campos recibidos:', Object.keys(req.body));
+
     const alojamiento = await Airbnb.findById(req.params.id);
 
     if (!alojamiento) {
@@ -152,29 +157,79 @@ exports.updateAirbnb = async (req, res) => {
       });
     }
 
+    // ✅ PREPARAR DATOS PARA ACTUALIZAR (igual que hoteles)
+    const updateData = { ...req.body };
+    
+    // ✅ PARSEAR OBJETOS JSON (desde FormData) - LISTA COMPLETA
+    const fieldsToParseAsJSON = [
+        'ubicacion', 
+        'contacto', 
+        'capacidad', 
+        'caracteristicas',
+        'servicios', 
+        'metodosPago'
+    ];
+    
+    fieldsToParseAsJSON.forEach(field => {
+        if (updateData[field] && typeof updateData[field] === 'string') {
+            try {
+                updateData[field] = JSON.parse(updateData[field]);
+                console.log(`✅ Parseado ${field}:`, updateData[field]);
+            } catch (e) {
+                console.log(`⚠️ No se pudo parsear ${field}:`, e.message);
+            }
+        }
+    });
+
     // 🔥 AGREGAR: Información de auditoría para el historial
-    req.body.ultimaModificacion = {
+    updateData.ultimaModificacion = {
       usuario: req.user.id,
       fecha: new Date(),
-      camposModificados: Object.keys(req.body)
+      camposModificados: Object.keys(updateData)
     };
 
+    console.log('📋 Campos finales para actualizar:', Object.keys(updateData));
+    console.log('📊 Datos estructurados:', {
+        nombre: updateData.nombre ? '✅' : '❌',
+        descripcion: updateData.descripcion ? '✅' : '❌',
+        precio: updateData.precio ? '✅' : '❌',
+        ubicacion: updateData.ubicacion ? '✅' : '❌',
+        contacto: updateData.contacto ? '✅' : '❌',
+        capacidad: updateData.capacidad ? '✅' : '❌',
+        servicios: updateData.servicios ? `✅ (${updateData.servicios.length})` : '❌',
+        metodosPago: updateData.metodosPago ? `✅ (${updateData.metodosPago.length})` : '❌'
+    });
+
+    // ✅ ACTUALIZAR EN BASE DE DATOS con datos procesados
     const updatedAlojamiento = await Airbnb.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updateData, // ✅ Ahora usa updateData procesado en lugar de req.body
       {
         new: true,
         runValidators: true
       }
     );
 
+    // ✅ RESPUESTA EXITOSA
     res.status(200).json({
       status: 'success',
+      message: 'Alojamiento actualizado exitosamente',
       data: {
         alojamiento: updatedAlojamiento
+      },
+      updateSummary: {
+        fieldsUpdated: Object.keys(updateData).filter(key => !key.startsWith('imagen')).length,
+        timestamp: new Date().toISOString()
       }
     });
+
+    console.log('✅ === ALOJAMIENTO ACTUALIZADO EXITOSAMENTE ===');
+
   } catch (error) {
+    console.error('❌ === ERROR EN ACTUALIZACIÓN ===');
+    console.error('Error:', error.message);
+    console.error('Stack:', error.stack);
+
     res.status(400).json({
       status: 'error',
       message: error.message
