@@ -14,44 +14,88 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* CORRECCIÓN 1: Usar height real del viewport */
             min-height: 100vh;
+            min-height: 100dvh; /* Soporte para viewport dinámico */
             background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
+            
+            /* CORRECCIÓN 2: Usar grid en lugar de flexbox para mejor control */
+            display: grid;
+            place-items: center;
+            
+            /* CORRECCIÓN 3: Padding responsive con clamp */
+            padding: clamp(1rem, 4vw, 2rem);
             position: relative;
-            overflow: hidden;
+            
+            /* CORRECCIÓN 4: Permitir scroll cuando sea necesario */
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
-        /* Background Animation */
+        /* Background Animation - Simplificado para mejor compatibilidad */
         body::before {
             content: '';
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
             background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
             z-index: 1;
+            pointer-events: none;
         }
 
         .login-container {
             position: relative;
             z-index: 2;
             background: rgba(255, 255, 255, 0.95);
+            
+            /* CORRECCIÓN 5: Fallback para backdrop-filter */
+            -webkit-backdrop-filter: blur(20px);
             backdrop-filter: blur(20px);
+            
             border-radius: 25px;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
             overflow: hidden;
-            max-width: 450px;
-            width: 100%;
+            
+            /* CORRECCIÓN 6: Ancho más flexible */
+            width: min(450px, 95vw);
+            
+            /* CORRECCIÓN 7: Altura máxima con scroll interno */
+            max-height: min(90vh, 90dvh);
+            overflow-y: auto;
+            
             border: 1px solid rgba(255, 255, 255, 0.2);
+            
+            /* CORRECCIÓN 8: Margen vertical automático adicional */
+            margin: auto;
+            
+            /* CORRECCIÓN 9: Animación de entrada suave */
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        /* CORRECCIÓN 10: Soporte para navegadores que no tienen backdrop-filter */
+        @supports not (backdrop-filter: blur(20px)) {
+            .login-container {
+                background: rgba(255, 255, 255, 0.98);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .login-header {
             background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-            padding: 2.5rem 2rem 2rem;
+            /* CORRECCIÓN 11: Padding responsive */
+            padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 4vw, 2rem) clamp(1rem, 4vw, 2rem);
             text-align: center;
             color: white;
             position: relative;
@@ -74,8 +118,8 @@
         }
 
         .logo-icon {
-            width: 80px;
-            height: 80px;
+            width: clamp(60px, 15vw, 80px);
+            height: clamp(60px, 15vw, 80px);
             background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
             display: flex;
@@ -87,25 +131,27 @@
         }
 
         .logo-icon i {
-            font-size: 2.5rem;
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
             color: white;
         }
 
         .login-title {
-            font-size: 1.8rem;
+            font-size: clamp(1.3rem, 5vw, 1.8rem);
             font-weight: 700;
             margin-bottom: 0.5rem;
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .login-subtitle {
-            font-size: 1rem;
+            font-size: clamp(0.9rem, 3vw, 1rem);
             opacity: 0.9;
             font-weight: 300;
+            line-height: 1.4;
         }
 
         .login-form {
-            padding: 2.5rem 2rem;
+            /* CORRECCIÓN 12: Padding más flexible */
+            padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 4vw, 2rem);
         }
 
         .form-group {
@@ -148,6 +194,7 @@
             color: #999;
             font-size: 1.1rem;
             transition: color 0.3s ease;
+            pointer-events: none;
         }
 
         .form-input:focus + .input-icon {
@@ -165,6 +212,7 @@
             cursor: pointer;
             font-size: 1.1rem;
             transition: color 0.3s ease;
+            z-index: 3;
         }
 
         .password-toggle:hover {
@@ -187,9 +235,24 @@
             margin-top: 1rem;
         }
 
+        .login-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(240, 237, 237, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
         .login-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 15px 35px rgba(76, 175, 80, 0.3);
+        }
+
+        .login-button:hover::before {
+            left: 100%;
         }
 
         .login-button:disabled {
@@ -276,16 +339,17 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            font-size: 0.95rem;
         }
 
         .help-text p {
-            color: #666;
+            color: #f5f1f1;
             font-size: 0.9rem;
             line-height: 1.5;
         }
 
         .footer-links {
-            padding: 1.5rem 2rem;
+            padding: 1.5rem clamp(1rem, 4vw, 2rem);
             background: #f8f9fa;
             border-top: 1px solid #e0e0e0;
         }
@@ -294,10 +358,11 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            color: #4CAF50;
+            color: #f5f5f5;
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
 
         .back-home:hover {
@@ -307,11 +372,11 @@
 
         /* Floating Elements */
         .floating-element {
-            position: absolute;
+            position: fixed;
             opacity: 0.1;
             animation: float 6s ease-in-out infinite;
             pointer-events: none;
-            z-index: 2;
+            z-index: 1;
         }
 
         .floating-element:nth-child(1) {
@@ -341,21 +406,7 @@
             }
         }
 
-        /* Super Admin Indicator */
-        .super-admin-indicator {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: linear-gradient(135deg, #f6ad55, #ed8936);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            display: none;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
+      
         .super-admin-indicator.show {
             display: block;
         }
@@ -365,22 +416,122 @@
             to { box-shadow: 0 0 20px rgba(246, 173, 85, 0.8); }
         }
 
-        /* Responsive */
+        /* CORRECCIÓN 13: Media queries mejoradas */
         @media (max-width: 768px) {
             body {
                 padding: 1rem;
+                /* Asegurar que en móvil no se corte */
+                align-items: flex-start;
+                padding-top: 2rem;
+                padding-bottom: 2rem;
             }
             
             .login-container {
-                margin: 1rem 0;
+                margin-top: auto;
+                margin-bottom: auto;
+                /* Permitir scroll interno en móvil */
+                max-height: calc(100vh - 4rem);
+                max-height: calc(100dvh - 4rem);
+            }
+
+            .floating-element {
+                display: none; /* Ocultar elementos flotantes en móvil */
+            }
+
+            .help-text {
+                padding: 1rem;
+                margin-top: 1.5rem;
+            }
+
+            .help-text h4 {
+                font-size: 0.9rem;
+            }
+
+            .help-text p {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* CORRECCIÓN 14: Para pantallas muy pequeñas */
+        @media (max-height: 600px) {
+            body {
+                align-items: flex-start;
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+            }
+            
+            .login-container {
+                max-height: calc(100vh - 2rem);
+                max-height: calc(100dvh - 2rem);
             }
             
             .login-header {
-                padding: 2rem 1.5rem 1.5rem;
+                padding: 1rem;
             }
             
             .login-form {
-                padding: 2rem 1.5rem;
+                padding: 1rem;
+            }
+
+            .help-text {
+                margin-top: 1rem;
+                padding: 1rem;
+            }
+
+            .footer-links {
+                padding: 1rem;
+            }
+        }
+
+        /* CORRECCIÓN 15: Para pantallas muy anchas */
+        @media (min-width: 1200px) {
+            .login-container {
+                max-width: 450px;
+            }
+        }
+
+        /* CORRECCIÓN 16: Para navegadores muy antiguos */
+        @supports not (display: grid) {
+            body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        /* CORRECCIÓN 17: Mejora de accesibilidad */
+        @media (prefers-reduced-motion: reduce) {
+            .login-container {
+                animation: none;
+            }
+
+            .floating-element {
+                animation: none;
+            }
+
+            .super-admin-indicator {
+                animation: none;
+            }
+
+            .login-button::before {
+                transition: none;
+            }
+        }
+
+        /* CORRECCIÓN 18: Modo oscuro básico */
+        @media (prefers-color-scheme: dark) {
+            .help-text {
+                background: #84b492af;
+                color: #fbfbfb;
+            }
+
+            .help-text p {
+                color: #fbfbfb;
+            }
+
+            .footer-links {
+                background: #4CAF50;
+                border-top-color: #f6f6f6;
             }
         }
     </style>
@@ -388,19 +539,19 @@
 <body>
     <!-- Floating Elements -->
     <div class="floating-element">
-        <i class="fas fa-compass" style="font-size: 3rem; color: rgba(255,255,255,0.2);"></i>
+        <i class="fas fa-compass" style="font-size: 3rem; color: rgba(76, 175, 80, 0.3);"></i>
     </div>
     <div class="floating-element">
-        <i class="fas fa-map-marker-alt" style="font-size: 2.5rem; color: rgba(255,255,255,0.2);"></i>
+        <i class="fas fa-map-marker-alt" style="font-size: 2.5rem; color: rgba(76, 175, 80, 0.3);"></i>
     </div>
     <div class="floating-element">
-        <i class="fas fa-suitcase-rolling" style="font-size: 2rem; color: rgba(255,255,255,0.2);"></i>
+        <i class="fas fa-suitcase-rolling" style="font-size: 2rem; color: rgba(76, 175, 80, 0.3);"></i>
     </div>
 
     <div class="login-container">
         <!-- Super Admin Indicator -->
         <div class="super-admin-indicator" id="superAdminIndicator">
-            <i class="fas fa-crown"></i> SUPER ADMIN
+          
         </div>
 
         <!-- Header -->
@@ -500,10 +651,10 @@
         const superAdminIndicator = document.getElementById('superAdminIndicator');
 
         // API Base URL
-      // ✅ CORREGIDO: URL dinámica igual que manage-images-cabana.html
-      const baseURL = window.location.hostname === 'localhost' 
-    ? 'http://localhost:5000/api' 
-    : '/api';
+        // ✅ CORREGIDO: URL dinámica igual que manage-images-cabana.html
+        const baseURL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5000/api' 
+            : '/api';
 
         // Detectar si es email de super admin
         document.getElementById('email').addEventListener('input', function() {
@@ -656,6 +807,34 @@
                 }
             }
         });
+
+        // CORRECCIÓN 19: Añadir manejo de errores de conectividad
+        window.addEventListener('online', function() {
+            if (document.querySelector('.error-message.show')) {
+                hideMessages();
+            }
+        });
+
+        window.addEventListener('offline', function() {
+            showError('Sin conexión a internet. Verifica tu conectividad.');
+        });
+
+        // CORRECCIÓN 20: Mejorar accesibilidad con keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.matches('input')) {
+                e.preventDefault();
+                loginForm.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // CORRECCIÓN 21: Detectar orientación en móviles
+        window.addEventListener('orientationchange', function() {
+            setTimeout(function() {
+                // Re-calcular altura después del cambio de orientación
+                document.body.style.height = '100vh';
+                document.body.style.height = '100dvh';
+            }, 100);
+        });
     </script>
 </body>
-</html>
+</html> 
