@@ -39,12 +39,26 @@
         .logo {
             font-size: 1.8rem;
             font-weight: bold;
-            color: #4CAF50;
+          color: var(--gray-800); 
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
+
+
+        .logo-image {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+    background: var(--white);
+    padding: 3px;
+    box-shadow: var(--shadow-sm);
+    border: 2px solid var(--gray-200);
+    transition: var(--transition);
+    flex-shrink: 0;
+}
         .nav-menu {
             display: flex;
             list-style: none;
@@ -137,6 +151,44 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
         }
+
+        /* ===== BOTÓN DE MENÚ MÓVIL ===== */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #333;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-toggle:hover {
+            background: #f0f0f0;
+            color: #4CAF50;
+        }
+
+        /* ===== OVERLAY PARA MÓVIL ===== */
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
         /* Page Header */
         .page-header {
             margin-top: 80px;
@@ -644,9 +696,98 @@
         }
         /* Responsive */
         @media (max-width: 768px) {
-            .nav-menu {
-                display: none;
+            .mobile-menu-toggle {
+                display: block;
             }
+
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 320px;
+                height: 100vh;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 2rem 0;
+                padding-top: 4rem;
+                z-index: 1000;
+                transition: all 0.3s ease;
+                box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            }
+
+            .nav-menu.active {
+                right: 0;
+            }
+
+            .nav-item {
+                width: 100%;
+                margin: 0;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+            .nav-link {
+                width: 100%;
+                padding: 1rem 2rem;
+                border-radius: 0;
+                justify-content: space-between;
+                font-size: 1.1rem;
+            }
+
+            .nav-link:hover {
+                background: linear-gradient(135deg, #4CAF50, #45a049);
+                color: white;
+                transform: none;
+            }
+
+            .dropdown-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                box-shadow: none;
+                background: #f8f9fa;
+                border-radius: 0;
+                margin: 0;
+                padding: 0;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+
+            .dropdown.active .dropdown-menu {
+                max-height: 300px;
+            }
+
+            .dropdown-item {
+                padding: 0.8rem 2rem;
+                padding-left: 3rem;
+                border-bottom: 1px solid #e0e0e0;
+                font-size: 1rem;
+            }
+
+            .dropdown-item:hover {
+                background: #e9ecef;
+                color: #4CAF50;
+                border-left: none;
+                padding-left: 3rem;
+            }
+
+            .auth-buttons {
+                display: flex;
+                gap: 1rem;
+                padding: 1rem 2rem;
+                border-top: 1px solid #f0f0f0;
+                margin-top: auto;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+            }
+
+            .nav-menu.active .auth-buttons {
+                display: flex;
+            }
+            
             .page-header h1 {
                 font-size: 2rem;
             }
@@ -666,11 +807,17 @@
     <nav class="navbar">
         <div class="nav-container">
             <a href="index.html" class="logo">
-               
+                 <img src="/img_jalpan/logo_pueblos_magicos.jpg" alt="Logo Turismo" class="logo-image">
                 Dirección de Turismo
             </a>
+
+            <!-- Botón de menú móvil -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
             
-            <ul class="nav-menu">
+            <!-- Menú de navegación -->
+            <ul class="nav-menu" id="navMenu">
                 <li class="nav-item">
                     <a href="index.html" class="nav-link">
                     
@@ -678,7 +825,7 @@
                     </a>
                 </li>
                 
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown" id="hospedajeDropdown">
                     <a href="#" class="nav-link">
                        
                         Hospedaje
@@ -728,6 +875,9 @@
             </div>
         </div>
     </nav>
+
+    <!-- Overlay para móvil -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
 
     <!-- Page Header -->
     <section class="page-header">
@@ -981,6 +1131,77 @@
             setupEventListeners();
             // Inicializar el slider
             new CategoriesSlider();
+
+            // ===== CONFIGURAR MENÚ MÓVIL RESPONSIVO =====
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const navMenu = document.getElementById('navMenu');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            const hospedajeDropdown = document.getElementById('hospedajeDropdown');
+
+            // Toggle del menú móvil
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                    mobileOverlay.classList.toggle('active');
+                    
+                    // Cambiar icono
+                    const icon = mobileMenuToggle.querySelector('i');
+                    if (navMenu.classList.contains('active')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    } else {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+            }
+
+            // Cerrar menú al hacer click en overlay
+            if (mobileOverlay) {
+                mobileOverlay.addEventListener('click', closeMenu);
+            }
+
+            // Función para cerrar el menú
+            function closeMenu() {
+                if (navMenu) navMenu.classList.remove('active');
+                if (mobileOverlay) mobileOverlay.classList.remove('active');
+                if (hospedajeDropdown) hospedajeDropdown.classList.remove('active');
+                
+                const icon = mobileMenuToggle?.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            }
+
+            // Toggle del dropdown en hospedaje en móvil
+            if (hospedajeDropdown) {
+                hospedajeDropdown.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 768) {
+                        if (e.target.closest('.nav-link') && !e.target.closest('.dropdown-item')) {
+                            e.preventDefault();
+                            hospedajeDropdown.classList.toggle('active');
+                        }
+                    }
+                });
+            }
+
+            // Cerrar menú al redimensionar ventana
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    closeMenu();
+                }
+            });
+
+            // Cerrar menú al hacer clic en un enlace (excepto dropdown)
+            const navLinks = document.querySelectorAll('.nav-link:not(.dropdown .nav-link)');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) {
+                        closeMenu();
+                    }
+                });
+            });
         });
 
         // Configurar event listeners
