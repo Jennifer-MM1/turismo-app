@@ -1502,7 +1502,7 @@ async function updateAirbnb(event) {
         const updateData = {
             nombre: formData.get('nombre'),
             descripcion: formData.get('descripcion'),
-            precio: parseFloat(formData.get('precio')) || 0,
+            precio: parseFloat(formData.get('precio')),
 
 
             
